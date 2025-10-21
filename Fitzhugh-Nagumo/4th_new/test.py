@@ -37,8 +37,8 @@ def evaluate_on_trajectory(model, init_states, epsilons, true_trajs, dt=0.01):
     pred_trajs = []
     u0 = init_states[0, :, :, 0]
 
-    torch.cuda.synchronize()
-    start_time = time.perf_counter()
+    # torch.cuda.synchronize()
+    # start_time = time.perf_counter()
     for t in range(T):
         # print(f"t = {t}/{T-1}", end='\r')
         # eps_batch = epsilons.view(-1, 1)  # [4, 1]
@@ -46,56 +46,56 @@ def evaluate_on_trajectory(model, init_states, epsilons, true_trajs, dt=0.01):
         # next_states = curr_states
         # for i in range(2):
         #     next_states = model.N0_SCHEME.single_step(next_states, dts=dt_tensor)
-        # pred_trajs.append(next_states)
+        pred_trajs.append(next_states)
         curr_states = next_states
 
-    torch.cuda.synchronize()
-    end_time = time.perf_counter()
-    elapsed_time = end_time - start_time
-    with open("time.txt", "w") as f:
-        f.write(f"Total inference time: {elapsed_time:.6f} s\n")
-    # pred_trajs = torch.stack(pred_trajs, dim=1)  # [4, T, 128, 128]
+    # torch.cuda.synchronize()
+    # end_time = time.perf_counter()
+    # elapsed_time = end_time - start_time
+    # with open("time.txt", "w") as f:
+        # f.write(f"Total inference time: {elapsed_time:.6f} s\n")
+    pred_trajs = torch.stack(pred_trajs, dim=1)  # [4, T, 128, 128]
 
-    # u0 = pred_trajs[1, 49, :, :, 0]
-    # v0 = pred_trajs[1, 49, :, :, 1]
+    u0 = pred_trajs[1, 49, :, :, 0]
+    v0 = pred_trajs[1, 49, :, :, 1]
 
-    # u_99 = pred_trajs[1, 99, :, :, 0]
-    # v_99 = pred_trajs[1, 99, :, :, 1]
+    u_99 = pred_trajs[1, 99, :, :, 0]
+    v_99 = pred_trajs[1, 99, :, :, 1]
 
-    # np.save('u0_4th.npy', u0.cpu().numpy())
-    # np.save('v0_4th.npy', v0.cpu().numpy())
-    # np.save('u99_4th.npy', u_99.cpu().numpy())
-    # np.save('v99_4th.npy', v_99.cpu().numpy())
+    np.save('u0_4th.npy', u0.cpu().numpy())
+    np.save('v0_4th.npy', v0.cpu().numpy())
+    np.save('u99_4th.npy', u_99.cpu().numpy())
+    np.save('v99_4th.npy', v_99.cpu().numpy())
 
-    # np.save('u0_true.npy', true_trajs[1,50,:,:,0].cpu().numpy())
-    # np.save('v0_true.npy', true_trajs[1,50,:,:,1].cpu().numpy())
-    # np.save('u99_true.npy', true_trajs[1,100,:,:,0].cpu().numpy())
-    # np.save('v99_true.npy', true_trajs[1,100,:,:,1].cpu().numpy())
+    np.save('u0_true.npy', true_trajs[1,50,:,:,0].cpu().numpy())
+    np.save('v0_true.npy', true_trajs[1,50,:,:,1].cpu().numpy())
+    np.save('u99_true.npy', true_trajs[1,100,:,:,0].cpu().numpy())
+    np.save('v99_true.npy', true_trajs[1,100,:,:,1].cpu().numpy())
 
-    # avg_l2_per_t = []
-    # std_l2_per_t = []
-    # avg_rel_per_t = []
-    # std_rel_per_t = []
+    avg_l2_per_t = []
+    std_l2_per_t = []
+    avg_rel_per_t = []
+    std_rel_per_t = []
 
-    # for t in range(T - 1):
-    #     l2s = []
-    #     rels = []
-    #     for i in range(batch_size):
-    #         l2 = mse_loss(pred_trajs[i, t], true_trajs[i, t+1])
-    #         rel = relative_l2_error(pred_trajs[i, t], true_trajs[i, t+1])
-    #         l2s.append(l2.item())
-    #         rels.append(rel.item())
+    for t in range(T - 1):
+        l2s = []
+        rels = []
+        for i in range(batch_size):
+            l2 = mse_loss(pred_trajs[i, t], true_trajs[i, t+1])
+            rel = relative_l2_error(pred_trajs[i, t], true_trajs[i, t+1])
+            l2s.append(l2.item())
+            rels.append(rel.item())
 
-    #     l2_tensor = torch.tensor(l2s)
-    #     rel_tensor = torch.tensor(rels)
+        l2_tensor = torch.tensor(l2s)
+        rel_tensor = torch.tensor(rels)
 
-    #     avg_l2_per_t.append(l2_tensor.mean().item())
-    #     std_l2_per_t.append(l2_tensor.std(unbiased=False).item())
+        avg_l2_per_t.append(l2_tensor.mean().item())
+        std_l2_per_t.append(l2_tensor.std(unbiased=False).item())
 
-    #     avg_rel_per_t.append(rel_tensor.mean().item())
-    #     std_rel_per_t.append(rel_tensor.std(unbiased=False).item())
+        avg_rel_per_t.append(rel_tensor.mean().item())
+        std_rel_per_t.append(rel_tensor.std(unbiased=False).item())
 
-    # return avg_l2_per_t, std_l2_per_t, avg_rel_per_t, std_rel_per_t
+    return avg_l2_per_t, std_l2_per_t, avg_rel_per_t, std_rel_per_t
 
 if __name__ == "__main__":
     # 加载模型
@@ -115,17 +115,17 @@ if __name__ == "__main__":
     true_trajs  = traj_data[:]        # [4, T, 128, 128]
     epsilons    = epsilons[:]         # [4]
 
-    evaluate_on_trajectory(model, init_states, epsilons, true_trajs)
+    # evaluate_on_trajectory(model, init_states, epsilons, true_trajs)
 
-    # avg_l2_per_t, std_l2_per_t, avg_rel_per_t, std_rel_per_t = evaluate_on_trajectory(model, init_states, epsilons, true_trajs)
+    avg_l2_per_t, std_l2_per_t, avg_rel_per_t, std_rel_per_t = evaluate_on_trajectory(model, init_states, epsilons, true_trajs)
 
-    # # 写入文件，每行写一个时间点的误差
-    # with open("traj_error_4.5.txt", "w") as f:
-    #     f.write("t_index\tavg_L2_error\tstd_L2_error\tavg_relative_error\tstd_relative_error\n")
-    #     for t, (l2_mean, l2_std, rel_mean, rel_std) in enumerate(
-    #         zip(avg_l2_per_t, std_l2_per_t, avg_rel_per_t, std_rel_per_t)
-    #     ):
-    #         f.write(f"{t}\t{l2_mean:.6e}\t{l2_std:.6e}\t{rel_mean:.6e}\t{rel_std:.6e}\n")
+    # 写入文件，每行写一个时间点的误差
+    with open("traj_error_4.5.txt", "w") as f:
+        f.write("t_index\tavg_L2_error\tstd_L2_error\tavg_relative_error\tstd_relative_error\n")
+        for t, (l2_mean, l2_std, rel_mean, rel_std) in enumerate(
+            zip(avg_l2_per_t, std_l2_per_t, avg_rel_per_t, std_rel_per_t)
+        ):
+            f.write(f"{t}\t{l2_mean:.6e}\t{l2_std:.6e}\t{rel_mean:.6e}\t{rel_std:.6e}\n")
 
 
-    # print("✅ Trajectory error evaluation done.")
+    print("✅ Trajectory error evaluation done.")

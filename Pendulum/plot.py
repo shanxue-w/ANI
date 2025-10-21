@@ -10,7 +10,6 @@ plt.rcParams.update({
 })
 
 data_2th_rel = np.loadtxt("2th_test/rel_test_errors_small.txt")
-data_3th_rel = np.loadtxt("3th/rel_test_errors_small.txt")
 data_4th_rel = np.loadtxt("4th_test/rel_test_errors_small.txt")
 data_6th_rel = np.loadtxt("6th_test/rel_test_errors_small.txt")
 data_neural_ode_rel = np.loadtxt("neural_RK4/rel_test_errors_baseline.txt")
@@ -36,7 +35,6 @@ plt.close()
 
 
 data_2th_abs = np.loadtxt("2th_test/abs_test_errors_small.txt")
-data_3th_abs = np.loadtxt("3th/abs_test_errors_small.txt")
 data_4th_abs = np.loadtxt("4th_test/abs_test_errors_small.txt")
 data_6th_abs = np.loadtxt("6th_test/abs_test_errors_small.txt")
 data_neural_ode_abs = np.loadtxt("neural_RK4/abs_test_errors_baseline.txt")

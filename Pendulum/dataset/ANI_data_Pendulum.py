@@ -106,12 +106,12 @@ def generate_trajectories(num_trajectories=30, delta_t=5e-2, total_time=20.0, h=
 
 
 # 生成总数据
-total_samples = 10000
+total_samples = 1500
 inputs, outputs = generate_data(num_samples=total_samples)
 
 # 划分比例
-n_train = 9000
-n_val = 1000
+n_train = 1000
+n_val = 500
 # n_var = total_samples - n_train - n_val  # = 700
 
 # 划分数据
@@ -125,14 +125,14 @@ val_outputs = outputs[n_train:n_train+n_val]
 # test_outputs = outputs[n_train+n_val:]
 
 # 保存为 npy 文件
-np.save('train_inputs_test.npy', train_inputs)
-np.save('train_outputs_test.npy', train_outputs)
+np.save('train_inputs_var.npy', train_inputs)
+np.save('train_outputs_var.npy', train_outputs)
 
-np.save('val_inputs_test.npy', val_inputs)
-np.save('val_outputs_test.npy', val_outputs)
+np.save('val_inputs_var.npy', val_inputs)
+np.save('val_outputs_var.npy', val_outputs)
 
 # np.save('test_inputs_fixed.npy', test_inputs)
 # np.save('test_outputs_fixed.npy', test_outputs)
 
 test_data = generate_trajectories(num_trajectories=50, delta_t=1e-1, total_time=20.0, h=1e-4)
-np.save('test_trajectories_test.npy', test_data)
+np.save('test_trajectories_var.npy', test_data)

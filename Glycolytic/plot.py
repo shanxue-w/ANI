@@ -29,12 +29,12 @@ abs_ANI_3th = np.loadtxt('3th/rel_test_errors_small.txt')
 abs_ANI_4th = np.loadtxt('4th/rel_test_errors_small.txt')
 abs_resnet    = np.loadtxt('NeuralRK4/rel_test_errors_small.txt')
 
-abs_ANI_2th_second = np.loadtxt('2th_2/rel_test_errors_small.txt')
-abs_ANI_3th_second = np.loadtxt('3th_2/rel_test_errors_small.txt')
-abs_ANI_4th_second = np.loadtxt('4th_2/rel_test_errors_small.txt')
+# abs_ANI_2th_second = np.loadtxt('2th_2/rel_test_errors_small.txt')
+# abs_ANI_3th_second = np.loadtxt('3th_2/rel_test_errors_small.txt')
+# abs_ANI_4th_second = np.loadtxt('4th_2/rel_test_errors_small.txt')
 
 plot_error(abs_ANI_2th, abs_ANI_3th, abs_ANI_4th, abs_resnet, 'rel_error_200.pdf')
-plot_error(abs_ANI_2th_second, abs_ANI_3th_second, abs_ANI_4th_second, abs_resnet, 'rel_error_200_second.pdf')
+# plot_error(abs_ANI_2th_second, abs_ANI_3th_second, abs_ANI_4th_second, abs_resnet, 'rel_error_200_second.pdf')
 
 def plot_error_compare(ANI_first, ANI_second, filename):
     plt.figure(figsize=(8, 6))
@@ -49,11 +49,11 @@ def plot_error_compare(ANI_first, ANI_second, filename):
     plt.savefig(filename, format='pdf', bbox_inches='tight', dpi=300)
     plt.close()
 
-plot_error_compare(abs_ANI_2th, abs_ANI_2th_second, "ANI_2th_compare.pdf")
+# plot_error_compare(abs_ANI_2th, abs_ANI_2th_second, "ANI_2th_compare.pdf")
 
 A1_error = np.loadtxt('2th/rel_test_errors_small_A.txt')
-A2_error = np.loadtxt('2th_2/rel_test_errors_small_A.txt')
-plot_error_compare(A1_error, A2_error, "two_A_compare.pdf")
+# A2_error = np.loadtxt('2th_2/rel_test_errors_small_A.txt')
+# plot_error_compare(A1_error, A2_error, "two_A_compare.pdf")
 
 
 phase_true = np.load('2th/traj_2th.npy')
