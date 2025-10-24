@@ -9,6 +9,22 @@ pip install -e .
 After installation, you can run the experiment scripts directly from the repository without additional configuration.
 
 ## Contents
+
+Each folder corresponds to a specific differential equation or PDE system. The structure inside each folder is organized as follows:
+
+* `Problem/`
+  Contains scripts for visualization and plotting. These scripts typically use trained models or saved data to produce figures and analysis.
+
+* `Problem/method/`
+  Contains the training and testing scripts (`.py` files) for the ANI model with a specific numerical method or resolution. Each file corresponds to either a training run or a test run.
+  - **Note:** For `NS_NEW`, the training script is named `parallel.py` due to its parallel implementation.
+
+* `Problem/dataset/`
+  Contains scripts for dataset generation as well as the generated data files. These scripts are used to create the training and testing data used by the ANI models.
+
+If you want, I can also make a **tree-style diagram** showing `Problem/`, `method/`, `dataset/`, and plotting scripts, so it’s visually easier to understand. Do you want me to add that?
+
+
 - `Pendulum`: Implementation and experiments of ANI on the damped pendulum ODE.
 - `Lorenz-stenflo`: Implementation and experiments of ANI on the Lorenz-Stenflo ODE.
 - `Glycolytic`: Implementation and experiments of ANI on the glycolytic oscillator ODE.

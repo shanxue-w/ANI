@@ -142,8 +142,8 @@ def evaluate_on_trajectory(model, init_states, true_trajs, dt=0.1):
     curr_states = init_states.clone()
     pred_trajs = []
     
-    torch.cuda.synchronize()
-    start_time = time.perf_counter()
+    # torch.cuda.synchronize()
+    # start_time = time.perf_counter()
 
     for t in range(T):
         # print(f"t = {t}/{T-1}", end='\r')
@@ -158,75 +158,75 @@ def evaluate_on_trajectory(model, init_states, true_trajs, dt=0.1):
         #     error = (next_states - true_trajs[:, t+1])
         #     # error = true_trajs[:, 0] 
         #     # error = true_trajs[:, 99] 
-        # pred_trajs.append(next_states.clone().cpu())
+        pred_trajs.append(next_states.clone().cpu())
         curr_states = next_states
-    torch.cuda.synchronize()
-    end_time = time.perf_counter()
-    elapsed_time = end_time - start_time
-    with open("time.txt", "w") as f:
-        f.write(f"Total inference time: {elapsed_time:.6f} s\n")
-    # pred_trajs = torch.stack(pred_trajs, dim=1)  # [4, T, 128, 128]
+    # torch.cuda.synchronize()
+    # end_time = time.perf_counter()
+    # elapsed_time = end_time - start_time
+    # with open("time.txt", "w") as f:
+        # f.write(f"Total inference time: {elapsed_time:.6f} s\n")
+    pred_trajs = torch.stack(pred_trajs, dim=1)  # [4, T, 128, 128]
 
-    # u_99 = pred_trajs[0, 99, 0, :, :]
-    # v_99 = pred_trajs[0, 99, 1, :, :]
+    u_99 = pred_trajs[0, 99, 0, :, :]
+    v_99 = pred_trajs[0, 99, 1, :, :]
 
-    # u_149 = pred_trajs[0, 149, 0, :, :]
-    # v_149 = pred_trajs[0, 149, 1, :, :]
+    u_149 = pred_trajs[0, 149, 0, :, :]
+    v_149 = pred_trajs[0, 149, 1, :, :]
 
-    # u_199 = pred_trajs[0, 199, 0, :, :]
-    # v_199 = pred_trajs[0, 199, 1, :, :]
+    u_199 = pred_trajs[0, 199, 0, :, :]
+    v_199 = pred_trajs[0, 199, 1, :, :]
 
-    # u_249 = pred_trajs[0, 249, 0, :, :]
-    # v_249 = pred_trajs[0, 249, 1, :, :]
+    u_249 = pred_trajs[0, 249, 0, :, :]
+    v_249 = pred_trajs[0, 249, 1, :, :]
 
-    # u_299 = pred_trajs[0, 299, 0, :, :]
-    # v_299 = pred_trajs[0, 299, 1, :, :]
+    u_299 = pred_trajs[0, 299, 0, :, :]
+    v_299 = pred_trajs[0, 299, 1, :, :]
 
-    # u_349 = pred_trajs[0, 349, 0, :, :]
-    # v_349 = pred_trajs[0, 349, 1, :, :]
+    u_349 = pred_trajs[0, 349, 0, :, :]
+    v_349 = pred_trajs[0, 349, 1, :, :]
 
-    # np.save('u_99_base.npy', u_99.cpu().numpy())
-    # np.save('v_99_base.npy', v_99.cpu().numpy())
-    # np.save('u_149_base.npy', u_149.cpu().numpy())
-    # np.save('v_149_base.npy', v_149.cpu().numpy())
-    # np.save('u_199_base.npy', u_199.cpu().numpy())
-    # np.save('v_199_base.npy', v_199.cpu().numpy())
-    # np.save('u_249_base.npy', u_249.cpu().numpy())
-    # np.save('v_249_base.npy', v_249.cpu().numpy())
-    # np.save('u_299_base.npy', u_299.cpu().numpy())
-    # np.save('v_299_base.npy', v_299.cpu().numpy())
-    # np.save('u_349_base.npy', u_349.cpu().numpy())
-    # np.save('v_349_base.npy', v_349.cpu().numpy())
+    np.save('u_99_base.npy', u_99.cpu().numpy())
+    np.save('v_99_base.npy', v_99.cpu().numpy())
+    np.save('u_149_base.npy', u_149.cpu().numpy())
+    np.save('v_149_base.npy', v_149.cpu().numpy())
+    np.save('u_199_base.npy', u_199.cpu().numpy())
+    np.save('v_199_base.npy', v_199.cpu().numpy())
+    np.save('u_249_base.npy', u_249.cpu().numpy())
+    np.save('v_249_base.npy', v_249.cpu().numpy())
+    np.save('u_299_base.npy', u_299.cpu().numpy())
+    np.save('v_299_base.npy', v_299.cpu().numpy())
+    np.save('u_349_base.npy', u_349.cpu().numpy())
+    np.save('v_349_base.npy', v_349.cpu().numpy())
 
-    # np.save('u_99_true.npy', true_trajs[0, 100, 0, :, :].cpu().numpy())
-    # np.save('v_99_true.npy', true_trajs[0, 100, 1, :, :].cpu().numpy())
-    # np.save('u_149_true.npy', true_trajs[0, 150, 0, :, :].cpu().numpy())
-    # np.save('v_149_true.npy', true_trajs[0, 150, 1, :, :].cpu().numpy())
-    # np.save('u_199_true.npy', true_trajs[0, 200, 0, :, :].cpu().numpy())
-    # np.save('v_199_true.npy', true_trajs[0, 200, 1, :, :].cpu().numpy())
-    # np.save('u_249_true.npy', true_trajs[0, 250, 0, :, :].cpu().numpy())
-    # np.save('v_249_true.npy', true_trajs[0, 250, 1, :, :].cpu().numpy())
-    # np.save('u_299_true.npy', true_trajs[0, 300, 0, :, :].cpu().numpy())
-    # np.save('v_299_true.npy', true_trajs[0, 300, 1, :, :].cpu().numpy())
-    # np.save('u_349_true.npy', true_trajs[0, 350, 0, :, :].cpu().numpy())
-    # np.save('v_349_true.npy', true_trajs[0, 350, 1, :, :].cpu().numpy())
+    np.save('u_99_true.npy', true_trajs[0, 100, 0, :, :].cpu().numpy())
+    np.save('v_99_true.npy', true_trajs[0, 100, 1, :, :].cpu().numpy())
+    np.save('u_149_true.npy', true_trajs[0, 150, 0, :, :].cpu().numpy())
+    np.save('v_149_true.npy', true_trajs[0, 150, 1, :, :].cpu().numpy())
+    np.save('u_199_true.npy', true_trajs[0, 200, 0, :, :].cpu().numpy())
+    np.save('v_199_true.npy', true_trajs[0, 200, 1, :, :].cpu().numpy())
+    np.save('u_249_true.npy', true_trajs[0, 250, 0, :, :].cpu().numpy())
+    np.save('v_249_true.npy', true_trajs[0, 250, 1, :, :].cpu().numpy())
+    np.save('u_299_true.npy', true_trajs[0, 300, 0, :, :].cpu().numpy())
+    np.save('v_299_true.npy', true_trajs[0, 300, 1, :, :].cpu().numpy())
+    np.save('u_349_true.npy', true_trajs[0, 350, 0, :, :].cpu().numpy())
+    np.save('v_349_true.npy', true_trajs[0, 350, 1, :, :].cpu().numpy())
 
 
-    # avg_l2_per_t = []
-    # avg_rel_per_t = []
+    avg_l2_per_t = []
+    avg_rel_per_t = []
 
-    # for t in range(T-1):
-    #     l2s = []
-    #     rels = []
-    #     for i in range(batch_size):
-    #         l2 = mse_loss(pred_trajs[i, t].to(device), true_trajs[i, t+1])
-    #         rel = relative_l2_error(pred_trajs[i, t].to(device), true_trajs[i, t+1])
-    #         l2s.append(l2.item())
-    #         rels.append(rel.item())
-    #     avg_l2_per_t.append(sum(l2s) / batch_size)
-    #     avg_rel_per_t.append(sum(rels) / batch_size)
+    for t in range(T-1):
+        l2s = []
+        rels = []
+        for i in range(batch_size):
+            l2 = mse_loss(pred_trajs[i, t].to(device), true_trajs[i, t+1])
+            rel = relative_l2_error(pred_trajs[i, t].to(device), true_trajs[i, t+1])
+            l2s.append(l2.item())
+            rels.append(rel.item())
+        avg_l2_per_t.append(sum(l2s) / batch_size)
+        avg_rel_per_t.append(sum(rels) / batch_size)
     
-    # # plot error [B,2,256,512], so plot u, v
+    # plot error [B,2,256,512], so plot u, v
     # print(error.norm())
     # u = error[0, 0]
     # v = error[0, 1]
@@ -250,7 +250,7 @@ def evaluate_on_trajectory(model, init_states, true_trajs, dt=0.1):
     # plt.savefig("error.png")
     # plt.close()
 
-    # return avg_l2_per_t, avg_rel_per_t, pred_trajs
+    return avg_l2_per_t, avg_rel_per_t, pred_trajs
 
 if __name__ == "__main__":
     # 加载模型
@@ -267,17 +267,17 @@ if __name__ == "__main__":
 
     print(init_states.shape, true_trajs.shape)
 
-    evaluate_on_trajectory(model, init_states, true_trajs)
+    # evaluate_on_trajectory(model, init_states, true_trajs)
 
-    # avg_l2_per_t, avg_rel_per_t, pred_trajs = evaluate_on_trajectory(model, init_states, true_trajs)
+    avg_l2_per_t, avg_rel_per_t, pred_trajs = evaluate_on_trajectory(model, init_states, true_trajs)
 
-    # # 写入文件，每行写一个时间点的误差
-    # with open("traj_error.txt", "w") as f:
-    #     f.write("t_index\tavg_L2_error\tavg_relative_error\n")
-    #     for t, (l2, rel) in enumerate(zip(avg_l2_per_t, avg_rel_per_t)):
-    #         f.write(f"{t}\t{l2:.6e}\t{rel:.6e}\n")
+    # 写入文件，每行写一个时间点的误差
+    with open("traj_error.txt", "w") as f:
+        f.write("t_index\tavg_L2_error\tavg_relative_error\n")
+        for t, (l2, rel) in enumerate(zip(avg_l2_per_t, avg_rel_per_t)):
+            f.write(f"{t}\t{l2:.6e}\t{rel:.6e}\n")
 
-    # print("✅ Trajectory error evaluation done.")
+    print("✅ Trajectory error evaluation done.")
 
     # # 假设已有 true_trajs [B, T, 2, H, W]
     # u_seq = true_trajs[2, :, 0].cpu().numpy()  # [T, H, W]

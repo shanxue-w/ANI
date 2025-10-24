@@ -940,18 +940,18 @@ class NavierStokes(nn.Module):
         omega = omega.unsqueeze(1)
         omega = self.N0_SCHEME.single_step(omega, dts=self.dt).squeeze(1)
 
-        # mean_old = omega.mean(dim=(-2, -1), keepdim=True)
-        # # Convert the updated vorticity back to velocity
-        # u, v = self.N0_SCHEME._vorticity_to_velocity_spectral(
-        #     omega, self.N0_SCHEME.Kx_fine, self.N0_SCHEME.Ky_fine, self.N0_SCHEME.denom_safe_fine
-        # )
-        # # Use the neural network to predict a residual displacement (delta_x, delta_y)
-        # omega_features = torch.stack([omega, u, v, x_grid, y_grid], dim=1)  # [B, H, W, 3]
-        # # The neural network outputs a 2-channel residual displacement field
-        # delta = self.dt_tensor * self.fno(omega_features, self.dt_tensor)  # [B, 3, H, W]
-        # omega_new = omega + delta.squeeze(1)
-        # mean_new = omega_new.mean(dim=(-2, -1), keepdim=True)
-        # omega = omega_new - mean_new + mean_old
+        mean_old = omega.mean(dim=(-2, -1), keepdim=True)
+        # Convert the updated vorticity back to velocity
+        u, v = self.N0_SCHEME._vorticity_to_velocity_spectral(
+            omega, self.N0_SCHEME.Kx_fine, self.N0_SCHEME.Ky_fine, self.N0_SCHEME.denom_safe_fine
+        )
+        # Use the neural network to predict a residual displacement (delta_x, delta_y)
+        omega_features = torch.stack([omega, u, v, x_grid, y_grid], dim=1)  # [B, H, W, 3]
+        # The neural network outputs a 2-channel residual displacement field
+        delta = self.dt_tensor * self.fno(omega_features, self.dt_tensor)  # [B, 3, H, W]
+        omega_new = omega + delta.squeeze(1)
+        mean_new = omega_new.mean(dim=(-2, -1), keepdim=True)
+        omega = omega_new - mean_new + mean_old
 
         # Perform a second standard single-step update
         # omega = omega.unsqueeze(1)
