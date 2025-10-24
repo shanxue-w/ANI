@@ -22,6 +22,7 @@ Each folder corresponds to a specific differential equation or PDE system. The s
 * `Problem/dataset/`
   Contains scripts for dataset generation as well as the generated data files. These scripts are used to create the training and testing data used by the ANI models.
 
+For each experiment, you can find the following directories:
 - `Pendulum`: Implementation and experiments of ANI on the damped pendulum ODE.
 - `Lorenz-stenflo`: Implementation and experiments of ANI on the Lorenz-Stenflo ODE.
 - `Glycolytic`: Implementation and experiments of ANI on the glycolytic oscillator ODE.
