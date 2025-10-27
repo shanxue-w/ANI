@@ -15,16 +15,18 @@ import math
 import matplotlib.colors as mcolors
 from matplotlib import cm
 
+import os 
+os.makedirs("../../results/KolmogorovFlow", exist_ok=True)
+
 plt.rcParams.update({
-    "font.size": 14,        # 全局字体大小
-    "axes.labelsize": 14,   # 坐标轴标签字体大小
-    "xtick.labelsize": 14,  # x 轴刻度字体大小
-    "ytick.labelsize": 14,  # y 轴刻度字体大小
-    "legend.fontsize": 14,  # 图例字体大小
+    "font.size": 14,        
+    "axes.labelsize": 14,  
+    "xtick.labelsize": 14,  
+    "ytick.labelsize": 14, 
+    "legend.fontsize": 14,
 })
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-# device = "cpu"
 
 torch.set_default_dtype(torch.float64)
 torch.manual_seed(123)
@@ -229,35 +231,28 @@ class A(N0):
         return torch.sqrt(S2), S11, S22, S12
 
     def _test_filter(self, f):
-        # 1. 将场 f 变换到谱空间
         f_hat = torch.fft.fft2(f)
-        # 2. 在谱空间中应用预先计算好的高斯核
         f_hat_filtered = f_hat * self.gaussian_filter_kernel
-        # 3. 将滤波后的结果逆变换回物理空间
         f_filtered = torch.fft.ifft2(f_hat_filtered)
         
         return f_filtered.real
 
     def _calculate_Cs_delta_squared(self, u, v, omega):
-        # 1. 批量 FFT + 滤波
         f_stack = torch.stack([u, v, omega])
         f_hat_filtered = torch.fft.fft2(f_stack) * self.gaussian_filter_kernel.unsqueeze(0)
         u_t, v_t, omega_t = torch.fft.ifft2(f_hat_filtered).real
 
-        # 2. 对流项
         dwdx, dwdy = self._compute_derivatives_spectral(omega, self.Kx_fine, self.Ky_fine)
         dwdx_t, dwdy_t = self._compute_derivatives_spectral(omega_t, self.Kx_fine, self.Ky_fine)
         J = u * dwdx + v * dwdy
         J_t = u_t * dwdx_t + v_t * dwdy_t
         J_tf = torch.fft.ifft2(torch.fft.fft2(J) * self.gaussian_filter_kernel).real
 
-        # 3. S 和 lap(omega)
         S_mag = self._s_mag(u, v)[0]
         S_mag_t = self._s_mag(u_t, v_t)[0]
         lap_omega = self._lap(omega)
         lap_omega_t = torch.fft.ifft2(torch.fft.fft2(lap_omega) * self.gaussian_filter_kernel).real
 
-        # 4. 最终 Cs_delta_sq
         H = J_t - J_tf
         M = self.kappa**2 * S_mag_t * lap_omega_t - torch.fft.ifft2(torch.fft.fft2(S_mag * lap_omega) * self.gaussian_filter_kernel).real
         Cs_delta_sq = torch.mean(H*M) / (torch.mean(M*M) + 1e-12)
@@ -420,24 +415,6 @@ class A(N0):
         return u
     
 
-u_true_t99 = np.load('2th_new/u_99_true.npy')
-v_true_t99 = np.load('2th_new/v_99_true.npy')
-u_2th_t99 = np.load('2th_new/u_99_2th.npy')
-v_2th_t99 = np.load('2th_new/v_99_2th.npy')
-u_4th_t99 = np.load('4th_new/u_99_4th.npy')
-v_4th_t99 = np.load('4th_new/v_99_4th.npy')
-u_les_t99 = np.load('2th_new/u_99_les.npy')
-v_les_t99 = np.load('2th_new/v_99_les.npy')
-
-u_true_149 = np.load('2th_new/u_149_true.npy')
-v_true_149 = np.load('2th_new/v_149_true.npy')
-u_2th_149 = np.load('2th_new/u_149_2th.npy')
-v_2th_149 = np.load('2th_new/v_149_2th.npy')
-u_4th_149 = np.load('4th_new/u_149_4th.npy')
-v_4th_149 = np.load('4th_new/v_149_4th.npy')
-u_les_149 = np.load('2th_new/u_149_les.npy')
-v_les_149 = np.load('2th_new/v_149_les.npy')
-
 u_true_t199 = np.load('2th_new/u_199_true.npy')
 v_true_t199 = np.load('2th_new/v_199_true.npy')
 u_2th_t199 = np.load('2th_new/u_199_2th.npy')
@@ -446,15 +423,6 @@ u_4th_t199 = np.load('4th_new/u_199_4th.npy')
 v_4th_t199 = np.load('4th_new/v_199_4th.npy')
 u_les_t199 = np.load('2th_new/u_199_les.npy')
 v_les_t199 = np.load('2th_new/v_199_les.npy')
-
-u_true_t249 = np.load('2th_new/u_249_true.npy')
-v_true_t249 = np.load('2th_new/v_249_true.npy')
-u_2th_t249 = np.load('2th_new/u_249_2th.npy')
-v_2th_t249 = np.load('2th_new/v_249_2th.npy')
-u_4th_t249 = np.load('4th_new/u_249_4th.npy')
-v_4th_t249 = np.load('4th_new/v_249_4th.npy')
-u_les_t249 = np.load('2th_new/u_249_les.npy')
-v_les_t249 = np.load('2th_new/v_249_les.npy')
 
 u_true_t299 = np.load('2th_new/u_299_true.npy')
 v_true_t299 = np.load('2th_new/v_299_true.npy')
@@ -484,11 +452,10 @@ def plot_uv_grid(u_list, v_list, t_label, methods):
     fig = plt.figure(figsize=(4.5*len(methods), 8))
     gs = fig.add_gridspec(2, len(methods)+1, width_ratios=[1]*len(methods)+[0.05])
 
-    # 统一颜色范围
     umin, umax = np.min(u_list), np.max(u_list)
     vmin, vmax = np.min(v_list), np.max(v_list)
 
-    # 第一行：u
+    # u
     axes_u = []
     for col, method in enumerate(methods):
         ax = fig.add_subplot(gs[0, col])
@@ -504,9 +471,8 @@ def plot_uv_grid(u_list, v_list, t_label, methods):
     sm    = cm.ScalarMappable(norm=norm, cmap=im_u.cmap)
     sm.set_array([])
     fig.colorbar(sm, cax=cax_u, label="u value")
-    # fig.colorbar(im_u, cax=cax_u, label="u value")
 
-    # 第二行：v
+    # v
     axes_v = []
     for col, method in enumerate(methods):
         ax = fig.add_subplot(gs[1, col])
@@ -522,37 +488,15 @@ def plot_uv_grid(u_list, v_list, t_label, methods):
     sm    = cm.ScalarMappable(norm=norm, cmap=im_v.cmap)
     sm.set_array([])
     fig.colorbar(sm, cax=cax_v, label="v value")
-    # fig.colorbar(im_v, cax=cax_v, label="v value")
 
     plt.tight_layout()
-    plt.savefig(f"uv_grid_{t_label}_new.pdf", format='pdf', bbox_inches='tight', dpi=300)
+    plt.savefig(f"../../results/KolmogorovFlow/uv_grid_{t_label}_new.pdf", format='pdf', bbox_inches='tight', dpi=300)
     plt.close()
-# t=0s
-plot_uv_grid(
-    [u_true_t99, u_les_t99, u_2th_t99, u_4th_t99],
-    [v_true_t99, v_les_t99, v_2th_t99, v_4th_t99],
-    "1s",
-    methods
-)
-
-plot_uv_grid(
-    [u_true_149, u_les_149, u_2th_149, u_4th_149],
-    [v_true_149, v_les_149, v_2th_149, v_4th_149],
-    "1.5s",
-    methods
-)
 
 plot_uv_grid(
     [u_true_t199, u_les_t199, u_2th_t199, u_4th_t199],
     [v_true_t199, v_les_t199, v_2th_t199, v_4th_t199],
     "2s",
-    methods
-)
-
-plot_uv_grid(
-    [u_true_t249, u_les_t249, u_2th_t249, u_4th_t249],
-    [v_true_t249, v_les_t249, v_2th_t249, v_4th_t249],
-    "2.5s",
     methods
 )
 
@@ -598,7 +542,6 @@ def plot_error_grid(u_true, v_true, u_methods, v_methods, t_label,
     fig, axes = plt.subplots(2, len(methods), figsize=(4*len(methods), 8))
     for col, method in enumerate(methods):
         # u
-        # im_u = axes[0, col].imshow(err_u[col], origin='lower', cmap=cmap, aspect='auto')
         im_u = axes[0, col].contourf(X, Y, err_u[col], cmap=cmap, origin='lower', levels=100)
         axes[0, col].set_rasterized(True)
         axes[0, col].set_title(f"{method} — {'u error'}")
@@ -607,7 +550,6 @@ def plot_error_grid(u_true, v_true, u_methods, v_methods, t_label,
         plt.colorbar(im_u, ax=axes[0, col], fraction=0.046, pad=0.04)
 
         # v
-        # im_v = axes[1, col].imshow(err_v[col], origin='lower', cmap=cmap, aspect='auto')
         im_v = axes[1, col].contourf(X, Y, err_v[col], cmap=cmap, origin='lower', levels=100)
         axes[1, col].set_rasterized(True)
         axes[1, col].set_title(f"{method} — {'v error'}")
@@ -616,36 +558,14 @@ def plot_error_grid(u_true, v_true, u_methods, v_methods, t_label,
         plt.colorbar(im_v, ax=axes[1, col], fraction=0.046, pad=0.04)
 
     plt.tight_layout(rect=[0,0,1,0.95])
-    # plt.show()
-    plt.savefig(f"error_grid_{t_label}_new.pdf", format='pdf', bbox_inches='tight', dpi=300)
+    plt.savefig(f"../../results/KolmogorovFlow/error_grid_{t_label}_new.pdf", format='pdf', bbox_inches='tight', dpi=300)
     plt.close()
-
-plot_error_grid(
-    u_true_t99, v_true_t99,
-    [u_les_t99, u_2th_t99, u_4th_t99],
-    [v_les_t99, v_2th_t99, v_4th_t99],
-    "1s"
-)
-
-plot_error_grid(
-    u_true_149, v_true_149,
-    [u_les_149, u_2th_149, u_4th_149],
-    [v_les_149, v_2th_149, v_4th_149],
-    "1.5s"
-)
 
 plot_error_grid(
     u_true_t199, v_true_t199,
     [u_les_t199, u_2th_t199, u_4th_t199],
     [v_les_t199, v_2th_t199, v_4th_t199],
     "2s"
-)
-
-plot_error_grid(
-    u_true_t249, v_true_t249,
-    [u_les_t249, u_2th_t249, u_4th_t249],
-    [v_les_t249, v_2th_t249, v_4th_t249],
-    "2.5s"
 )
 
 plot_error_grid(
@@ -663,25 +583,6 @@ plot_error_grid(
 )
 
 model = A(Nx=128, Ny=128, Lx=1.0, Ly=1.0, device=device)
-# convert u_true_t99 -> tensor
-u_true_t99 = torch.tensor(u_true_t99).unsqueeze(0).to(device)
-v_true_t99 = torch.tensor(v_true_t99).unsqueeze(0).to(device)
-u_2th_t99 = torch.tensor(u_2th_t99).unsqueeze(0).to(device)
-v_2th_t99 = torch.tensor(v_2th_t99).unsqueeze(0).to(device)
-u_4th_t99 = torch.tensor(u_4th_t99).unsqueeze(0).to(device)
-v_4th_t99 = torch.tensor(v_4th_t99).unsqueeze(0).to(device)
-u_les_t99 = torch.tensor(u_les_t99).unsqueeze(0).to(device)
-v_les_t99 = torch.tensor(v_les_t99).unsqueeze(0).to(device)
-
-u_true_149 = torch.tensor(u_true_149).unsqueeze(0).to(device)
-v_true_149 = torch.tensor(v_true_149).unsqueeze(0).to(device)
-u_2th_149 = torch.tensor(u_2th_149).unsqueeze(0).to(device)
-v_2th_149 = torch.tensor(v_2th_149).unsqueeze(0).to(device)
-u_4th_149 = torch.tensor(u_4th_149).unsqueeze(0).to(device)
-v_4th_149 = torch.tensor(v_4th_149).unsqueeze(0).to(device)
-u_les_149 = torch.tensor(u_les_149).unsqueeze(0).to(device)
-v_les_149 = torch.tensor(v_les_149).unsqueeze(0).to(device)
-
 u_true_t199 = torch.tensor(u_true_t199).unsqueeze(0).to(device)
 v_true_t199 = torch.tensor(v_true_t199).unsqueeze(0).to(device)
 u_2th_t199 = torch.tensor(u_2th_t199).unsqueeze(0).to(device)
@@ -690,15 +591,6 @@ u_4th_t199 = torch.tensor(u_4th_t199).unsqueeze(0).to(device)
 v_4th_t199 = torch.tensor(v_4th_t199).unsqueeze(0).to(device)
 u_les_t199 = torch.tensor(u_les_t199).unsqueeze(0).to(device)
 v_les_t199 = torch.tensor(v_les_t199).unsqueeze(0).to(device)
-
-u_true_t249 = torch.tensor(u_true_t249).unsqueeze(0).to(device)
-v_true_t249 = torch.tensor(v_true_t249).unsqueeze(0).to(device)
-u_2th_t249 = torch.tensor(u_2th_t249).unsqueeze(0).to(device)
-v_2th_t249 = torch.tensor(v_2th_t249).unsqueeze(0).to(device)
-u_4th_t249 = torch.tensor(u_4th_t249).unsqueeze(0).to(device)
-v_4th_t249 = torch.tensor(v_4th_t249).unsqueeze(0).to(device)
-u_les_t249 = torch.tensor(u_les_t249).unsqueeze(0).to(device)
-v_les_t249 = torch.tensor(v_les_t249).unsqueeze(0).to(device)
 
 u_true_t299 = torch.tensor(u_true_t299).unsqueeze(0).to(device)
 v_true_t299 = torch.tensor(v_true_t299).unsqueeze(0).to(device)
@@ -719,25 +611,10 @@ u_les_t349 = torch.tensor(u_les_t349).unsqueeze(0).to(device)
 v_les_t349 = torch.tensor(v_les_t349).unsqueeze(0).to(device)
 
 
-omega_true_t99 = model._velocity_to_vorticity_spectral(u_true_t99, v_true_t99, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_2th_t99 = model._velocity_to_vorticity_spectral(u_2th_t99, v_2th_t99, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_4th_t99 = model._velocity_to_vorticity_spectral(u_4th_t99, v_4th_t99, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_les_t99 = model._velocity_to_vorticity_spectral(u_les_t99, v_les_t99, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-
-omega_true_149 = model._velocity_to_vorticity_spectral(u_true_149, v_true_149, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_2th_149 = model._velocity_to_vorticity_spectral(u_2th_149, v_2th_149, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_4th_149 = model._velocity_to_vorticity_spectral(u_4th_149, v_4th_149, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_les_149 = model._velocity_to_vorticity_spectral(u_les_149, v_les_149, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-
 omega_true_t199 = model._velocity_to_vorticity_spectral(u_true_t199, v_true_t199, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
 omega_2th_t199 = model._velocity_to_vorticity_spectral(u_2th_t199, v_2th_t199, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
 omega_4th_t199 = model._velocity_to_vorticity_spectral(u_4th_t199, v_4th_t199, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
 omega_les_t199 = model._velocity_to_vorticity_spectral(u_les_t199, v_les_t199, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-
-omega_true_t249 = model._velocity_to_vorticity_spectral(u_true_t249, v_true_t249, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_2th_t249 = model._velocity_to_vorticity_spectral(u_2th_t249, v_2th_t249, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_4th_t249 = model._velocity_to_vorticity_spectral(u_4th_t249, v_4th_t249, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_les_t249 = model._velocity_to_vorticity_spectral(u_les_t249, v_les_t249, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
 
 omega_true_t299 = model._velocity_to_vorticity_spectral(u_true_t299, v_true_t299, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
 omega_2th_t299 = model._velocity_to_vorticity_spectral(u_2th_t299, v_2th_t299, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
@@ -748,15 +625,6 @@ omega_true_t349 = model._velocity_to_vorticity_spectral(u_true_t349, v_true_t349
 omega_2th_t349 = model._velocity_to_vorticity_spectral(u_2th_t349, v_2th_t349, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
 omega_4th_t349 = model._velocity_to_vorticity_spectral(u_4th_t349, v_4th_t349, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
 omega_les_t349 = model._velocity_to_vorticity_spectral(u_les_t349, v_les_t349, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-
-fig, ax = plt.subplots(figsize=(4, 4))
-ax.contourf(X, Y, omega_true_t249, levels=100, cmap='viridis', origin='lower')
-ax.axis('off')
-ax.set_aspect('equal', adjustable='box')
-plt.tight_layout()
-ax.set_rasterized(True)
-plt.savefig("omega_grid_new.pdf", format='pdf', bbox_inches='tight', dpi=300, transparent=True)
-plt.close()
 
 def plot_omega_grid(omega_list, t_label, methods):
 
@@ -785,32 +653,14 @@ def plot_omega_grid(omega_list, t_label, methods):
     # fig.colorbar(im_u, cax=cax_u, label=r"$\omega$ value")
 
     plt.tight_layout()
-    plt.savefig(f"omega_grid_{t_label}_new.pdf", format='pdf', bbox_inches='tight', dpi=300)
+    plt.savefig(f"../../results/KolmogorovFlow/omega_grid_{t_label}_new.pdf", format='pdf', bbox_inches='tight', dpi=300)
     plt.close()
 
 
 methods = ["True", "LES", "ANI-2", "ANI-4"]
 plot_omega_grid(
-    [omega_true_t99, omega_les_t99, omega_2th_t99, omega_4th_t99],
-    "1s",
-    methods
-)
-
-plot_omega_grid(
-    [omega_true_149, omega_les_149, omega_2th_149, omega_4th_149],
-    "1.5s",
-    methods
-)
-
-plot_omega_grid(
     [omega_true_t199, omega_les_t199, omega_2th_t199, omega_4th_t199],
     "2s",
-    methods
-)
-
-plot_omega_grid(
-    [omega_true_t249, omega_les_t249, omega_2th_t249, omega_4th_t249],
-    "2.5s",
     methods
 )
 
@@ -851,43 +701,13 @@ def plot_omega_error_grid(omega_true, omega_methods, t_label, methods,
         plt.colorbar(im, ax=axes[col], fraction=0.046, pad=0.04)
 
     plt.tight_layout()
-    plt.savefig(f"omega_error_grid_{t_label}_new.pdf", format='pdf', bbox_inches='tight', dpi=300)
+    plt.savefig(f"../../results/KolmogorovFlow/omega_error_grid_{t_label}_new.pdf", format='pdf', bbox_inches='tight', dpi=300)
     plt.close()
-
-plot_omega_error_grid(
-    omega_true_t99,
-    [omega_les_t99, omega_2th_t99, omega_4th_t99],
-    "1s",
-    ["LES", "ANI-2", "ANI-4"],
-    signed=False,
-    cmap_abs='viridis',
-    cmap_signed='RdBu'
-)
-
-plot_omega_error_grid(
-    omega_true_149,
-    [omega_les_149, omega_2th_149, omega_4th_149],
-    "1.5s",
-    ["LES", "ANI-2", "ANI-4"],
-    signed=False,
-    cmap_abs='viridis',
-    cmap_signed='RdBu'
-)
 
 plot_omega_error_grid(
     omega_true_t199,
     [omega_les_t199, omega_2th_t199, omega_4th_t199],
     "2s",
-    ["LES", "ANI-2", "ANI-4"],
-    signed=False,
-    cmap_abs='viridis',
-    cmap_signed='RdBu'
-)
-
-plot_omega_error_grid(
-    omega_true_t249,
-    [omega_les_t249, omega_2th_t249, omega_4th_t249],
-    "2.5s",
     ["LES", "ANI-2", "ANI-4"],
     signed=False,
     cmap_abs='viridis',
@@ -914,48 +734,8 @@ plot_omega_error_grid(
     cmap_signed='RdBu'
 )
 
-def compute_kinetic_energy(u, v, L=1.0):
-    # u [1, 128, 128]
-    # v [1, 128, 128]
-    # L = 1.0
-    dx = L / u.shape[1]
-    dy = L / u.shape[2]
-    u = u.squeeze(0).cpu().numpy()
-    v = v.squeeze(0).cpu().numpy()
-    E = 0.5 * (u**2 + v**2) * dx * dy
-    return E
-
-def plot_kinetic_energy(u_list, v_list, t_label, methods):
-    E_list = [compute_kinetic_energy(u, v) for u, v in zip(u_list, v_list)]
-    fig, ax = plt.subplots(figsize=(6, 4))
-    for E, method in zip(E_list, methods):
-        ax.plot(E, label=method)
-    ax.set_title(f"Kinetic Energy — {t_label}")
-    ax.set_xlabel("Time step")
-    ax.set_ylabel("Kinetic Energy")
-    ax.legend()
-    plt.tight_layout()
-    plt.savefig(f"kinetic_energy_{t_label}.pdf", format='pdf', bbox_inches='tight', dpi=300)
-    plt.close()
-
-plot_kinetic_energy(
-    [u_true_t99, u_les_t99, u_2th_t99, u_4th_t99],
-    [v_true_t99, v_les_t99, v_2th_t99, v_4th_t99],
-    "1s",
-    ["True", "LES", "ANI-2", "ANI-4"]
-)
 
 def compute_isotropic_spectrum(u, v, w=None, L=1.0, nbins=None):
-    """
-    计算速度场的各向同性能谱 (修正版)
-    适用于 2D (u,v) 或 3D (u,v,w) 速度场
-    """
-    # ... (前面的代码，如 tensor 转 numpy, FFT 等保持不变) ...
-    # 假设 N, L 已经定义
-    # 假设 u_hat, v_hat 已经通过 FFT 计算得出
-    
-    # ------------------- 从这里开始修改 -------------------
-
     if u.ndim == 3:
         u = u[0]
     if v.ndim == 3:
@@ -967,127 +747,75 @@ def compute_isotropic_spectrum(u, v, w=None, L=1.0, nbins=None):
     u_hat = np.fft.fft2(u) / N**2
     v_hat = np.fft.fft2(v) / N**2
 
-    # 能量谱密度 (傅里叶空间)
     E_hat = 0.5 * (np.abs(u_hat)**2 + np.abs(v_hat)**2)
 
-    # 波数网格
     kx = np.fft.fftfreq(N, d=L/N) * 2*np.pi
     ky = np.fft.fftfreq(N, d=L/N) * 2*np.pi
     kx_grid, ky_grid = np.meshgrid(kx, ky, indexing='ij')
     k_mag = np.sqrt(kx_grid**2 + ky_grid**2).ravel()
     E_flat = E_hat.ravel()
 
-    # 最大波数 (Nyquist)
     k_max = np.pi * N / L * np.sqrt(2)
     if nbins is None:
         nbins = N // 2
     
-    # 分箱
     k_bins = np.linspace(0.0, k_max, nbins + 1)
     dk = k_bins[1] - k_bins[0]
 
-    # bin 内能量总和
     E_k_sum, _ = np.histogram(k_mag, bins=k_bins, weights=E_flat)
 
     k_values = 0.5 * (k_bins[:-1] + k_bins[1:])
-    # shell_area = dk
-    # shell_area[shell_area == 0] = 1.0  # 避免除零
-
-    # 各向同性能谱 (密度形式)
     E_k = E_k_sum
 
     return k_values, E_k
 
 def plot_isotropic_spectrum(u_list, v_list, t_label="t", methods=None, L=1.0):
-    """
-    绘制专业级的各向同性能量谱图 (使用行内标签，无图例)
-    """
     if methods is None:
         methods = [f"method_{i}" for i in range(len(u_list))]
 
-    # 1. 设置样式和颜色
-    # plt.style.use('seaborn-v0_8-whitegrid')
     plt.figure(figsize=(8, 6))
     colors = ['#1f77b4', '#2ca02c', '#733497', '#CC79A7', '#F0E442', '#56B4E9']
 
     u_first, v_first = u_list[0], v_list[0]
     k, E_k = compute_isotropic_spectrum(u_first.cpu().numpy(), v_first.cpu().numpy(), L=L)
     
-    # 绘制所有方法的数据曲线，并在线条末端添加标签
     for i, (u, v, method) in enumerate(zip(u_list, v_list, methods)):
         k_i, E_k_i = compute_isotropic_spectrum(u.cpu().numpy(), v.cpu().numpy(), L=L)
         plt.loglog(k_i[1:], E_k_i[1:], color=colors[i % len(colors)], linewidth=2, label=method)
-        # 在数据曲线的末端添加文字标签
-        # plt.text(k_i[-1], E_k_i[-1], f'  {method}', color=colors[i % len(colors)], 
-                #  fontsize=12, ha='left', va='center')
-
-
-    # 3. 智能地绘制参考线并添加行内标签
-    # k^-3 参考线
     k_range_3 = np.array([35, 80], dtype=np.float64)
     idx_3 = (np.abs(k - k_range_3[0])).argmin()
     C3 = E_k[idx_3] * (k[idx_3]**3)
     E_ref_3 = C3 * (k_range_3**-3) * 2
     plt.loglog(k_range_3, E_ref_3, '--', color='black', linewidth=2) # 移除 label
     
-    # 在 k^-3 线的右上角添加文字
     plt.text(k_range_3[1], E_ref_3[1], r' $k^{-3}$', fontsize=14, color='black', 
              ha='left', va='bottom', rotation=-30) # rotation使标签跟随线条斜率
 
-    # k^-5/3 参考线
     k_range_53 = np.array([15, 35], dtype=np.float64)
     idx_53 = (np.abs(k - k_range_53[0])).argmin()
     C53 = E_k[idx_53] * (k[idx_53]**(5/3))
     E_ref_53 = C53 * (k_range_53**(-5/3)) * 2
     plt.loglog(k_range_53, E_ref_53, '--', color='dimgray', linewidth=2) # 移除 label
     
-    # 在 k^-5/3 线的右上角添加文字
     plt.text(k_range_53[1], E_ref_53[1], r' $k^{-5/3}$', fontsize=14, color='dimgray',
              ha='left', va='bottom', rotation=-25) # rotation使标签跟随线条斜率
 
-
-    # 4. 美化图表细节
     plt.xlabel(r'$k$', fontsize=14)
     plt.ylabel(r'$E(k)$', fontsize=14)
     plt.tick_params(axis='both', which='major')
     plt.grid(True, which='both', linestyle='--', linewidth=0.5, alpha=0.7)
     plt.legend()
     
-    # 调整坐标轴范围，给右侧的文字留出空间
     plt.xlim(right=plt.xlim()[1] * 1.5)
 
     plt.tight_layout()
-    plt.savefig(f"isotropic_spectrum_{t_label}_new.pdf", format='pdf', bbox_inches='tight', dpi=300)
+    plt.savefig(f"../../results/KolmogorovFlow/isotropic_spectrum_{t_label}_new.pdf", format='pdf', bbox_inches='tight', dpi=300)
     plt.close()
-
-plot_isotropic_spectrum(
-    [u_les_t99, u_2th_t99, u_4th_t99],
-    [v_les_t99, v_2th_t99, v_4th_t99],
-    "1s",
-    ["LES", "ANI-2", "ANI-4"],
-    L=1.0
-)
-
-plot_isotropic_spectrum(
-    [u_les_149, u_2th_149, u_4th_149],
-    [v_les_149, v_2th_149, v_4th_149],
-    "1.5s",
-    ["LES", "ANI-2", "ANI-4"],
-    L=1.0
-)
 
 plot_isotropic_spectrum(
     [u_les_t199, u_2th_t199, u_4th_t199],
     [v_les_t199, v_2th_t199, v_4th_t199],
     "2s",
-    ["LES", "ANI-2", "ANI-4"],
-    L=1.0
-)
-
-plot_isotropic_spectrum(
-    [u_les_t249, u_2th_t249, u_4th_t249],
-    [v_les_t249, v_2th_t249, v_4th_t249],
-    "2.5s",
     ["LES", "ANI-2", "ANI-4"],
     L=1.0
 )
