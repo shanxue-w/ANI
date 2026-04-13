@@ -1,14 +1,43 @@
 # Alternating Neural Integrators (ANI)
 
-This repository contains the implementation of **Alternating Neural Integrators (ANI)** and the numerical experiments used to evaluate ANI on a range of ordinary differential equations (ODEs) and partial differential equations (PDEs).
+## System Requirements
 
-Most ODE experiments in this repository follow a unified code template. To ensure that all experiments run correctly, we recommend first installing the dependencies and then installing the repository in editable mode:
+The codebase has been tested in a standard Linux environment and is intended for research use on workstation- or server-level hardware. This repository has been tested on Ubuntu 22.04 LTS with Python 3.11 and MATLAB R2024a.
 
+### Operating system
+The repository is expected to run on:
+- Ubuntu 22.04 LTS or later
+- Other Linux environments with comparable Python and MATLAB support
+
+Windows and macOS may also work for parts of the repository, but the full workflow has primarily been developed and tested in Linux-based environments.
+
+### Hardware
+- A CUDA-capable GPU is recommended for training ANI models
+- CPU-only execution is possible for some scripts, but training and large-scale experiments may be significantly slower
+- At least **16 GB RAM** is recommended for small to moderate experiments; more memory may be required for larger PDE datasets and training runs
+
+### Software dependencies
+The repository requires:
+- Python 3.11
+- Packages listed in `requirements.txt`
+- MATLAB for parts of the symbolic regression / post-processing workflow
+
+Install the Python environment with:
 ```bash
 pip install -r requirements.txt
 pip install -e .
 ```
-After installation, experiment scripts can be run directly from the repository without additional configuration.
+
+Some experiments call MATLAB from the terminal via commands of the form:
+```bash
+matlab -batch "script_name"
+```
+
+If `matlab -batch` is not available in your environment, please run the required MATLAB scripts manually.
+
+
+### Installation time
+On a typical research workstation with a stable Python environment, installation usually takes approximately **30 minutes**.
 
 ## Quick Demo: Lorenz--Stenflo
 
@@ -18,7 +47,7 @@ We provide a **complete demo** in the `Lorenz-stenflo` folder. This demo include
 - the **ANI model**,
 - and the **symbolic regression** pipeline.
 
-In most cases, the full workflow can be launched with:
+A small demo dataset is provided in the `Lorenz-stenflo` example for testing the full pipeline. In most cases, the full workflow can be launched with:
 
 ```bash
 bash run.sh
@@ -31,6 +60,17 @@ matlab -batch "script_name"
 ```
 
 If `matlab -batch` is not available in your environment, please run the required MATLAB scripts manually.
+
+### Demo runtime
+
+For the provided **Lorenz--Stenflo** demo, the expected runtime is approximately **3 hours**, depending on hardware, MATLAB availability, and whether intermediate results are already cached.
+
+### Expected output
+Running `bash run.sh` in `Lorenz-stenflo` will generate:
+- trained ANI model checkpoints,
+- baseline results,
+- symbolic regression outputs,
+- figures and evaluation summaries saved to the corresponding output folders.
 
 ## Repository Structure
 
@@ -97,6 +137,14 @@ This GitHub repository contains the source code only. The datasets used in this 
 - [Zenodo Link 2](https://zenodo.org/records/17412698?preview=1&token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjliYmQ2ZTQ0LWYyMjQtNGVjMS04NDc1LTM1YjM5YzQ0NmZkOCIsImRhdGEiOnt9LCJyYW5kb20iOiIxYWE4MWMyMzQzZDIyYjY3NDAxZjEzNThlMzNhZTc4ZiJ9.5___hNAhSjTrFlyrdkM6WKgziyw0UwyMkttc-R0HVFcAtreUruzKY14CxZpLf90BuhWSdjJepm5k1ZAxUdzfpg)
 - [Zenodo Link 3](https://zenodo.org/records/19482734?preview=1&token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjgxNzk2NGZhLTc1NmQtNDM2Mi1hNTgwLTViMzgwMWZhOTMzOSIsImRhdGEiOnt9LCJyYW5kb20iOiIxYTkwYjlhMDM3NzY5MWQzM2UwZmNlN2Q2OTlhMjczZCJ9.cFybQkKN6f28_ut_TqiV_8iu5OC23R4F_zRwC6oFXi2K1vrQ3eVW0EMPI9dGVBLw7Fem33q_dATvrWJ0oTzyMg)
 
+## Running on custom data
+
+For experiments following the common template, users can:
+1. place raw data or generated trajectories in the corresponding `Problem/dataset/` directory,
+2. modify the dataset generation or loading script in that folder,
+3. run the training/testing scripts in `Problem/method/`.
+
+Because different experiments use different state variables and preprocessing pipelines, users should adapt the dataset scripts for their own problem setting.
 
 
 ## Running Experiments
