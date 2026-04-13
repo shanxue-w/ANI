@@ -15,15 +15,24 @@ run_py () {
   ( cd "$dir" && python "$script" )
 }
 
-# run_py 2th_h20 ANI2.py
-# run_py 2th_h32 ANI2.py
-# run_py 4th_h20 ANI4.py
-# run_py 4th_h32 ANI4.py
-# run_py NeuralRK4_h20 base.py
-# run_py NeuralRK4_h32 base.py
+run_py 2th_h20 ANI2.py
+run_py 2th_h20 Extraction.py
+run_py 2th_h32 ANI2.py
+run_py 2th_h32 Extraction.py
+run_py 4th_h20 ANI4.py
+run_py 4th_h20 Extraction.py
+run_py 4th_h32 ANI4.py
+run_py 4th_h32 Extraction.py
+run_py NeuralRK4_h20 base.py
+run_py NeuralRK4_h20 Extraction.py
+run_py NeuralRK4_h32 base.py
+run_py NeuralRK4_h32 Extraction.py
 
 run_py 2th ANI2.py
+run_py 2th Extraction.py
 run_py 4th ANI4.py
+run_py 4th Extraction.py
 run_py NeuralRK4 base.py
+run_py NeuralRK4 Extraction.py
 
-echo "All six runs finished."
+echo "All runs finished."
