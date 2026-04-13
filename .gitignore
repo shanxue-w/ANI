@@ -9,11 +9,18 @@
 *.pt
 *.gif
 
+*.csv
+
 __pycache__/
 *.pyc
 *.txt
 *.zip
 *.svg
+*.list
+*.xlsx
+*.tx
+*.list~
+*.pkl
 
 src/ANI.egg-info/*
 

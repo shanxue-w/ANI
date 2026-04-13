@@ -8,12 +8,13 @@ import random
 import torch.nn.functional as F
 from torch.fft import fft2, ifft2
 import matplotlib.pyplot as plt
+from numpy.lib.format import open_memmap
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 torch.set_default_dtype(torch.float64)
-# torch.manual_seed(0)
-# np.random.seed(0)
+torch.manual_seed(23989)
+np.random.seed(23989)
 
 class A():
     def __init__(self, Nx=1024, Ny=1024, Lx=1.0, Ly=1.0, Re=1e4, dt_step=5e-4, device='cuda', factor=1):
@@ -98,27 +99,32 @@ class A():
 
     def _cache_dealiasing_mask(self):
         """
-        Creates a 2/3 de-aliasing mask in Fourier space.
+        2/3 de-aliasing mask (Orszag-style), built from *linear wavenumber indices*,
+        similar to your CuPy implementation:
+            kc = (2/3) * (n/2)
+            mask = (KX^2 + KY^2) < 1.4 * kc^2
+        For Nx != Ny we use an elliptical form.
         """
-        # The 2/3 rule truncates modes beyond 2/3 of the maximum wavenumber.
-        # This corresponds to indices beyond 2/3 of the total grid size.
-        cutoff_x = int(2.0 * self.Nx // self.factor / 3.0)
-        cutoff_y = int(2.0 * self.Ny // self.factor / 3.0)
+        Nx_f = self.Nx // self.factor
+        Ny_f = self.Ny // self.factor
 
-        # Create a 1D mask for the x and y dimensions
-        mask_x = torch.zeros(self.Nx // self.factor, dtype=torch.bool, device=self.device)
-        mask_y = torch.zeros(self.Ny // self.factor, dtype=torch.bool, device=self.device)
+        # "linear" wavenumber indices (integers like ..., -2, -1, 0, 1, 2, ...)
+        # This matches cp.fft.fftfreq(n, 1/n) logic.
+        kx_lin = torch.fft.fftfreq(Nx_f, d=1.0 / Nx_f, device=self.device)  # shape [Nx_f]
+        ky_lin = torch.fft.fftfreq(Ny_f, d=1.0 / Ny_f, device=self.device)  # shape [Ny_f]
+        KX, KY = torch.meshgrid(kx_lin, ky_lin, indexing="ij")              # [Nx_f, Ny_f]
 
-        # Set mask to True for modes to be kept.
-        # In a standard FFT, the modes are ordered from 0 to N/2-1, then -N/2 to -1.
-        # So we keep modes from 0 to cutoff and -cutoff to -1.
-        mask_x[:cutoff_x] = True
-        mask_x[self.Nx - cutoff_x:] = True
-        mask_y[:cutoff_y] = True
-        mask_y[self.Ny - cutoff_y:] = True
+        # 2/3 rule cutoff in each direction: kc = (2/3)*(n/2) = n/3
+        kc_x = (2.0 / 3.0) * (Nx_f / 2.0)   # = Nx_f/3
+        kc_y = (2.0 / 3.0) * (Ny_f / 2.0)   # = Ny_f/3
 
-        # Combine the 1D masks into a 2D mask for the full grid
-        self.dealias_mask = mask_x.unsqueeze(1) & mask_y.unsqueeze(0)
+        # CuPy version used: (KX^2 + KY^2) < 1.4 * kc^2
+        # For rectangular grids, use an ellipse: (KX/kc_x)^2 + (KY/kc_y)^2 < 1.4
+        alpha = 1.4
+        dealias_mask = (KX / kc_x) ** 2 + (KY / kc_y) ** 2 < alpha
+
+        self.dealias_mask = dealias_mask  # bool [Nx_f, Ny_f]
+
 
     def _compute_derivatives_spectral(self, field_real, Kx, Ky):
         field_k = torch.fft.fft2(field_real)
@@ -268,7 +274,7 @@ class A():
         # Use M=64 for numerical integration
         M = 64
 
-        r = torch.exp(2j * np.pi * (torch.arange(1, M+1, dtype=torch.float64) - 0.5) / M).to(device)
+        r = torch.exp(1j * np.pi * (torch.arange(1, M+1, dtype=torch.float64) - 0.5) / M).to(device)
         LR = z_nz + r.unsqueeze(0)
 
         Q  = torch.mean( (torch.exp(LR / 2.0)-1.0) / LR, dim=-1)
@@ -629,60 +635,153 @@ def generate_and_save_dataset(model, batch_size, batch, steps, dt, device, save_
     torch.save(output_tensor, os.path.join(save_dir, f"{split_name}_output_new.pt"))
     print(f"[{split_name}] saved {input_tensor.shape[0]} samples.")
 
-def generate_test_dataset(model, batch_size, batch, steps, dt, device, save_path):
-    all_trajectories = []
+def _downsample_omega_to_128(omega: torch.Tensor) -> torch.Tensor:
+    B, C, H, W = omega.shape
+    if H == 128 and W == 128:
+        return omega
 
+    if (H % 128 == 0) and (W % 128 == 0):
+        sx = H // 128
+        sy = W // 128
+        return omega[:, :, ::sx, ::sy]
+
+    return F.interpolate(omega, size=(128, 128), mode="bilinear", align_corners=False)
+
+
+@torch.no_grad()
+def generate_and_save_omega_trajectories(
+    model,
+    batch_size: int,
+    batch: int,
+    dt: float,
+    device,
+    save_dir: str,
+    split_name: str,
+    T: int = 1000,
+    burn_in_seconds: float = 0.0,
+    dtype=np.float64,
+):
+    os.makedirs(save_dir, exist_ok=True)
+
+    # 总轨迹数
+    N_target = batch * batch_size
+    burn_steps = int(round(burn_in_seconds / dt))
+    print(f"[{split_name}] N={N_target}, T={T}, dt={dt}, burn_in={burn_in_seconds}s -> {burn_steps} steps")
+
+    out_path = os.path.join(save_dir, f"{split_name}_omega_traj_{N_target}x{T}x128x128.npy")
+    traj_mm = open_memmap(out_path, mode="w+", dtype=dtype, shape=(N_target, T+1, 128, 128))
+
+    filled = 0
     batch_idx = 0
 
-    while batch_idx < batch:
-        print(f"[test] Batch {batch_idx+1}/{batch}")
+    while filled < N_target:
+        batch_idx += 1
+        print(f"[{split_name}] Generating batch {batch_idx} (filled {filled}/{N_target})")
 
-        u0 = generate_initial_velocity(batch_size, device=device)  # [B, 2, Nx, Ny]
-        u = u0.clone().to(device)
+        u0 = generate_initial_velocity(batch_size, device=device) 
+        u0 = u0.to(device)
 
-        trajectories = []
+        omega = model._velocity_to_vorticity_spectral(
+            u0[:, 0], u0[:, 1], model.Kx_fine, model.Ky_fine
+        ).unsqueeze(1)
 
-        for step in range(steps):
-            print(f"  Step {step+1}/{steps}", end='\r')
-            # trajectories.append(u.cpu())  # 下采样
-            # trajectories.append(F.avg_pool2d(u, kernel_size=8, stride=8, count_include_pad=False).cpu())
-            trajectories.append(u.cpu()[:, :, ::8, ::8])  # 下采样
-            u, status = model.single_step(u, dts=dt)
-            if status == False:
+        status = True
+
+        for s in range(burn_steps):
+            omega, status = model.single_step(omega, dts=dt)
+            # if status is False:
+            #     break
+        # if status is False:
+        #     print(f"[{split_name}] burn-in failed, resampling...")
+        #     continue
+
+        omega_batch_frames = []
+        for t in range(T+1):
+            if (t + 1) % 50 == 0 or t == 0:
+                print(f"  Save step {t+1}/{T}", end="\r")
+
+            omega_128 = _downsample_omega_to_128(omega)      # [B,1,128,128]
+            omega_128 = omega_128[:, 0]                      # [B,128,128]
+            omega_batch_frames.append(omega_128.detach().cpu())
+
+            omega, status = model.single_step(omega, dts=dt)
+            if status is False:
                 break
 
-        if status == False:
-            continue
+        # if status is False or len(omega_batch_frames) != T:
+        # if len(omega_batch_frames) != T:
+        #     print(f"\n[{split_name}] rollout failed mid-way, resampling...")
+        #     continue
 
-        batch_idx += 1
+        omega_batch = torch.stack(omega_batch_frames, dim=1).numpy().astype(dtype, copy=False)
 
-        # 拼接当前batch所有时间步，形状: [B, steps, 2, Nx_down, Ny_down]
-        trajectories = torch.stack(trajectories, dim=1)
-        all_trajectories.append(trajectories)
+        take = min(batch_size, N_target - filled)
+        traj_mm[filled:filled + take] = omega_batch[:take]
+        filled += take
+        traj_mm.flush()
 
-    # 合并所有batch，形状变为 [B*batch, steps, 2, Nx_down, Ny_down]
-    all_trajectories = torch.cat(all_trajectories, dim=0)
+        print(f"\n[{split_name}] wrote {take} trajectories -> filled {filled}/{N_target}")
 
-    torch.save(all_trajectories, save_path)
-    print(f"Saved test trajectories to {save_path} with shape {all_trajectories.shape}")
-
+    print(f"[{split_name}] ✅ saved trajectories to: {out_path}")
+    return out_path
 
 if __name__ == '__main__':
     model = A(Nx=1024, Ny=1024, Lx=1.0, Ly=1.0, Re=1e4, device=device)
-    dt = 0.01
-    # # 训练集 30个样本，500步
-    # generate_and_save_dataset(model, batch_size=1, batch=32, steps=400, dt=dt, device=device, save_dir='./', split_name='train')
+    dt = 1e-2
+    # seed = 123
+    # generate_and_save_omega_trajectories(model=model, batch_size=1, batch=40, dt=1e-2, device=device, save_dir='./', split_name='train_new', T=400)
+    
+    # seed = 23989
+    generate_and_save_omega_trajectories(model=model, batch_size=1, batch=4, dt=1e-2, burn_in_seconds=0.5, device=device, save_dir='./', split_name='test_new', T=400)
+
+    # generate_and_save_dataset(model, batch_size=1, batch=32, steps=1000, dt=dt, device=device, save_dir='./', split_name='train')
 
     # # # 验证集 10个样本，500步
-    # generate_and_save_dataset(model, batch_size=1, batch=4, steps=400, dt=dt, device=device, save_dir='./', split_name='val')
+    # generate_and_save_dataset(model, batch_size=1, batch=4, steps=1000, dt=dt, device=device, save_dir='./', split_name='val')
 
     # generate_test_dataset(model, batch_size=1, batch=4, steps=400, dt=dt, device=device, save_path='test_trajectory_new.pt')
     # vor = model._velocity_to_vorticity_spectral(u[:,0], u[:,1], model.Kx_fine, model.Ky_fine)
 
     # x = torch.linspace(0, 1, 1024+1)[:-1]
     # y = torch.linspace(0, 1, 1024+1)[:-1]
+    # # omega = generate_kolmogorov_flow_vorticity(1, Nx=1024, Ny=1024, Lx=1., Ly=1., device=device)
+    # u0 = generate_initial_velocity(1, device=device)
+    # # print(u0.shape)
+    # omega = model._velocity_to_vorticity_spectral(u0[:, 0], u0[:, 1], model.Kx_fine, model.Ky_fine).unsqueeze(1)
 
-    # X,Y = torch.meshgrid(x,y)
+    # for l in range(10):
+    #     for i in range(1000):
+    #         print(f"{i}/1000", end='\r')
+    #         omega, _ = model.single_step(omega, dts=1e-3)
+    #     X,Y = torch.meshgrid(x,y)
+    #     # plot omega of [1, 1, 1024, 1024]
+
+    #     if hasattr(omega, 'detach'): # 如果是 torch tensor
+    #         omega_plot = omega.detach().cpu().numpy().squeeze().T
+    #     else: # 如果是 cupy array
+    #         omega_plot = omega.get().squeeze().T
+
+    #     # 2. 绘图
+    #     plt.figure(figsize=(8, 8))
+    #     # 使用 pcolormesh 或 imshow。对于 1024x1024，imshow 性能更好
+    #     # cmap='RdBu_r' 是流体可视化中最常用的，红色代表正涡度（逆时针），蓝色代表负涡度（顺时针）
+    #     im = plt.imshow(omega_plot, 
+    #                     extent=[0, 1, 0, 1], 
+    #                     origin='lower', 
+    #                     cmap='RdBu_r')
+
+    #     # 3. 细节美化
+    #     plt.colorbar(im, label=rf'Vorticity $\omega$')
+    #     plt.title(f"Kolmogorov Flow at $t = {1}$")
+    #     plt.xlabel("$x$")
+    #     plt.ylabel("$y$")
+
+    #     plt.tight_layout()
+    #     # plt.show()
+    #     plt.savefig(f'omega_{l}.png', dpi=300)
+    #     plt.close()
+
+
     # # plot u
     # plt.figure(figsize=(10, 10))
     # plt.contourf(X, Y, vor[0].cpu().numpy(), levels=100, cmap='viridis')
@@ -707,10 +806,10 @@ if __name__ == '__main__':
 
     # print(error_x.abs().max(), error_y.abs().max())
 
-    x = torch.linspace(0, 1, 1024+1)[:-1]
-    y = torch.linspace(0, 1, 1024+1)[:-1]
+    # x = torch.linspace(0, 1, 1024+1)[:-1]
+    # y = torch.linspace(0, 1, 1024+1)[:-1]
 
-    X,Y = torch.meshgrid(x,y)
-    omega = torch.rand(1, 1, 1024, 1024)
-    omega = omega - torch.mean(omega)    
+    # X,Y = torch.meshgrid(x,y)
+    # omega = torch.rand(1, 1, 1024, 1024)
+    # omega = omega - torch.mean(omega)    
     

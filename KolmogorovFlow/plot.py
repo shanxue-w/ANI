@@ -12,8 +12,8 @@ plt.rcParams.update({
 
 file_path_2th = '2th/traj_error.txt'
 file_path_4th = '4th/traj_error.txt'
-# file_path_A   = '2th/traj_error_1e4.txt'
-file_path_A   = 'baseline/traj_error.txt'
+file_path_les = '2th/traj_error_les.txt'
+# file_path_opt = '2th/traj_error_opt.txt'
 
 data_2th = pd.read_csv(file_path_2th, sep='\t')
 data_2th = data_2th['avg_relative_error']
@@ -21,17 +21,21 @@ data_2th = data_2th[0:400]
 data_4th = pd.read_csv(file_path_4th, sep='\t')
 data_4th = data_4th['avg_relative_error']
 data_4th = data_4th[0:400]
-data_A   = pd.read_csv(file_path_A, sep='\t')
-data_A   = data_A['avg_relative_error']
-data_A   = data_A[0:400]
+data_les = pd.read_csv(file_path_les, sep='\t')
+data_les = data_les['avg_relative_error']
+data_les = data_les[0:400]
+# data_opt = pd.read_csv(file_path_opt, sep='\t')
+# data_opt = data_opt['avg_relative_error']
+# data_opt = data_opt[0:400]
 
 # 设置图表大小
 plt.figure(figsize=(8, 6))
 
 # 绘制数据
-plt.plot(data_A, label='FNO', linestyle='-.', color='#0072B2', linewidth=2, marker='^', markersize=2)
+plt.plot(data_les, label='LES', linestyle='-.', color='#0072B2', linewidth=2, marker='^', markersize=2)
 plt.plot(data_2th, label='ANI-2', linestyle='-', color='#009E73', linewidth=2, marker='o', markersize=2)
 plt.plot(data_4th, label='ANI-4', linestyle='--', color='#E69F00', linewidth=2, marker='s', markersize=2)
+# plt.plot(data_opt, label='Optimized LES', linestyle=':', color='orange', linewidth=1.5, marker='x', markersize=2)
 
 # 添加标题和标签
 # plt.title('Comparison of Average Relative Error', fontsize=14)
@@ -45,10 +49,10 @@ plt.ylabel('Average Relative Error', fontsize=14)
 plt.grid(True, alpha=0.3)
 
 # 添加图例
-plt.legend()
+plt.legend(fontsize=14)
 
 # 调整布局
 plt.tight_layout()
 
 # 保存图表
-plt.savefig('ns_traj_error_model.pdf', format='pdf', bbox_inches='tight', dpi=300)
+plt.savefig('ns_traj_error.pdf', format='pdf', bbox_inches='tight', dpi=300)

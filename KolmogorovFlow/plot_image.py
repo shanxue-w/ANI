@@ -15,7 +15,6 @@ import math
 import matplotlib.colors as mcolors
 from matplotlib import cm
 
-
 plt.rcParams.update({
     "font.size": 14,        # 全局字体大小
     "axes.labelsize": 14,   # 坐标轴标签字体大小
@@ -75,7 +74,7 @@ class A(N0):
     def _get_spectral_operators(self, Nx, Ny, Lx, Ly, device):
         dx = Lx / Nx
         dy = Ly / Ny
-        # Wavenumbers for FFT. torch.fft.fftfreq handBaseline the correct ordering for FFT.
+        # Wavenumbers for FFT. torch.fft.fftfreq handles the correct ordering for FFT.
         kx = 2 * math.pi * torch.fft.fftfreq(Nx, d=dx).to(device)
         ky = 2 * math.pi * torch.fft.fftfreq(Ny, d=dy).to(device)
         
@@ -178,7 +177,7 @@ class A(N0):
         omega_k = torch.fft.fft2(omega_real)
 
         # Solve for stream function in Fourier space: ψ_k = -ω_k / (k_x^2 + k_y^2)
-        # denom_safe handBaseline the (0,0) mode, ensuring stability.
+        # denom_safe handles the (0,0) mode, ensuring stability.
         psi_k = -omega_k / denom_safe.unsqueeze(0)
         # The mean stream function is arbitrary, so set its (0,0) mode to zero.
         # This also ensures the (0,0) mode of psi_k is 0 after division by denom_safe[0,0]=1.0.
@@ -402,15 +401,15 @@ class A(N0):
         Nc_k = self.rhs_fft(omega_c_real)
 
         # === Final Update Step ===
-        omega_k_new = (
+        omega_k = (
             E.unsqueeze(0) * omega_k_n +
             dt * (A_coeffs.unsqueeze(0) * N0_k +
                   B_coeffs.unsqueeze(0) * (Na_k + Nb_k) +
                   C_coeffs.unsqueeze(0) * Nc_k)
         )
         
-        omega_new_real = torch.fft.ifft2(omega_k_new).real
-        return omega_new_real.unsqueeze(1)
+        omega_real = torch.fft.ifft2(omega_k).real
+        return omega_real.unsqueeze(1)
     
     def single_step(self, u: torch.Tensor, dts: float = None, dt_max: float = 5e-4) -> torch.Tensor:
         remain_time = dts 
@@ -421,65 +420,101 @@ class A(N0):
         return u
     
 
-u_true_t99 = np.load('2th/u_99_true.npy')
-v_true_t99 = np.load('2th/v_99_true.npy')
-u_2th_t99 = np.load('2th/u_99_2th.npy')
-v_2th_t99 = np.load('2th/v_99_2th.npy')
-u_4th_t99 = np.load('4th/u_99_4th.npy')
-v_4th_t99 = np.load('4th/v_99_4th.npy')
-u_Baseline_t99 = np.load('baseline/u_99_base.npy')
-v_Baseline_t99 = np.load('baseline/v_99_base.npy')
+u_true_t99 = np.load('2th/u_99_true.npy').squeeze(0)
+v_true_t99 = np.load('2th/v_99_true.npy').squeeze(0)
+u_2th_t99 = np.load('2th/u_99_2th.npy').squeeze(0)
+v_2th_t99 = np.load('2th/v_99_2th.npy').squeeze(0)
+u_4th_t99 = np.load('4th/u_99_4th.npy').squeeze(0)
+v_4th_t99 = np.load('4th/v_99_4th.npy').squeeze(0)
+u_les_t99 = np.load('2th/u_99_les.npy').squeeze(0)
+v_les_t99 = np.load('2th/v_99_les.npy').squeeze(0)
 
-u_true_149 = np.load('2th/u_149_true.npy')
-v_true_149 = np.load('2th/v_149_true.npy')
-u_2th_149 = np.load('2th/u_149_2th.npy')
-v_2th_149 = np.load('2th/v_149_2th.npy')
-u_4th_149 = np.load('4th/u_149_4th.npy')
-v_4th_149 = np.load('4th/v_149_4th.npy')
-u_Baseline_149 = np.load('baseline/u_149_base.npy')
-v_Baseline_149 = np.load('baseline/v_149_base.npy')
+u_true_149 = np.load('2th/u_149_true.npy').squeeze(0)
+v_true_149 = np.load('2th/v_149_true.npy').squeeze(0)
+u_2th_149 = np.load('2th/u_149_2th.npy').squeeze(0)
+v_2th_149 = np.load('2th/v_149_2th.npy').squeeze(0)
+u_4th_149 = np.load('4th/u_149_4th.npy').squeeze(0)
+v_4th_149 = np.load('4th/v_149_4th.npy').squeeze(0)
+u_les_149 = np.load('2th/u_149_les.npy').squeeze(0)
+v_les_149 = np.load('2th/v_149_les.npy').squeeze(0)
 
-u_true_t199 = np.load('2th/u_199_true.npy')
-v_true_t199 = np.load('2th/v_199_true.npy')
-u_2th_t199 = np.load('2th/u_199_2th.npy')
-v_2th_t199 = np.load('2th/v_199_2th.npy')
-u_4th_t199 = np.load('4th/u_199_4th.npy')
-v_4th_t199 = np.load('4th/v_199_4th.npy')
-u_Baseline_t199 = np.load('baseline/u_199_base.npy')
-v_Baseline_t199 = np.load('baseline/v_199_base.npy')
+u_true_t199 = np.load('2th/u_199_true.npy').squeeze(0)
+v_true_t199 = np.load('2th/v_199_true.npy').squeeze(0)
+u_2th_t199 = np.load('2th/u_199_2th.npy').squeeze(0)
+v_2th_t199 = np.load('2th/v_199_2th.npy').squeeze(0)
+u_4th_t199 = np.load('4th/u_199_4th.npy').squeeze(0)
+v_4th_t199 = np.load('4th/v_199_4th.npy').squeeze(0)
+u_les_t199 = np.load('2th/u_199_les.npy').squeeze(0)
+v_les_t199 = np.load('2th/v_199_les.npy').squeeze(0)
 
-u_true_t249 = np.load('2th/u_249_true.npy')
-v_true_t249 = np.load('2th/v_249_true.npy')
-u_2th_t249 = np.load('2th/u_249_2th.npy')
-v_2th_t249 = np.load('2th/v_249_2th.npy')
-u_4th_t249 = np.load('4th/u_249_4th.npy')
-v_4th_t249 = np.load('4th/v_249_4th.npy')
-u_Baseline_t249 = np.load('baseline/u_249_base.npy')
-v_Baseline_t249 = np.load('baseline/v_249_base.npy')
+u_true_t249 = np.load('2th/u_249_true.npy').squeeze(0)
+v_true_t249 = np.load('2th/v_249_true.npy').squeeze(0)
+u_2th_t249 = np.load('2th/u_249_2th.npy').squeeze(0)
+v_2th_t249 = np.load('2th/v_249_2th.npy').squeeze(0)
+u_4th_t249 = np.load('4th/u_249_4th.npy').squeeze(0)
+v_4th_t249 = np.load('4th/v_249_4th.npy').squeeze(0)
+u_les_t249 = np.load('2th/u_249_les.npy').squeeze(0)
+v_les_t249 = np.load('2th/v_249_les.npy').squeeze(0)
 
-u_true_t299 = np.load('2th/u_299_true.npy')
-v_true_t299 = np.load('2th/v_299_true.npy')
-u_2th_t299 = np.load('2th/u_299_2th.npy')
-v_2th_t299 = np.load('2th/v_299_2th.npy')
-u_4th_t299 = np.load('4th/u_299_4th.npy')
-v_4th_t299 = np.load('4th/v_299_4th.npy')
-u_Baseline_t299 = np.load('baseline/u_299_base.npy')
-v_Baseline_t299 = np.load('baseline/v_299_base.npy')
+u_true_t299 = np.load('2th/u_299_true.npy').squeeze(0)
+v_true_t299 = np.load('2th/v_299_true.npy').squeeze(0)
+u_2th_t299 = np.load('2th/u_299_2th.npy').squeeze(0)
+v_2th_t299 = np.load('2th/v_299_2th.npy').squeeze(0)
+u_4th_t299 = np.load('4th/u_299_4th.npy').squeeze(0)
+v_4th_t299 = np.load('4th/v_299_4th.npy').squeeze(0)
+u_les_t299 = np.load('2th/u_299_les.npy').squeeze(0)
+v_les_t299 = np.load('2th/v_299_les.npy').squeeze(0)
 
-u_true_t349 = np.load('2th/u_349_true.npy')
-v_true_t349 = np.load('2th/v_349_true.npy')
-u_2th_t349 = np.load('2th/u_349_2th.npy')
-v_2th_t349 = np.load('2th/v_349_2th.npy')
-u_4th_t349 = np.load('4th/u_349_4th.npy')
-v_4th_t349 = np.load('4th/v_349_4th.npy')
-u_Baseline_t349 = np.load('baseline/u_349_base.npy')
-v_Baseline_t349 = np.load('baseline/v_349_base.npy')
+u_true_t349 = np.load('2th/u_349_true.npy').squeeze(0)
+v_true_t349 = np.load('2th/v_349_true.npy').squeeze(0)
+u_2th_t349 = np.load('2th/u_349_2th.npy').squeeze(0)
+v_2th_t349 = np.load('2th/v_349_2th.npy').squeeze(0)
+u_4th_t349 = np.load('4th/u_349_4th.npy').squeeze(0)
+v_4th_t349 = np.load('4th/v_349_4th.npy').squeeze(0)
+u_les_t349 = np.load('2th/u_349_les.npy').squeeze(0)
+v_les_t349 = np.load('2th/v_349_les.npy').squeeze(0)
 
-x = np.linspace(0, 1, 256+1)[:-1]
-y = np.linspace(0, 1, 256+1)[:-1]
+time_steps = [99, 149, 199, 249, 299, 349, 399, 449, 499, 549, 599, 649, 699, 749]
+data = {
+    'u_true': {}, 'v_true': {},
+    'u_2th': {}, 'v_2th': {},
+    'u_4th': {}, 'v_4th': {},
+    'u_les': {}, 'v_les': {},
+    'omega_2th' : {}, 'omega_true' : {},
+    'omega_4th' : {}, 'omega_les' : {}
+}
+for t in time_steps:
+    data['u_true'][t] = np.load(f'2th/u_{t}_true.npy').squeeze(0)
+    data['v_true'][t] = np.load(f'2th/v_{t}_true.npy').squeeze(0)
+    data['u_2th'][t]  = np.load(f'2th/u_{t}_2th.npy').squeeze(0)
+    data['v_2th'][t]  = np.load(f'2th/v_{t}_2th.npy').squeeze(0)
+    data['u_4th'][t]  = np.load(f'4th/u_{t}_4th.npy').squeeze(0)
+    data['v_4th'][t]  = np.load(f'4th/v_{t}_4th.npy').squeeze(0)
+    data['u_les'][t]  = np.load(f'2th/u_{t}_les.npy').squeeze(0)
+    data['v_les'][t]  = np.load(f'2th/v_{t}_les.npy').squeeze(0)
+
+time_map = {
+    99:  "0.5s",
+    149: "0.75s",
+    199: "1.0s",
+    249: "1.25s",
+    299: "1.5s",
+    349: "1.75s",
+    399: "2.0s",
+    449: "2.25s",
+    499: "2.5s",
+    549: "2.75s",
+    599: "3.0s",
+    649: "3.25s",
+    699: "3.5s",
+    749: "3.75s"
+}
+
+x = np.linspace(0, 1, 128)
+y = np.linspace(0, 1, 128)
 X, Y = np.meshgrid(x, y, indexing='ij')
 
-methods = ["True", "FNO", "ANI-2", "ANI-4"]
+methods = ["True", "LES", "ANI-2", "ANI-4"]
 
 def plot_uv_grid(u_list, v_list, t_label, methods):
     fig = plt.figure(figsize=(4.5*len(methods), 8))
@@ -495,9 +530,7 @@ def plot_uv_grid(u_list, v_list, t_label, methods):
         ax = fig.add_subplot(gs[0, col])
         im_u = ax.contourf(X, Y, u_list[col], cmap='RdBu_r', origin='lower',
                            levels=100, vmin=umin, vmax=umax)
-        # for c in im_u.collections:
-            # c.set_rasterized(True)
-        ax.set_rasterized(True) 
+        ax.set_rasterized(True)
         ax.set_title(f"{method} - u")
         ax.axis('off')
         ax.set_aspect('equal', adjustable='box')
@@ -515,9 +548,7 @@ def plot_uv_grid(u_list, v_list, t_label, methods):
         ax = fig.add_subplot(gs[1, col])
         im_v = ax.contourf(X, Y, v_list[col], cmap='RdBu_r', origin='lower',
                            levels=100, vmin=vmin, vmax=vmax)
-        # for c in im_v.collections:
-            # c.set_rasterized(True)
-        ax.set_rasterized(True) 
+        ax.set_rasterized(True)
         ax.set_title(f"{method} - v")
         ax.axis('off')
         ax.set_aspect('equal', adjustable='box')
@@ -530,58 +561,75 @@ def plot_uv_grid(u_list, v_list, t_label, methods):
     # fig.colorbar(im_v, cax=cax_v, label="v value")
 
     plt.tight_layout()
-    plt.savefig(f"uv_grid_{t_label}_model.pdf", format='pdf', bbox_inches='tight', dpi=300)
+    plt.savefig(f"uv_grid_{t_label}.pdf", format='pdf', bbox_inches='tight', dpi=300)
     plt.close()
 # t=0s
-plot_uv_grid(
-    [u_true_t99, u_Baseline_t99, u_2th_t99, u_4th_t99],
-    [v_true_t99, v_Baseline_t99, v_2th_t99, v_4th_t99],
-    "1s",
-    methods
-)
+# plot_uv_grid(
+#     [u_true_t99, u_les_t99, u_2th_t99, u_4th_t99],
+#     [v_true_t99, v_les_t99, v_2th_t99, v_4th_t99],
+#     "0.5s",
+#     methods
+# )
 
-plot_uv_grid(
-    [u_true_149, u_Baseline_149, u_2th_149, u_4th_149],
-    [v_true_149, v_Baseline_149, v_2th_149, v_4th_149],
-    "1.5s",
-    methods
-)
+# plot_uv_grid(
+#     [u_true_149, u_les_149, u_2th_149, u_4th_149],
+#     [v_true_149, v_les_149, v_2th_149, v_4th_149],
+#     "0.75s",
+#     methods
+# )
 
-plot_uv_grid(
-    [u_true_t199, u_Baseline_t199, u_2th_t199, u_4th_t199],
-    [v_true_t199, v_Baseline_t199, v_2th_t199, v_4th_t199],
-    "2s",
-    methods
-)
+# plot_uv_grid(
+#     [u_true_t199, u_les_t199, u_2th_t199, u_4th_t199],
+#     [v_true_t199, v_les_t199, v_2th_t199, v_4th_t199],
+#     "1.0s",
+#     methods
+# )
 
-plot_uv_grid(
-    [u_true_t249, u_Baseline_t249, u_2th_t249, u_4th_t249],
-    [v_true_t249, v_Baseline_t249, v_2th_t249, v_4th_t249],
-    "2.5s",
-    methods
-)
+# plot_uv_grid(
+#     [u_true_t249, u_les_t249, u_2th_t249, u_4th_t249],
+#     [v_true_t249, v_les_t249, v_2th_t249, v_4th_t249],
+#     "1.25s",
+#     methods
+# )
 
-plot_uv_grid(
-    [u_true_t299, u_Baseline_t299, u_2th_t299, u_4th_t299],
-    [v_true_t299, v_Baseline_t299, v_2th_t299, v_4th_t299],
-    "3s",
-    methods
-)
+# plot_uv_grid(
+#     [u_true_t299, u_les_t299, u_2th_t299, u_4th_t299],
+#     [v_true_t299, v_les_t299, v_2th_t299, v_4th_t299],
+#     "1.5s",
+#     methods
+# )
 
-plot_uv_grid(
-    [u_true_t349, u_Baseline_t349, u_2th_t349, u_4th_t349],
-    [v_true_t349, v_Baseline_t349, v_2th_t349, v_4th_t349],
-    "3.5s",
-    methods
-)
+# plot_uv_grid(
+#     [u_true_t349, u_les_t349, u_2th_t349, u_4th_t349],
+#     [v_true_t349, v_les_t349, v_2th_t349, v_4th_t349],
+#     "1.75s",
+#     methods
+# )
+for t, time_label in time_map.items():
+    u_list = [
+        data['u_true'][t],
+        data['u_les'][t],
+        data['u_2th'][t],
+        data['u_4th'][t]
+    ]
+    
+    v_list = [
+        data['v_true'][t],
+        data['v_les'][t],
+        data['v_2th'][t],
+        data['v_4th'][t]
+    ]
+    print(f"Plotting for t = {t} ({time_label})...")
+    plot_uv_grid(u_list, v_list, time_label, methods)
 
-methods = ["FNO", "ANI-2", "ANI-4"]
+
+methods = ["LES", "ANI-2", "ANI-4"]
 
 def plot_error_grid(u_true, v_true, u_methods, v_methods, t_label,
                     signed=False, cmap_abs='viridis', cmap_signed='RdBu_r'):
     """
     u_true, v_true: 2D numpy arrays
-    u_methods, v_methods: lists of numpy arrays [u_2th, u_4th, u_baseline]
+    u_methods, v_methods: lists of numpy arrays [u_2th, u_4th, u_LES]
     signed: True → signed error; False → absolute error
     Each subplot has its own colorbar.
     """
@@ -605,9 +653,7 @@ def plot_error_grid(u_true, v_true, u_methods, v_methods, t_label,
         # u
         # im_u = axes[0, col].imshow(err_u[col], origin='lower', cmap=cmap, aspect='auto')
         im_u = axes[0, col].contourf(X, Y, err_u[col], cmap=cmap, origin='lower', levels=100)
-        # for c in im_u.collections:
-            # c.set_rasterized(True)
-        axes[0, col].set_rasterized(True) 
+        axes[0, col].set_rasterized(True)
         axes[0, col].set_title(f"{method} — {'u error'}")
         axes[0, col].axis('off')
         axes[0, col].set_aspect('equal', adjustable='box')
@@ -616,8 +662,6 @@ def plot_error_grid(u_true, v_true, u_methods, v_methods, t_label,
         # v
         # im_v = axes[1, col].imshow(err_v[col], origin='lower', cmap=cmap, aspect='auto')
         im_v = axes[1, col].contourf(X, Y, err_v[col], cmap=cmap, origin='lower', levels=100)
-        # for c in im_v.collections:
-            # c.set_rasterized(True)
         axes[1, col].set_rasterized(True)
         axes[1, col].set_title(f"{method} — {'v error'}")
         axes[1, col].axis('off')
@@ -626,146 +670,198 @@ def plot_error_grid(u_true, v_true, u_methods, v_methods, t_label,
 
     plt.tight_layout(rect=[0,0,1,0.95])
     # plt.show()
-    plt.savefig(f"error_grid_{t_label}_model.pdf", format='pdf', bbox_inches='tight', dpi=300)
+    plt.savefig(f"error_grid_{t_label}.pdf", format='pdf', bbox_inches='tight', dpi=300)
     plt.close()
 
-plot_error_grid(
-    u_true_t99, v_true_t99,
-    [u_Baseline_t99, u_2th_t99, u_4th_t99],
-    [v_Baseline_t99, v_2th_t99, v_4th_t99],
-    "1s"
-)
+# plot_error_grid(
+#     u_true_t99, v_true_t99,
+#     [u_les_t99, u_2th_t99, u_4th_t99],
+#     [v_les_t99, v_2th_t99, v_4th_t99],
+#     "0.5s"
+# )
 
-plot_error_grid(
-    u_true_149, v_true_149,
-    [u_Baseline_149, u_2th_149, u_4th_149],
-    [v_Baseline_149, v_2th_149, v_4th_149],
-    "1.5s"
-)
+# plot_error_grid(
+#     u_true_149, v_true_149,
+#     [u_les_149, u_2th_149, u_4th_149],
+#     [v_les_149, v_2th_149, v_4th_149],
+#     "0.75s"
+# )
 
-plot_error_grid(
-    u_true_t199, v_true_t199,
-    [u_Baseline_t199, u_2th_t199, u_4th_t199],
-    [v_Baseline_t199, v_2th_t199, v_4th_t199],
-    "2s"
-)
+# plot_error_grid(
+#     u_true_t199, v_true_t199,
+#     [u_les_t199, u_2th_t199, u_4th_t199],
+#     [v_les_t199, v_2th_t199, v_4th_t199],
+#     "1.0s"
+# )
 
-plot_error_grid(
-    u_true_t249, v_true_t249,
-    [u_Baseline_t249, u_2th_t249, u_4th_t249],
-    [v_Baseline_t249, v_2th_t249, v_4th_t249],
-    "2.5s"
-)
+# plot_error_grid(
+#     u_true_t249, v_true_t249,
+#     [u_les_t249, u_2th_t249, u_4th_t249],
+#     [v_les_t249, v_2th_t249, v_4th_t249],
+#     "1.25s"
+# )
 
-plot_error_grid(
-    u_true_t299, v_true_t299,
-    [u_Baseline_t299, u_2th_t299, u_4th_t299],
-    [v_Baseline_t299, v_2th_t299, v_4th_t299],
-    "3s"
-)
+# plot_error_grid(
+#     u_true_t299, v_true_t299,
+#     [u_les_t299, u_2th_t299, u_4th_t299],
+#     [v_les_t299, v_2th_t299, v_4th_t299],
+#     "1.5s"
+# )
 
-plot_error_grid(
-    u_true_t349, v_true_t349,
-    [u_Baseline_t349, u_2th_t349, u_4th_t349],
-    [v_Baseline_t349, v_2th_t349, v_4th_t349],
-    "3.5s"
-)
+# plot_error_grid(
+#     u_true_t349, v_true_t349,
+#     [u_les_t349, u_2th_t349, u_4th_t349],
+#     [v_les_t349, v_2th_t349, v_4th_t349],
+#     "1.75s"
+# )
 
-model = A(Nx=256, Ny=256, Lx=1.0, Ly=1.0, device=device)
+# def get_var(prefix, t):
+#     name_with_t = f"{prefix}_t{t}"
+#     name_without_t = f"{prefix}_{t}"
+#     if name_with_t in locals() or name_with_t in globals():
+#         return globals().get(name_with_t, locals().get(name_with_t))
+#     return globals().get(name_without_t, locals().get(name_without_t))
+
+for t, time_label in time_map.items():
+    u_true = data['u_true'][t]
+    v_true = data['v_true'][t]
+    
+    # u_preds = [get_var("u_les", t), get_var("u_2th", t), get_var("u_4th", t)]
+    # v_preds = [get_var("v_les", t), get_var("v_2th", t), get_var("v_4th", t)]
+    u_preds = [data['u_les'][t], data['u_2th'][t], data['u_4th'][t]]
+    v_preds = [data['v_les'][t], data['v_2th'][t], data['v_4th'][t]]
+    
+    if u_true is not None:
+        print(f"Generating Error Grid for {time_label}...")
+        plot_error_grid(
+            u_true, v_true,
+            u_preds, v_preds,
+            time_label
+        )
+
+model = A(Nx=128, Ny=128, Lx=1.0, Ly=1.0, device=device)
 # convert u_true_t99 -> tensor
-u_true_t99 = torch.tensor(u_true_t99).unsqueeze(0).to(device)
-v_true_t99 = torch.tensor(v_true_t99).unsqueeze(0).to(device)
-u_2th_t99 = torch.tensor(u_2th_t99).unsqueeze(0).to(device)
-v_2th_t99 = torch.tensor(v_2th_t99).unsqueeze(0).to(device)
-u_4th_t99 = torch.tensor(u_4th_t99).unsqueeze(0).to(device)
-v_4th_t99 = torch.tensor(v_4th_t99).unsqueeze(0).to(device)
-u_Baseline_t99 = torch.tensor(u_Baseline_t99).unsqueeze(0).to(device)
-v_Baseline_t99 = torch.tensor(v_Baseline_t99).unsqueeze(0).to(device)
+# u_true_t99 = torch.tensor(u_true_t99).unsqueeze(0).to(device)
+# v_true_t99 = torch.tensor(v_true_t99).unsqueeze(0).to(device)
+# u_2th_t99 = torch.tensor(u_2th_t99).unsqueeze(0).to(device)
+# v_2th_t99 = torch.tensor(v_2th_t99).unsqueeze(0).to(device)
+# u_4th_t99 = torch.tensor(u_4th_t99).unsqueeze(0).to(device)
+# v_4th_t99 = torch.tensor(v_4th_t99).unsqueeze(0).to(device)
+# u_les_t99 = torch.tensor(u_les_t99).unsqueeze(0).to(device)
+# v_les_t99 = torch.tensor(v_les_t99).unsqueeze(0).to(device)
 
-u_true_149 = torch.tensor(u_true_149).unsqueeze(0).to(device)
-v_true_149 = torch.tensor(v_true_149).unsqueeze(0).to(device)
-u_2th_149 = torch.tensor(u_2th_149).unsqueeze(0).to(device)
-v_2th_149 = torch.tensor(v_2th_149).unsqueeze(0).to(device)
-u_4th_149 = torch.tensor(u_4th_149).unsqueeze(0).to(device)
-v_4th_149 = torch.tensor(v_4th_149).unsqueeze(0).to(device)
-u_Baseline_149 = torch.tensor(u_Baseline_149).unsqueeze(0).to(device)
-v_Baseline_149 = torch.tensor(v_Baseline_149).unsqueeze(0).to(device)
+# u_true_149 = torch.tensor(u_true_149).unsqueeze(0).to(device)
+# v_true_149 = torch.tensor(v_true_149).unsqueeze(0).to(device)
+# u_2th_149 = torch.tensor(u_2th_149).unsqueeze(0).to(device)
+# v_2th_149 = torch.tensor(v_2th_149).unsqueeze(0).to(device)
+# u_4th_149 = torch.tensor(u_4th_149).unsqueeze(0).to(device)
+# v_4th_149 = torch.tensor(v_4th_149).unsqueeze(0).to(device)
+# u_les_149 = torch.tensor(u_les_149).unsqueeze(0).to(device)
+# v_les_149 = torch.tensor(v_les_149).unsqueeze(0).to(device)
 
-u_true_t199 = torch.tensor(u_true_t199).unsqueeze(0).to(device)
-v_true_t199 = torch.tensor(v_true_t199).unsqueeze(0).to(device)
-u_2th_t199 = torch.tensor(u_2th_t199).unsqueeze(0).to(device)
-v_2th_t199 = torch.tensor(v_2th_t199).unsqueeze(0).to(device)
-u_4th_t199 = torch.tensor(u_4th_t199).unsqueeze(0).to(device)
-v_4th_t199 = torch.tensor(v_4th_t199).unsqueeze(0).to(device)
-u_Baseline_t199 = torch.tensor(u_Baseline_t199).unsqueeze(0).to(device)
-v_Baseline_t199 = torch.tensor(v_Baseline_t199).unsqueeze(0).to(device)
+# u_true_t199 = torch.tensor(u_true_t199).unsqueeze(0).to(device)
+# v_true_t199 = torch.tensor(v_true_t199).unsqueeze(0).to(device)
+# u_2th_t199 = torch.tensor(u_2th_t199).unsqueeze(0).to(device)
+# v_2th_t199 = torch.tensor(v_2th_t199).unsqueeze(0).to(device)
+# u_4th_t199 = torch.tensor(u_4th_t199).unsqueeze(0).to(device)
+# v_4th_t199 = torch.tensor(v_4th_t199).unsqueeze(0).to(device)
+# u_les_t199 = torch.tensor(u_les_t199).unsqueeze(0).to(device)
+# v_les_t199 = torch.tensor(v_les_t199).unsqueeze(0).to(device)
 
-u_true_t249 = torch.tensor(u_true_t249).unsqueeze(0).to(device)
-v_true_t249 = torch.tensor(v_true_t249).unsqueeze(0).to(device)
-u_2th_t249 = torch.tensor(u_2th_t249).unsqueeze(0).to(device)
-v_2th_t249 = torch.tensor(v_2th_t249).unsqueeze(0).to(device)
-u_4th_t249 = torch.tensor(u_4th_t249).unsqueeze(0).to(device)
-v_4th_t249 = torch.tensor(v_4th_t249).unsqueeze(0).to(device)
-u_Baseline_t249 = torch.tensor(u_Baseline_t249).unsqueeze(0).to(device)
-v_Baseline_t249 = torch.tensor(v_Baseline_t249).unsqueeze(0).to(device)
+# u_true_t249 = torch.tensor(u_true_t249).unsqueeze(0).to(device)
+# v_true_t249 = torch.tensor(v_true_t249).unsqueeze(0).to(device)
+# u_2th_t249 = torch.tensor(u_2th_t249).unsqueeze(0).to(device)
+# v_2th_t249 = torch.tensor(v_2th_t249).unsqueeze(0).to(device)
+# u_4th_t249 = torch.tensor(u_4th_t249).unsqueeze(0).to(device)
+# v_4th_t249 = torch.tensor(v_4th_t249).unsqueeze(0).to(device)
+# u_les_t249 = torch.tensor(u_les_t249).unsqueeze(0).to(device)
+# v_les_t249 = torch.tensor(v_les_t249).unsqueeze(0).to(device)
 
-u_true_t299 = torch.tensor(u_true_t299).unsqueeze(0).to(device)
-v_true_t299 = torch.tensor(v_true_t299).unsqueeze(0).to(device)
-u_2th_t299 = torch.tensor(u_2th_t299).unsqueeze(0).to(device)
-v_2th_t299 = torch.tensor(v_2th_t299).unsqueeze(0).to(device)
-u_4th_t299 = torch.tensor(u_4th_t299).unsqueeze(0).to(device)
-v_4th_t299 = torch.tensor(v_4th_t299).unsqueeze(0).to(device)
-u_Baseline_t299 = torch.tensor(u_Baseline_t299).unsqueeze(0).to(device)
-v_Baseline_t299 = torch.tensor(v_Baseline_t299).unsqueeze(0).to(device)
+# u_true_t299 = torch.tensor(u_true_t299).unsqueeze(0).to(device)
+# v_true_t299 = torch.tensor(v_true_t299).unsqueeze(0).to(device)
+# u_2th_t299 = torch.tensor(u_2th_t299).unsqueeze(0).to(device)
+# v_2th_t299 = torch.tensor(v_2th_t299).unsqueeze(0).to(device)
+# u_4th_t299 = torch.tensor(u_4th_t299).unsqueeze(0).to(device)
+# v_4th_t299 = torch.tensor(v_4th_t299).unsqueeze(0).to(device)
+# u_les_t299 = torch.tensor(u_les_t299).unsqueeze(0).to(device)
+# v_les_t299 = torch.tensor(v_les_t299).unsqueeze(0).to(device)
 
-u_true_t349 = torch.tensor(u_true_t349).unsqueeze(0).to(device)
-v_true_t349 = torch.tensor(v_true_t349).unsqueeze(0).to(device)
-u_2th_t349 = torch.tensor(u_2th_t349).unsqueeze(0).to(device)
-v_2th_t349 = torch.tensor(v_2th_t349).unsqueeze(0).to(device)
-u_4th_t349 = torch.tensor(u_4th_t349).unsqueeze(0).to(device)
-v_4th_t349 = torch.tensor(v_4th_t349).unsqueeze(0).to(device)
-u_Baseline_t349 = torch.tensor(u_Baseline_t349).unsqueeze(0).to(device)
-v_Baseline_t349 = torch.tensor(v_Baseline_t349).unsqueeze(0).to(device)
+# u_true_t349 = torch.tensor(u_true_t349).unsqueeze(0).to(device)
+# v_true_t349 = torch.tensor(v_true_t349).unsqueeze(0).to(device)
+# u_2th_t349 = torch.tensor(u_2th_t349).unsqueeze(0).to(device)
+# v_2th_t349 = torch.tensor(v_2th_t349).unsqueeze(0).to(device)
+# u_4th_t349 = torch.tensor(u_4th_t349).unsqueeze(0).to(device)
+# v_4th_t349 = torch.tensor(v_4th_t349).unsqueeze(0).to(device)
+# u_les_t349 = torch.tensor(u_les_t349).unsqueeze(0).to(device)
+# v_les_t349 = torch.tensor(v_les_t349).unsqueeze(0).to(device)
 
 
-omega_true_t99 = model._velocity_to_vorticity_spectral(u_true_t99, v_true_t99, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_2th_t99 = model._velocity_to_vorticity_spectral(u_2th_t99, v_2th_t99, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_4th_t99 = model._velocity_to_vorticity_spectral(u_4th_t99, v_4th_t99, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_Baseline_t99 = model._velocity_to_vorticity_spectral(u_Baseline_t99, v_Baseline_t99, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_true_t99 = model._velocity_to_vorticity_spectral(u_true_t99, v_true_t99, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_2th_t99 = model._velocity_to_vorticity_spectral(u_2th_t99, v_2th_t99, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_4th_t99 = model._velocity_to_vorticity_spectral(u_4th_t99, v_4th_t99, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_les_t99 = model._velocity_to_vorticity_spectral(u_les_t99, v_les_t99, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
 
-omega_true_149 = model._velocity_to_vorticity_spectral(u_true_149, v_true_149, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_2th_149 = model._velocity_to_vorticity_spectral(u_2th_149, v_2th_149, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_4th_149 = model._velocity_to_vorticity_spectral(u_4th_149, v_4th_149, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_Baseline_149 = model._velocity_to_vorticity_spectral(u_Baseline_149, v_Baseline_149, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_true_149 = model._velocity_to_vorticity_spectral(u_true_149, v_true_149, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_2th_149 = model._velocity_to_vorticity_spectral(u_2th_149, v_2th_149, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_4th_149 = model._velocity_to_vorticity_spectral(u_4th_149, v_4th_149, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_les_149 = model._velocity_to_vorticity_spectral(u_les_149, v_les_149, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
 
-omega_true_t199 = model._velocity_to_vorticity_spectral(u_true_t199, v_true_t199, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_2th_t199 = model._velocity_to_vorticity_spectral(u_2th_t199, v_2th_t199, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_4th_t199 = model._velocity_to_vorticity_spectral(u_4th_t199, v_4th_t199, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_Baseline_t199 = model._velocity_to_vorticity_spectral(u_Baseline_t199, v_Baseline_t199, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_true_t199 = model._velocity_to_vorticity_spectral(u_true_t199, v_true_t199, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_2th_t199 = model._velocity_to_vorticity_spectral(u_2th_t199, v_2th_t199, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_4th_t199 = model._velocity_to_vorticity_spectral(u_4th_t199, v_4th_t199, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_les_t199 = model._velocity_to_vorticity_spectral(u_les_t199, v_les_t199, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
 
-omega_true_t249 = model._velocity_to_vorticity_spectral(u_true_t249, v_true_t249, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_2th_t249 = model._velocity_to_vorticity_spectral(u_2th_t249, v_2th_t249, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_4th_t249 = model._velocity_to_vorticity_spectral(u_4th_t249, v_4th_t249, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_Baseline_t249 = model._velocity_to_vorticity_spectral(u_Baseline_t249, v_Baseline_t249, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_true_t249 = model._velocity_to_vorticity_spectral(u_true_t249, v_true_t249, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_2th_t249 = model._velocity_to_vorticity_spectral(u_2th_t249, v_2th_t249, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_4th_t249 = model._velocity_to_vorticity_spectral(u_4th_t249, v_4th_t249, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_les_t249 = model._velocity_to_vorticity_spectral(u_les_t249, v_les_t249, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
 
-omega_true_t299 = model._velocity_to_vorticity_spectral(u_true_t299, v_true_t299, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_2th_t299 = model._velocity_to_vorticity_spectral(u_2th_t299, v_2th_t299, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_4th_t299 = model._velocity_to_vorticity_spectral(u_4th_t299, v_4th_t299, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_Baseline_t299 = model._velocity_to_vorticity_spectral(u_Baseline_t299, v_Baseline_t299, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_true_t299 = model._velocity_to_vorticity_spectral(u_true_t299, v_true_t299, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_2th_t299 = model._velocity_to_vorticity_spectral(u_2th_t299, v_2th_t299, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_4th_t299 = model._velocity_to_vorticity_spectral(u_4th_t299, v_4th_t299, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_les_t299 = model._velocity_to_vorticity_spectral(u_les_t299, v_les_t299, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
 
-omega_true_t349 = model._velocity_to_vorticity_spectral(u_true_t349, v_true_t349, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_2th_t349 = model._velocity_to_vorticity_spectral(u_2th_t349, v_2th_t349, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_4th_t349 = model._velocity_to_vorticity_spectral(u_4th_t349, v_4th_t349, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
-omega_Baseline_t349 = model._velocity_to_vorticity_spectral(u_Baseline_t349, v_Baseline_t349, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_true_t349 = model._velocity_to_vorticity_spectral(u_true_t349, v_true_t349, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_2th_t349 = model._velocity_to_vorticity_spectral(u_2th_t349, v_2th_t349, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_4th_t349 = model._velocity_to_vorticity_spectral(u_4th_t349, v_4th_t349, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
+# omega_les_t349 = model._velocity_to_vorticity_spectral(u_les_t349, v_les_t349, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
 
-fig, ax = plt.subplots(figsize=(4, 4))
-ax.contourf(X, Y, omega_true_149, levels=100, cmap='RdBu_r', origin='lower')
-ax.axis('off')
-ax.set_aspect('equal', adjustable='box')
-plt.tight_layout()
-ax.set_rasterized(True)
-plt.savefig("omega_grid_model.pdf", format='pdf', bbox_inches='tight', dpi=300, transparent=True)
-plt.close()
+methods = ["true", "2th", "4th", "les"]
+steps = [99, 149, 199, 249, 299, 349, 399, 449, 499, 549, 599, 649, 699, 749]
+for t in steps:
+    for m in methods:
+        u_key = f'u_{m}'
+        v_key = f'v_{m}'
+        omega_key = f'omega_{m}'
+        
+        if t in data[u_key] and t in data[v_key]:
+            u_np = data[u_key][t]
+            v_np = data[v_key][t]
+            
+            u_tensor = torch.tensor(u_np).unsqueeze(0).to(device)
+            v_tensor = torch.tensor(v_np).unsqueeze(0).to(device)
+            
+            with torch.no_grad():
+                omega_tensor = model._velocity_to_vorticity_spectral(
+                    u_tensor, v_tensor, model.Kx_fine, model.Ky_fine
+                )
+            
+            # 将计算结果存回字典 (以 Numpy 形式，方便绘图)
+            data[omega_key][t] = omega_tensor.squeeze(0).cpu().numpy()
+            
+            # 如果你后续训练还需要 Tensor，也可以选择把 Tensor 存下来：
+            # data[f'{u_key}_tensor'][t] = u_tensor 
+            
+    print(f"Time step {t}: Velocity converted, Omega calculated and stored in data dictionary.")
+
+# fig, ax = plt.subplots(figsize=(4, 4))
+# ax.contourf(X, Y, omega_true_t249, levels=100, cmap='RdBu_r', origin='lower')
+# ax.axis('off')
+# ax.set_aspect('equal', adjustable='box')
+# plt.tight_layout()
+# ax.set_rasterized(True)
+# plt.savefig("omega_grid.pdf", format='pdf', bbox_inches='tight', dpi=300, transparent=True)
+# plt.close()
 
 def plot_omega_grid(omega_list, t_label, methods):
 
@@ -781,8 +877,6 @@ def plot_omega_grid(omega_list, t_label, methods):
         ax = fig.add_subplot(gs[0, col])
         im_u = ax.contourf(X, Y, omega_list[col], cmap='RdBu_r', origin='lower',
                            levels=100, vmin=umin, vmax=umax)
-        # for c in im_u.collections:
-            # c.set_rasterized(True)
         ax.set_rasterized(True)
         ax.set_title(fr"{method} - $\omega$")
         ax.axis('off')
@@ -796,46 +890,66 @@ def plot_omega_grid(omega_list, t_label, methods):
     # fig.colorbar(im_u, cax=cax_u, label=r"$\omega$ value")
 
     plt.tight_layout()
-    plt.savefig(f"omega_grid_{t_label}_model.pdf", format='pdf', bbox_inches='tight', dpi=300)
+    plt.savefig(f"omega_grid_{t_label}.pdf", format='pdf', bbox_inches='tight', dpi=300)
     plt.close()
 
 
-methods = ["True", "FNO", "ANI-2", "ANI-4"]
-plot_omega_grid(
-    [omega_true_t99, omega_Baseline_t99, omega_2th_t99, omega_4th_t99],
-    "1s",
-    methods
-)
+# methods = ["True", "LES", "ANI-2", "ANI-4"]
+# plot_omega_grid(
+#     [omega_true_t99, omega_les_t99, omega_2th_t99, omega_4th_t99],
+#     "0.5s",
+#     methods
+# )
 
-plot_omega_grid(
-    [omega_true_149, omega_Baseline_149, omega_2th_149, omega_4th_149],
-    "1.5s",
-    methods
-)
+# plot_omega_grid(
+#     [omega_true_149, omega_les_149, omega_2th_149, omega_4th_149],
+#     "0.75s",
+#     methods
+# )
 
-plot_omega_grid(
-    [omega_true_t199, omega_Baseline_t199, omega_2th_t199, omega_4th_t199],
-    "2s",
-    methods
-)
+# plot_omega_grid(
+#     [omega_true_t199, omega_les_t199, omega_2th_t199, omega_4th_t199],
+#     "1.0s",
+#     methods
+# )
 
-plot_omega_grid(
-    [omega_true_t249, omega_Baseline_t249, omega_2th_t249, omega_4th_t249],
-    "2.5s",
-    methods
-)
+# plot_omega_grid(
+#     [omega_true_t249, omega_les_t249, omega_2th_t249, omega_4th_t249],
+#     "1.25s",
+#     methods
+# )
 
-plot_omega_grid(
-    [omega_true_t299, omega_Baseline_t299, omega_2th_t299, omega_4th_t299],
-    "3s",
-    methods
-)
+# plot_omega_grid(
+#     [omega_true_t299, omega_les_t299, omega_2th_t299, omega_4th_t299],
+#     "1.5s",
+#     methods
+# )
 
-plot_omega_grid(
-    [omega_true_t349, omega_Baseline_t349, omega_2th_t349, omega_4th_t349],
-    "3.5s",
-    methods
-)
+# plot_omega_grid(
+#     [omega_true_t349, omega_les_t349, omega_2th_t349, omega_4th_t349],
+#     "1.75s",
+#     methods
+# )
+
+
+for t, time_label in time_map.items():
+    try:
+        omega_list = [
+            data['omega_true'][t],
+            data['omega_les'][t],
+            data['omega_2th'][t],
+            data['omega_4th'][t]
+        ]
+        
+        print(f"Plotting Omega Grid for {time_label} (Step {t})...")
+        plot_omega_grid(
+            omega_list,
+            time_label,
+            methods
+        )
+        
+    except KeyError:
+        print(f"Skipping Step {t}: Data not found in data dictionary.")
 
 def plot_omega_error_grid(omega_true, omega_methods, t_label, methods,
                           signed=False, cmap_abs='viridis', cmap_signed='RdBu_r'):
@@ -855,8 +969,6 @@ def plot_omega_error_grid(omega_true, omega_methods, t_label, methods,
 
     for col, method in enumerate(methods):
         im = axes[col].contourf(X, Y, err[col], cmap=cmap, origin='lower', levels=100)
-        # for c in im.collections:
-            # c.set_rasterized(True)
         axes[col].set_rasterized(True)
         axes[col].set_title(f"{method} — ω error")
         axes[col].axis('off')
@@ -864,72 +976,102 @@ def plot_omega_error_grid(omega_true, omega_methods, t_label, methods,
         plt.colorbar(im, ax=axes[col], fraction=0.046, pad=0.04)
 
     plt.tight_layout()
-    plt.savefig(f"omega_error_grid_{t_label}_model.pdf", format='pdf', bbox_inches='tight', dpi=300)
+    plt.savefig(f"omega_error_grid_{t_label}.pdf", format='pdf', bbox_inches='tight', dpi=300)
     plt.close()
 
-plot_omega_error_grid(
-    omega_true_t99,
-    [omega_Baseline_t99, omega_2th_t99, omega_4th_t99],
-    "1s",
-    ["FNO", "ANI-2", "ANI-4"],
-    signed=False,
-    cmap_abs='viridis',
-    cmap_signed='RdBu_r'
-)
+# plot_omega_error_grid(
+#     omega_true_t99,
+#     [omega_les_t99, omega_2th_t99, omega_4th_t99],
+#     "0.5s",
+#     ["LES", "ANI-2", "ANI-4"],
+#     signed=False,
+#     cmap_abs='viridis',
+#     cmap_signed='RdBu_r'
+# )
 
-plot_omega_error_grid(
-    omega_true_149,
-    [omega_Baseline_149, omega_2th_149, omega_4th_149],
-    "1.5s",
-    ["FNO", "ANI-2", "ANI-4"],
-    signed=False,
-    cmap_abs='viridis',
-    cmap_signed='RdBu_r'
-)
+# plot_omega_error_grid(
+#     omega_true_149,
+#     [omega_les_149, omega_2th_149, omega_4th_149],
+#     "0.75s",
+#     ["LES", "ANI-2", "ANI-4"],
+#     signed=False,
+#     cmap_abs='viridis',
+#     cmap_signed='RdBu_r'
+# )
 
-plot_omega_error_grid(
-    omega_true_t199,
-    [omega_Baseline_t199, omega_2th_t199, omega_4th_t199],
-    "2s",
-    ["FNO", "ANI-2", "ANI-4"],
-    signed=False,
-    cmap_abs='viridis',
-    cmap_signed='RdBu_r'
-)
+# plot_omega_error_grid(
+#     omega_true_t199,
+#     [omega_les_t199, omega_2th_t199, omega_4th_t199],
+#     "1.0s",
+#     ["LES", "ANI-2", "ANI-4"],
+#     signed=False,
+#     cmap_abs='viridis',
+#     cmap_signed='RdBu_r'
+# )
 
-plot_omega_error_grid(
-    omega_true_t249,
-    [omega_Baseline_t249, omega_2th_t249, omega_4th_t249],
-    "2.5s",
-    ["FNO", "ANI-2", "ANI-4"],
-    signed=False,
-    cmap_abs='viridis',
-    cmap_signed='RdBu_r'
-)
+# plot_omega_error_grid(
+#     omega_true_t249,
+#     [omega_les_t249, omega_2th_t249, omega_4th_t249],
+#     "1.25s",
+#     ["LES", "ANI-2", "ANI-4"],
+#     signed=False,
+#     cmap_abs='viridis',
+#     cmap_signed='RdBu_r'
+# )
 
-plot_omega_error_grid(
-    omega_true_t299,
-    [omega_Baseline_t299, omega_2th_t299, omega_4th_t299],
-    "3s",
-    ["FNO", "ANI-2", "ANI-4"],
-    signed=False,
-    cmap_abs='viridis',
-    cmap_signed='RdBu_r'
-)
+# plot_omega_error_grid(
+#     omega_true_t299,
+#     [omega_les_t299, omega_2th_t299, omega_4th_t299],
+#     "1.5s",
+#     ["LES", "ANI-2", "ANI-4"],
+#     signed=False,
+#     cmap_abs='viridis',
+#     cmap_signed='RdBu_r'
+# )
 
-plot_omega_error_grid(
-    omega_true_t349,
-    [omega_Baseline_t349, omega_2th_t349, omega_4th_t349],
-    "3.5s",
-    ["FNO", "ANI-2", "ANI-4"],
-    signed=False,
-    cmap_abs='viridis',
-    cmap_signed='RdBu_r'
-)
+# plot_omega_error_grid(
+#     omega_true_t349,
+#     [omega_les_t349, omega_2th_t349, omega_4th_t349],
+#     "1.75s",
+#     ["LES", "ANI-2", "ANI-4"],
+#     signed=False,
+#     cmap_abs='viridis',
+#     cmap_signed='RdBu_r'
+# )
+
+methods_label = ["LES", "ANI-2", "ANI-4"]
+plot_config = {
+    'signed': False,
+    'cmap_abs': 'viridis',
+    'cmap_signed': 'RdBu_r'
+}
+
+for t, time_label in time_map.items():
+    
+    try:
+        o_true = data['omega_true'][t]
+        o_preds = [
+            data['omega_les'][t],
+            data['omega_2th'][t],
+            data['omega_4th'][t]
+        ]
+        
+        print(f"Generating Omega Error Grid for {time_label} (Step {t})...")
+        plot_omega_error_grid(
+            o_true,
+            o_preds,
+            time_label,
+            methods_label,
+            **plot_config  
+        )
+        
+    except KeyError:
+        if t > 349:
+            print(f"Notice: Data for Step {t} ({time_label}) not found in 'data' dictionary. Skipping.")
 
 def compute_kinetic_energy(u, v, L=1.0):
-    # u [1, 256, 256]
-    # v [1, 256, 256]
+    # u [1, 128, 128]
+    # v [1, 128, 128]
     # L = 1.0
     dx = L / u.shape[1]
     dy = L / u.shape[2]
@@ -944,19 +1086,19 @@ def plot_kinetic_energy(u_list, v_list, t_label, methods):
     for E, method in zip(E_list, methods):
         ax.plot(E, label=method)
     ax.set_title(f"Kinetic Energy — {t_label}")
-    ax.set_xlabel("Time step", fontsize=14)
-    ax.set_ylabel("Kinetic Energy", fontsize=14)
+    ax.set_xlabel("Time step")
+    ax.set_ylabel("Kinetic Energy")
     ax.legend()
     plt.tight_layout()
-    plt.savefig(f"kinetic_energy_{t_label}_model.pdf", format='pdf', bbox_inches='tight', dpi=300)
+    plt.savefig(f"kinetic_energy_{t_label}.pdf", format='pdf', bbox_inches='tight', dpi=300)
     plt.close()
 
-plot_kinetic_energy(
-    [u_true_t99, u_Baseline_t99, u_2th_t99, u_4th_t99],
-    [v_true_t99, v_Baseline_t99, v_2th_t99, v_4th_t99],
-    "1s",
-    ["True", "FNO", "ANI-2", "ANI-4"]
-)
+# plot_kinetic_energy(
+#     [u_true_t99, u_les_t99, u_2th_t99, u_4th_t99],
+#     [v_true_t99, v_les_t99, v_2th_t99, v_4th_t99],
+#     "1s",
+#     ["True", "LES", "ANI-2", "ANI-4"]
+# )
 
 def compute_isotropic_spectrum(u, v, w=None, L=1.0, nbins=None):
     """
@@ -1024,15 +1166,15 @@ def plot_isotropic_spectrum(u_list, v_list, t_label="t", methods=None, L=1.0):
     colors = ['#1f77b4', '#2ca02c', '#733497', '#CC79A7', '#F0E442', '#56B4E9']
 
     u_first, v_first = u_list[0], v_list[0]
-    k, E_k = compute_isotropic_spectrum(u_first.cpu().numpy(), v_first.cpu().numpy(), L=L)
+    k, E_k = compute_isotropic_spectrum(u_first, v_first, L=L)
     
     # 绘制所有方法的数据曲线，并在线条末端添加标签
     for i, (u, v, method) in enumerate(zip(u_list, v_list, methods)):
-        k_i, E_k_i = compute_isotropic_spectrum(u.cpu().numpy(), v.cpu().numpy(), L=L)
+        k_i, E_k_i = compute_isotropic_spectrum(u, v, L=L)
         plt.loglog(k_i[1:], E_k_i[1:], color=colors[i % len(colors)], linewidth=2, label=method)
         # 在数据曲线的末端添加文字标签
         # plt.text(k_i[-1], E_k_i[-1], f'  {method}', color=colors[i % len(colors)], 
-                #  fontsize=14, ha='left', va='center')
+                #  fontsize=12, ha='left', va='center')
 
 
     # 3. 智能地绘制参考线并添加行内标签
@@ -1040,23 +1182,23 @@ def plot_isotropic_spectrum(u_list, v_list, t_label="t", methods=None, L=1.0):
     k_range_3 = np.array([35, 80], dtype=np.float64)
     idx_3 = (np.abs(k - k_range_3[0])).argmin()
     C3 = E_k[idx_3] * (k[idx_3]**3)
-    E_ref_3 = C3 * (k_range_3**-3) / 2
+    E_ref_3 = C3 * (k_range_3**-3) * 2
     plt.loglog(k_range_3, E_ref_3, '--', color='black', linewidth=2) # 移除 label
     
     # 在 k^-3 线的右上角添加文字
     plt.text(k_range_3[1], E_ref_3[1], r' $k^{-3}$', fontsize=14, color='black', 
              ha='left', va='bottom', rotation=-30) # rotation使标签跟随线条斜率
 
-    # # k^-5/3 参考线
-    # k_range_53 = np.array([15, 35], dtype=np.float64)
-    # idx_53 = (np.abs(k - k_range_53[0])).argmin()
-    # C53 = E_k[idx_53] * (k[idx_53]**(5/3))
-    # E_ref_53 = C53 * (k_range_53**(-5/3)) * 2
-    # plt.loglog(k_range_53, E_ref_53, '--', color='dimgray', linewidth=2) # 移除 label
+    # k^-5/3 参考线
+    k_range_53 = np.array([15, 35], dtype=np.float64)
+    idx_53 = (np.abs(k - k_range_53[0])).argmin()
+    C53 = E_k[idx_53] * (k[idx_53]**(5/3))
+    E_ref_53 = C53 * (k_range_53**(-5/3)) * 2
+    plt.loglog(k_range_53, E_ref_53, '--', color='dimgray', linewidth=2) # 移除 label
     
-    # # 在 k^-5/3 线的右上角添加文字
-    # plt.text(k_range_53[1], E_ref_53[1], r' $k^{-5/3}$', fontsize=14, color='dimgray',
-    #          ha='left', va='bottom', rotation=-25) # rotation使标签跟随线条斜率
+    # 在 k^-5/3 线的右上角添加文字
+    plt.text(k_range_53[1], E_ref_53[1], r' $k^{-5/3}$', fontsize=14, color='dimgray',
+             ha='left', va='bottom', rotation=-25) # rotation使标签跟随线条斜率
 
 
     # 4. 美化图表细节
@@ -1070,53 +1212,84 @@ def plot_isotropic_spectrum(u_list, v_list, t_label="t", methods=None, L=1.0):
     plt.xlim(right=plt.xlim()[1] * 1.5)
 
     plt.tight_layout()
-    plt.savefig(f"isotropic_spectrum_{t_label}_model.pdf", format='pdf', bbox_inches='tight', dpi=300)
+    plt.savefig(f"isotropic_spectrum_{t_label}.pdf", format='pdf', bbox_inches='tight', dpi=300)
     plt.close()
 
-plot_isotropic_spectrum(
-    [u_true_t99, u_Baseline_t99, u_2th_t99, u_4th_t99],
-    [v_true_t99, v_Baseline_t99, v_2th_t99, v_4th_t99],
-    "1s",
-    ["True", "FNO", "ANI-2", "ANI-4"],
-    L=1.0
-)
+# plot_isotropic_spectrum(
+#     [u_true_t99, u_les_t99, u_2th_t99, u_4th_t99],
+#     [v_true_t99, v_les_t99, v_2th_t99, v_4th_t99],
+#     "0.5s",
+#     ["True", "LES", "ANI-2", "ANI-4"],
+#     L=1.0
+# )
 
-plot_isotropic_spectrum(
-    [u_true_149, u_Baseline_149, u_2th_149, u_4th_149],
-    [v_true_149, v_Baseline_149, v_2th_149, v_4th_149],
-    "1.5s",
-    ["True", "FNO", "ANI-2", "ANI-4"],
-    L=1.0
-)
+# plot_isotropic_spectrum(
+#     [u_true_149, u_les_149, u_2th_149, u_4th_149],
+#     [v_true_149, v_les_149, v_2th_149, v_4th_149],
+#     "0.75s",
+#     ["True", "LES", "ANI-2", "ANI-4"],
+#     L=1.0
+# )
 
-plot_isotropic_spectrum(
-    [u_true_t199, u_Baseline_t199, u_2th_t199, u_4th_t199],
-    [v_true_t199, v_Baseline_t199, v_2th_t199, v_4th_t199],
-    "2s",
-    ["True", "FNO", "ANI-2", "ANI-4"],
-    L=1.0
-)
+# plot_isotropic_spectrum(
+#     [u_true_t199, u_les_t199, u_2th_t199, u_4th_t199],
+#     [v_true_t199, v_les_t199, v_2th_t199, v_4th_t199],
+#     "1.0s",
+#     ["True", "LES", "ANI-2", "ANI-4"],
+#     L=1.0
+# )
 
-plot_isotropic_spectrum(
-    [u_true_t249, u_Baseline_t249, u_2th_t249, u_4th_t249],
-    [v_true_t249, v_Baseline_t249, v_2th_t249, v_4th_t249],
-    "2.5s",
-    ["True", "FNO", "ANI-2", "ANI-4"],
-    L=1.0
-)
+# plot_isotropic_spectrum(
+#     [u_true_t249, u_les_t249, u_2th_t249, u_4th_t249],
+#     [v_true_t249, v_les_t249, v_2th_t249, v_4th_t249],
+#     "1.25s",
+#     ["True", "LES", "ANI-2", "ANI-4"],
+#     L=1.0
+# )
 
-plot_isotropic_spectrum(
-    [u_true_t299, u_Baseline_t299, u_2th_t299, u_4th_t299],
-    [v_true_t299, v_Baseline_t299, v_2th_t299, v_4th_t299],
-    "3s",
-    ["True", "FNO", "ANI-2", "ANI-4"],
-    L=1.0
-)
+# plot_isotropic_spectrum(
+#     [u_true_t299, u_les_t299, u_2th_t299, u_4th_t299],
+#     [v_true_t299, v_les_t299, v_2th_t299, v_4th_t299],
+#     "1.5s",
+#     ["True", "LES", "ANI-2", "ANI-4"],
+#     L=1.0
+# )
 
-plot_isotropic_spectrum(
-    [u_true_t349, u_Baseline_t349, u_2th_t349, u_4th_t349],
-    [v_true_t349, v_Baseline_t349, v_2th_t349, v_4th_t349],
-    "3.5s",
-    ["True", "FNO", "ANI-2", "ANI-4"],
-    L=1.0
-)
+# plot_isotropic_spectrum(
+#     [u_true_t349, u_les_t349, u_2th_t349, u_4th_t349],
+#     [v_true_t349, v_les_t349, v_2th_t349, v_4th_t349],
+#     "1.75s",
+#     ["True", "LES", "ANI-2", "ANI-4"],
+#     L=1.0
+# )
+
+methods_label = ["True", "LES", "ANI-2", "ANI-4"]
+
+for t, time_label in time_map.items():
+    try:
+        u_list = [
+            data['u_true'][t],
+            data['u_les'][t],
+            data['u_2th'][t],
+            data['u_4th'][t]
+        ]
+        
+        v_list = [
+            data['v_true'][t],
+            data['v_les'][t],
+            data['v_2th'][t],
+            data['v_4th'][t]
+        ]
+        
+        print(f"Plotting Isotropic Spectrum for {time_label} (Step {t})...")
+        
+        plot_isotropic_spectrum(
+            u_list,
+            v_list,
+            time_label,
+            methods_label,
+            L=1.0
+        )
+        
+    except KeyError:
+        print(f"Skipping Step {t}: Data not found in 'data' dictionary.")

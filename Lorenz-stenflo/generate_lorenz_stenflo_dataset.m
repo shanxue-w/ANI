@@ -1,7 +1,7 @@
 function generate_lorenz_stenflo_dataset()
     % ==== 系统参数 ====
 
-    delta_t = 1e-2;
+    delta_t = 5e-2;
     steps_per_condition = 2;
     num_train_conditions = 1000;
     num_val_conditions = 200;

@@ -10,10 +10,10 @@ plt.rcParams.update({
     "legend.fontsize": 14,  # 图例字体大小
 })
 
-file_path_2th = '2th/traj_error.txt'
-file_path_4th = '4th/traj_error.txt'
+file_path_2th = '2th/traj_error_4000.txt'
+file_path_4th = '4th/traj_error_4000.txt'
 # file_path_A   = '2th/traj_error_1e4.txt'
-file_path_A   = 'baseline/traj_error.txt'
+file_path_A   = 'prior_baseline/traj_error_4000.txt'
 
 data_2th = pd.read_csv(file_path_2th, sep='\t')
 data_2th = data_2th['avg_relative_error']
@@ -29,7 +29,7 @@ data_A   = data_A[0:400]
 plt.figure(figsize=(8, 6))
 
 # 绘制数据
-plt.plot(data_A, label='FNO', linestyle='-.', color='#0072B2', linewidth=2, marker='^', markersize=2)
+plt.plot(data_A, label='Baseline', linestyle='-.', color='#0072B2', linewidth=2, marker='^', markersize=2)
 plt.plot(data_2th, label='ANI-2', linestyle='-', color='#009E73', linewidth=2, marker='o', markersize=2)
 plt.plot(data_4th, label='ANI-4', linestyle='--', color='#E69F00', linewidth=2, marker='s', markersize=2)
 

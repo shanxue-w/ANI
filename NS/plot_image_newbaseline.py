@@ -427,8 +427,8 @@ u_2th_t99 = np.load('2th/u_99_2th.npy')
 v_2th_t99 = np.load('2th/v_99_2th.npy')
 u_4th_t99 = np.load('4th/u_99_4th.npy')
 v_4th_t99 = np.load('4th/v_99_4th.npy')
-u_Baseline_t99 = np.load('baseline/u_99_base.npy')
-v_Baseline_t99 = np.load('baseline/v_99_base.npy')
+u_Baseline_t99 = np.load('prior_baseline/u_99_base.npy')
+v_Baseline_t99 = np.load('prior_baseline/v_99_base.npy')
 
 u_true_149 = np.load('2th/u_149_true.npy')
 v_true_149 = np.load('2th/v_149_true.npy')
@@ -436,8 +436,8 @@ u_2th_149 = np.load('2th/u_149_2th.npy')
 v_2th_149 = np.load('2th/v_149_2th.npy')
 u_4th_149 = np.load('4th/u_149_4th.npy')
 v_4th_149 = np.load('4th/v_149_4th.npy')
-u_Baseline_149 = np.load('baseline/u_149_base.npy')
-v_Baseline_149 = np.load('baseline/v_149_base.npy')
+u_Baseline_149 = np.load('prior_baseline/u_149_base.npy')
+v_Baseline_149 = np.load('prior_baseline/v_149_base.npy')
 
 u_true_t199 = np.load('2th/u_199_true.npy')
 v_true_t199 = np.load('2th/v_199_true.npy')
@@ -445,8 +445,8 @@ u_2th_t199 = np.load('2th/u_199_2th.npy')
 v_2th_t199 = np.load('2th/v_199_2th.npy')
 u_4th_t199 = np.load('4th/u_199_4th.npy')
 v_4th_t199 = np.load('4th/v_199_4th.npy')
-u_Baseline_t199 = np.load('baseline/u_199_base.npy')
-v_Baseline_t199 = np.load('baseline/v_199_base.npy')
+u_Baseline_t199 = np.load('prior_baseline/u_199_base.npy')
+v_Baseline_t199 = np.load('prior_baseline/v_199_base.npy')
 
 u_true_t249 = np.load('2th/u_249_true.npy')
 v_true_t249 = np.load('2th/v_249_true.npy')
@@ -454,8 +454,8 @@ u_2th_t249 = np.load('2th/u_249_2th.npy')
 v_2th_t249 = np.load('2th/v_249_2th.npy')
 u_4th_t249 = np.load('4th/u_249_4th.npy')
 v_4th_t249 = np.load('4th/v_249_4th.npy')
-u_Baseline_t249 = np.load('baseline/u_249_base.npy')
-v_Baseline_t249 = np.load('baseline/v_249_base.npy')
+u_Baseline_t249 = np.load('prior_baseline/u_249_base.npy')
+v_Baseline_t249 = np.load('prior_baseline/v_249_base.npy')
 
 u_true_t299 = np.load('2th/u_299_true.npy')
 v_true_t299 = np.load('2th/v_299_true.npy')
@@ -463,8 +463,8 @@ u_2th_t299 = np.load('2th/u_299_2th.npy')
 v_2th_t299 = np.load('2th/v_299_2th.npy')
 u_4th_t299 = np.load('4th/u_299_4th.npy')
 v_4th_t299 = np.load('4th/v_299_4th.npy')
-u_Baseline_t299 = np.load('baseline/u_299_base.npy')
-v_Baseline_t299 = np.load('baseline/v_299_base.npy')
+u_Baseline_t299 = np.load('prior_baseline/u_299_base.npy')
+v_Baseline_t299 = np.load('prior_baseline/v_299_base.npy')
 
 u_true_t349 = np.load('2th/u_349_true.npy')
 v_true_t349 = np.load('2th/v_349_true.npy')
@@ -472,14 +472,14 @@ u_2th_t349 = np.load('2th/u_349_2th.npy')
 v_2th_t349 = np.load('2th/v_349_2th.npy')
 u_4th_t349 = np.load('4th/u_349_4th.npy')
 v_4th_t349 = np.load('4th/v_349_4th.npy')
-u_Baseline_t349 = np.load('baseline/u_349_base.npy')
-v_Baseline_t349 = np.load('baseline/v_349_base.npy')
+u_Baseline_t349 = np.load('prior_baseline/u_349_base.npy')
+v_Baseline_t349 = np.load('prior_baseline/v_349_base.npy')
 
 x = np.linspace(0, 1, 256+1)[:-1]
 y = np.linspace(0, 1, 256+1)[:-1]
 X, Y = np.meshgrid(x, y, indexing='ij')
 
-methods = ["True", "FNO", "ANI-2", "ANI-4"]
+methods = ["True", "Baseline", "ANI-2", "ANI-4"]
 
 def plot_uv_grid(u_list, v_list, t_label, methods):
     fig = plt.figure(figsize=(4.5*len(methods), 8))
@@ -575,7 +575,7 @@ plot_uv_grid(
     methods
 )
 
-methods = ["FNO", "ANI-2", "ANI-4"]
+methods = ["Baseline", "ANI-2", "ANI-4"]
 
 def plot_error_grid(u_true, v_true, u_methods, v_methods, t_label,
                     signed=False, cmap_abs='viridis', cmap_signed='RdBu_r'):
@@ -800,7 +800,7 @@ def plot_omega_grid(omega_list, t_label, methods):
     plt.close()
 
 
-methods = ["True", "FNO", "ANI-2", "ANI-4"]
+methods = ["True", "Baseline", "ANI-2", "ANI-4"]
 plot_omega_grid(
     [omega_true_t99, omega_Baseline_t99, omega_2th_t99, omega_4th_t99],
     "1s",
@@ -871,7 +871,7 @@ plot_omega_error_grid(
     omega_true_t99,
     [omega_Baseline_t99, omega_2th_t99, omega_4th_t99],
     "1s",
-    ["FNO", "ANI-2", "ANI-4"],
+    ["Baseline", "ANI-2", "ANI-4"],
     signed=False,
     cmap_abs='viridis',
     cmap_signed='RdBu_r'
@@ -881,7 +881,7 @@ plot_omega_error_grid(
     omega_true_149,
     [omega_Baseline_149, omega_2th_149, omega_4th_149],
     "1.5s",
-    ["FNO", "ANI-2", "ANI-4"],
+    ["Baseline", "ANI-2", "ANI-4"],
     signed=False,
     cmap_abs='viridis',
     cmap_signed='RdBu_r'
@@ -891,7 +891,7 @@ plot_omega_error_grid(
     omega_true_t199,
     [omega_Baseline_t199, omega_2th_t199, omega_4th_t199],
     "2s",
-    ["FNO", "ANI-2", "ANI-4"],
+    ["Baseline", "ANI-2", "ANI-4"],
     signed=False,
     cmap_abs='viridis',
     cmap_signed='RdBu_r'
@@ -901,7 +901,7 @@ plot_omega_error_grid(
     omega_true_t249,
     [omega_Baseline_t249, omega_2th_t249, omega_4th_t249],
     "2.5s",
-    ["FNO", "ANI-2", "ANI-4"],
+    ["Baseline", "ANI-2", "ANI-4"],
     signed=False,
     cmap_abs='viridis',
     cmap_signed='RdBu_r'
@@ -911,7 +911,7 @@ plot_omega_error_grid(
     omega_true_t299,
     [omega_Baseline_t299, omega_2th_t299, omega_4th_t299],
     "3s",
-    ["FNO", "ANI-2", "ANI-4"],
+    ["Baseline", "ANI-2", "ANI-4"],
     signed=False,
     cmap_abs='viridis',
     cmap_signed='RdBu_r'
@@ -921,7 +921,7 @@ plot_omega_error_grid(
     omega_true_t349,
     [omega_Baseline_t349, omega_2th_t349, omega_4th_t349],
     "3.5s",
-    ["FNO", "ANI-2", "ANI-4"],
+    ["Baseline", "ANI-2", "ANI-4"],
     signed=False,
     cmap_abs='viridis',
     cmap_signed='RdBu_r'
@@ -955,7 +955,7 @@ plot_kinetic_energy(
     [u_true_t99, u_Baseline_t99, u_2th_t99, u_4th_t99],
     [v_true_t99, v_Baseline_t99, v_2th_t99, v_4th_t99],
     "1s",
-    ["True", "FNO", "ANI-2", "ANI-4"]
+    ["True", "Baseline", "ANI-2", "ANI-4"]
 )
 
 def compute_isotropic_spectrum(u, v, w=None, L=1.0, nbins=None):
@@ -1077,7 +1077,7 @@ plot_isotropic_spectrum(
     [u_true_t99, u_Baseline_t99, u_2th_t99, u_4th_t99],
     [v_true_t99, v_Baseline_t99, v_2th_t99, v_4th_t99],
     "1s",
-    ["True", "FNO", "ANI-2", "ANI-4"],
+    ["True", "Baseline", "ANI-2", "ANI-4"],
     L=1.0
 )
 
@@ -1085,7 +1085,7 @@ plot_isotropic_spectrum(
     [u_true_149, u_Baseline_149, u_2th_149, u_4th_149],
     [v_true_149, v_Baseline_149, v_2th_149, v_4th_149],
     "1.5s",
-    ["True", "FNO", "ANI-2", "ANI-4"],
+    ["True", "Baseline", "ANI-2", "ANI-4"],
     L=1.0
 )
 
@@ -1093,7 +1093,7 @@ plot_isotropic_spectrum(
     [u_true_t199, u_Baseline_t199, u_2th_t199, u_4th_t199],
     [v_true_t199, v_Baseline_t199, v_2th_t199, v_4th_t199],
     "2s",
-    ["True", "FNO", "ANI-2", "ANI-4"],
+    ["True", "Baseline", "ANI-2", "ANI-4"],
     L=1.0
 )
 
@@ -1101,7 +1101,7 @@ plot_isotropic_spectrum(
     [u_true_t249, u_Baseline_t249, u_2th_t249, u_4th_t249],
     [v_true_t249, v_Baseline_t249, v_2th_t249, v_4th_t249],
     "2.5s",
-    ["True", "FNO", "ANI-2", "ANI-4"],
+    ["True", "Baseline", "ANI-2", "ANI-4"],
     L=1.0
 )
 
@@ -1109,7 +1109,7 @@ plot_isotropic_spectrum(
     [u_true_t299, u_Baseline_t299, u_2th_t299, u_4th_t299],
     [v_true_t299, v_Baseline_t299, v_2th_t299, v_4th_t299],
     "3s",
-    ["True", "FNO", "ANI-2", "ANI-4"],
+    ["True", "Baseline", "ANI-2", "ANI-4"],
     L=1.0
 )
 
@@ -1117,6 +1117,6 @@ plot_isotropic_spectrum(
     [u_true_t349, u_Baseline_t349, u_2th_t349, u_4th_t349],
     [v_true_t349, v_Baseline_t349, v_2th_t349, v_4th_t349],
     "3.5s",
-    ["True", "FNO", "ANI-2", "ANI-4"],
+    ["True", "Baseline", "ANI-2", "ANI-4"],
     L=1.0
 )
