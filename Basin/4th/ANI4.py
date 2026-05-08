@@ -17,7 +17,7 @@ torch.manual_seed(SEED)
 torch.cuda.manual_seed(SEED)
 torch.cuda.manual_seed_all(SEED)
 
-BASIN_ID = "01013500"
+BASIN_ID = "01031500"
 DATA_FILE = f"../dataset/data_{BASIN_ID}.pt"
 MODEL_FILE = f"ANI2_Best_{BASIN_ID}.pth"
 

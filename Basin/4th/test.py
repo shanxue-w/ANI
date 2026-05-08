@@ -85,7 +85,7 @@ def run_test():
     # 6. 绘图
     plt.figure(figsize=(8, 6))
     plt.plot(obs, label='Observed', color='black', alpha=0.7, lw=1.5)
-    plt.plot(preds, label='Predicted (ANI4)', color='red', alpha=0.8, lw=1.2, ls='--')
+    plt.plot(preds, label='Predicted (ANI-4)', color='red', alpha=0.8, lw=1.2, ls='--')
     # plt.title(f"Long-term Simulation - Basin {BASIN_ID}")
     plt.xlabel("Days")
     plt.ylabel("Streamflow (mm/day)")

@@ -124,8 +124,8 @@ class ANI_2th_Hydro(nn.Module):
         q_corr = q_half + drift * dt * self.y_std
 
         # # prior half-step
-        # q_next = self.A(q_corr, P_raw, T_raw, dt/2)
-        q_next = self.A(q_half, P_raw, T_raw, dt/2)
+        q_next = self.A(q_corr, P_raw, T_raw, dt/2)
+        # q_next = self.A(q_half, P_raw, T_raw, dt/2)
         
         return F.softplus(q_next), drift
 

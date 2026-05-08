@@ -125,7 +125,7 @@ if __name__ == "__main__":
             plt.subplot(num_plots, 1, i+1)
             
             plt.plot(res['true'], 'k-', label='Ground Truth', linewidth=2)
-            plt.plot(res['pred'], 'r--', label=f'ANI2 Pred (MSE={res["mse"]:.1e})', linewidth=1.5)
+            plt.plot(res['pred'], 'r--', label=f'ANI-2 Pred (MSE={res["mse"]:.1e})', linewidth=1.5)
             
             # plt.title(f"Cycle ID (norm): {res['cycle_id']:.4f}")
             plt.ylabel("Voltage (V)")

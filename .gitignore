@@ -22,6 +22,8 @@ __pycache__/
 *.list~
 *.pkl
 
+*.pdf_only
+
 src/ANI.egg-info/*
 
 !Lorenz-stenflo/OSNET_Lorenz_stenflo_4th_0.mat

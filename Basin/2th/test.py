@@ -86,8 +86,8 @@ def run_test():
     # 6. 绘图
     plt.figure(figsize=(8, 6))
     plt.plot(obs, label='Observed', color='black', alpha=0.7, lw=1.5)
-    # plt.plot(preds, label='Predicted (ANI2)', color='red', alpha=0.8, lw=1.2, ls='--')
-    plt.plot(preds, label='Predicted (Prior)', color='red', alpha=0.8, lw=1.2, ls='--')
+    plt.plot(preds, label='Predicted (ANI-2)', color='red', alpha=0.8, lw=1.2, ls='--')
+    # plt.plot(preds, label='Predicted (Prior)', color='red', alpha=0.8, lw=1.2, ls='--')
     # plt.title(f"Long-term Simulation - Basin {BASIN_ID}")
     plt.xlabel("Days")
     plt.ylabel("Streamflow (mm/day)")
@@ -100,7 +100,7 @@ def run_test():
              bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
     
     plt.tight_layout()
-    plt.savefig(f"rollout_result_{BASIN_ID}_prior.pdf", dpi=300, bbox_inches='tight', format='pdf')
+    plt.savefig(f"rollout_result_{BASIN_ID}_prior_only.pdf", dpi=300, bbox_inches='tight', format='pdf')
     print(f"Plot saved to rollout_result_{BASIN_ID}_prior.pdf")
     # plt.show()
 # # 设置 2行2列 的画板

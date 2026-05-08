@@ -114,7 +114,7 @@ The repository currently includes the following experiments:
 - **Euler**  
   ANI for the one-dimensional compressible Euler equations.
 
-- **Allen-Cahn-new**  
+- **Fitzhugh-Nagumo**  
   Implementation and experiments for the corresponding reaction-diffusion benchmark.
 
 - **NS_NEW**  
