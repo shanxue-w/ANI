@@ -133,9 +133,9 @@ The repository currently includes the following experiments:
 
 This GitHub repository contains the source code only. The datasets used in this work are hosted separately.
 
-- [Zenodo Link 1](https://zenodo.org/records/17412715?preview=1&token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6ImZiMGNjZDk4LWExNTMtNGM4YS05Yzc5LTJmYWI4MzVmODY5MCIsImRhdGEiOnt9LCJyYW5kb20iOiJjMTJiODRiYWFiYWZhZTVmYTU1NDZiMzVlNTE1ODgwMCJ9.9eJxZvjbyJNErJ1PbaAFLrT125mgY7paS_P_kXdibbehwLg9aTTYw-hStZpSh2P-K2-tPTuSSFty-Xh_qajE-Q)
-- [Zenodo Link 2](https://zenodo.org/records/17412698?preview=1&token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjliYmQ2ZTQ0LWYyMjQtNGVjMS04NDc1LTM1YjM5YzQ0NmZkOCIsImRhdGEiOnt9LCJyYW5kb20iOiIxYWE4MWMyMzQzZDIyYjY3NDAxZjEzNThlMzNhZTc4ZiJ9.5___hNAhSjTrFlyrdkM6WKgziyw0UwyMkttc-R0HVFcAtreUruzKY14CxZpLf90BuhWSdjJepm5k1ZAxUdzfpg)
-- [Zenodo Link 3](https://zenodo.org/records/19482734?preview=1&token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjgxNzk2NGZhLTc1NmQtNDM2Mi1hNTgwLTViMzgwMWZhOTMzOSIsImRhdGEiOnt9LCJyYW5kb20iOiIxYTkwYjlhMDM3NzY5MWQzM2UwZmNlN2Q2OTlhMjczZCJ9.cFybQkKN6f28_ut_TqiV_8iu5OC23R4F_zRwC6oFXi2K1vrQ3eVW0EMPI9dGVBLw7Fem33q_dATvrWJ0oTzyMg)
+- [Zenodo Link 1](https://doi.org/10.5281/zenodo.17412715)
+- [Zenodo Link 2](https://doi.org/10.5281/zenodo.17412698)
+- [Zenodo Link 3](https://doi.org/10.5281/zenodo.19482734)
 
 ## Running on custom data
 
