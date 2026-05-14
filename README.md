@@ -109,7 +109,7 @@ The repository currently includes the following experiments:
   ANI for the Morris--Lecar neuron model.
 
 - **Kan**  
-  ANI for the multi-tropical predator--prey ODE system.
+  ANI for the multi-trophic predator--prey ODE system.
 
 - **Euler**  
   ANI for the one-dimensional compressible Euler equations.
