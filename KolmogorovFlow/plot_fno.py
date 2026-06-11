@@ -44,8 +44,8 @@ plt.plot(data_fno, label='FNO',  color='#D55E00', linewidth=2)
 
 # 添加标题和标签
 # plt.title('Comparison of Average Relative Error', fontsize=14)
-plt.xlabel('Time Index', fontsize=14)
-plt.ylabel('Average Relative Error', fontsize=14)
+plt.xlabel('Time Step', fontsize=14)
+plt.ylabel(r'Mean Relative $L^2$ Error', fontsize=14)
 
 # 使用对数坐标轴
 plt.yscale('log')
@@ -61,3 +61,4 @@ plt.tight_layout()
 
 # 保存图表
 plt.savefig('ns_traj_error_fno.pdf', format='pdf', bbox_inches='tight', dpi=300)
+

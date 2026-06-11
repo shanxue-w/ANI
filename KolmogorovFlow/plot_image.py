@@ -894,7 +894,7 @@ def plot_omega_grid(omega_list, t_label, methods):
     plt.close()
 
 
-# methods = ["True", "LES", "ANI-2", "ANI-4"]
+methods_legend = ["True", "LES", "ANI-2", "ANI-4"]
 # plot_omega_grid(
 #     [omega_true_t99, omega_les_t99, omega_2th_t99, omega_4th_t99],
 #     "0.5s",
@@ -945,7 +945,7 @@ for t, time_label in time_map.items():
         plot_omega_grid(
             omega_list,
             time_label,
-            methods
+            methods_legend
         )
         
     except KeyError:
@@ -1110,6 +1110,8 @@ def compute_isotropic_spectrum(u, v, w=None, L=1.0, nbins=None):
     # 假设 u_hat, v_hat 已经通过 FFT 计算得出
     
     # ------------------- 从这里开始修改 -------------------
+    u = u.detach().cpu().numpy() if torch.is_tensor(u) else np.asarray(u)
+    v = v.detach().cpu().numpy() if torch.is_tensor(v) else np.asarray(v)
 
     if u.ndim == 3:
         u = u[0]
@@ -1293,3 +1295,418 @@ for t, time_label in time_map.items():
         
     except KeyError:
         print(f"Skipping Step {t}: Data not found in 'data' dictionary.")
+
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib import gridspec
+from matplotlib.ticker import LogLocator, LogFormatterMathtext
+from matplotlib.lines import Line2D
+from matplotlib import colors as mcolors
+from matplotlib import cm
+import torch
+
+
+# ============================================================
+# Nature-style global settings
+# ============================================================
+def mm_to_inch(mm):
+    return mm / 25.4
+
+
+plt.rcParams.update({
+    "font.family": "sans-serif",
+    "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"],
+
+    "font.size": 7,
+    "axes.labelsize": 7,
+    "axes.titlesize": 7,
+    "xtick.labelsize": 6.5,
+    "ytick.labelsize": 6.5,
+    "legend.fontsize": 6.5,
+
+    "axes.linewidth": 0.6,
+    "xtick.major.width": 0.6,
+    "ytick.major.width": 0.6,
+    "xtick.major.size": 2.5,
+    "ytick.major.size": 2.5,
+
+    "pdf.fonttype": 42,
+    "ps.fonttype": 42,
+    "axes.unicode_minus": False,
+})
+
+
+COLORS = {
+    "True":  "#0072B2",
+    "LES":   "#009E73",
+    "ANI-2": "#7B4FB3",
+    "ANI-4": "#CC79A7",
+}
+
+
+# ============================================================
+# Helpers
+# ============================================================
+def to_numpy(x):
+    if isinstance(x, torch.Tensor):
+        x = x.detach().cpu().numpy()
+    return np.asarray(x)
+
+
+def add_panel_label(ax, label, x=-0.08, y=1.04):
+    ax.text(
+        x, y, label,
+        transform=ax.transAxes,
+        fontsize=9,
+        fontweight="bold",
+        va="top",
+        ha="left",
+    )
+
+
+# ============================================================
+# Panel a: trajectory error
+# ============================================================
+def load_error_series(path, n=400):
+    df = pd.read_csv(path, sep="\t")
+    y = df["avg_relative_error"].to_numpy()
+    return y[:n]
+
+
+def plot_error_panel(ax, file_les, file_ani2, file_ani4, n=400):
+    y_les  = load_error_series(file_les, n=n)
+    y_ani2 = load_error_series(file_ani2, n=n)
+    y_ani4 = load_error_series(file_ani4, n=n)
+
+    x = np.arange(len(y_les))
+
+    ax.plot(
+        x, y_les,
+        label="LES",
+        color=COLORS["True"],
+        linestyle="-.",
+        linewidth=1.0,
+    )
+    ax.plot(
+        x, y_ani2,
+        label="ANI-2",
+        color=COLORS["LES"],
+        linestyle="-",
+        linewidth=1.0,
+    )
+    ax.plot(
+        x, y_ani4,
+        label="ANI-4",
+        color="#E69F00",
+        linestyle="--",
+        linewidth=1.0,
+    )
+
+    ax.set_xlabel("Time Step")
+    ax.set_ylabel("Average relative error")
+    ax.grid(True, linewidth=0.35, alpha=0.30)
+    ax.legend(frameon=False, loc="best", handlelength=2.5)
+
+    add_panel_label(ax, "a")
+
+
+# ============================================================
+# Panel b: isotropic spectrum
+# ============================================================
+def compute_isotropic_spectrum(u, v, L=1.0, nbins=None):
+    u = to_numpy(u)
+    v = to_numpy(v)
+
+    if u.ndim == 3:
+        u = u[0]
+    if v.ndim == 3:
+        v = v[0]
+
+    N = u.shape[0]
+
+    u_hat = np.fft.fft2(u) / N**2
+    v_hat = np.fft.fft2(v) / N**2
+
+    E_hat = 0.5 * (np.abs(u_hat)**2 + np.abs(v_hat)**2)
+
+    kx = np.fft.fftfreq(N, d=L / N) * 2 * np.pi
+    ky = np.fft.fftfreq(N, d=L / N) * 2 * np.pi
+    kx_grid, ky_grid = np.meshgrid(kx, ky, indexing="ij")
+    k_mag = np.sqrt(kx_grid**2 + ky_grid**2).ravel()
+    E_flat = E_hat.ravel()
+
+    k_max = np.pi * N / L * np.sqrt(2)
+    if nbins is None:
+        nbins = N // 2
+
+    k_bins = np.linspace(0.0, k_max, nbins + 1)
+    E_k_sum, _ = np.histogram(k_mag, bins=k_bins, weights=E_flat)
+
+    k_values = 0.5 * (k_bins[:-1] + k_bins[1:])
+    E_k = E_k_sum
+
+    return k_values, E_k
+
+
+def add_slope_reference(ax, k, E_ref_base, k_range, power, text, color="black",
+                        text_xy=None):
+    idx0 = (np.abs(k - k_range[0])).argmin()
+    C = E_ref_base[idx0] * (k[idx0] ** power)
+    E_ref = C * (k_range ** (-power)) * 2.0
+
+    ax.loglog(
+        k_range, E_ref,
+        linestyle="--",
+        color=color,
+        linewidth=1.0,
+    )
+
+    if text_xy is None:
+        text_xy = (k_range[-1], E_ref[-1])
+
+    ax.text(
+        text_xy[0], text_xy[1],
+        text,
+        fontsize=6.5,
+        color=color,
+        ha="left",
+        va="bottom",
+        rotation=-28 if power == 3 else -23,
+    )
+
+
+def plot_spectrum_panel(ax, u_list, v_list, methods, L=1.0):
+    for u, v, method in zip(u_list, v_list, methods):
+        k, E_k = compute_isotropic_spectrum(u, v, L=L)
+        ax.loglog(
+            k[1:],
+            E_k[1:],
+            label=method,
+            linewidth=1.0,
+            color=COLORS[method] if method in COLORS else None,
+        )
+
+    # reference lines use the first curve as anchor
+    k0, E0 = compute_isotropic_spectrum(u_list[0], v_list[0], L=L)
+
+    # k^-3
+    k_range_3 = np.array([70, 120], dtype=float)
+    add_slope_reference(
+        ax,
+        k0,
+        E0,
+        k_range_3,
+        power=3,
+        text=r"$k^{-3}$",
+        color="black",
+        text_xy=(k_range_3[-1] * 1.02, None if False else (E0[(np.abs(k0-k_range_3[0])).argmin()] * (k0[(np.abs(k0-k_range_3[0])).argmin()]**3) * (k_range_3[-1]**-3) * 2.0 * 0.9))
+    )
+
+    # k^-5/3
+    k_range_53 = np.array([30, 55], dtype=float)
+    idx53 = (np.abs(k0 - k_range_53[0])).argmin()
+    C53 = E0[idx53] * (k0[idx53] ** (5 / 3))
+    E_ref53 = C53 * (k_range_53 ** (-5 / 3)) * 2.0
+    ax.loglog(k_range_53, E_ref53, linestyle="--", color="dimgray", linewidth=1.0)
+    ax.text(
+        k_range_53[-1] * 1.03,
+        E_ref53[-1] * 0.95,
+        r"$k^{-5/3}$",
+        fontsize=6.5,
+        color="dimgray",
+        ha="left",
+        va="bottom",
+        rotation=-22,
+    )
+
+    ax.set_xlabel(r"$k$")
+    ax.set_ylabel(r"$E(k)$")
+    ax.grid(True, which="both", linewidth=0.35, alpha=0.30)
+    ax.legend(frameon=False, loc="best", handlelength=2.5)
+
+    ax.xaxis.set_major_locator(LogLocator(base=10))
+    ax.yaxis.set_major_locator(LogLocator(base=10))
+    ax.xaxis.set_major_formatter(LogFormatterMathtext())
+    ax.yaxis.set_major_formatter(LogFormatterMathtext())
+
+    add_panel_label(ax, "b")
+
+
+# ============================================================
+# Panel c: omega snapshots
+# ============================================================
+def plot_omega_row(fig, outer_spec, omega_list, method_titles):
+    omega_np = [to_numpy(w) for w in omega_list]
+    omega_np = [w[0] if w.ndim == 3 else w for w in omega_np]
+
+    # Use a symmetric colour range; better for vorticity fields.
+    absmax = max(np.nanmax(np.abs(w)) for w in omega_np)
+    vmin, vmax = -absmax, absmax
+
+    gs = outer_spec.subgridspec(
+        1, 5,
+        width_ratios=[1, 1, 1, 1, 0.075],
+        wspace=0.10,
+    )
+
+    axes = []
+    im = None
+
+    for i, (w, title) in enumerate(zip(omega_np, method_titles)):
+        ax = fig.add_subplot(gs[0, i])
+
+        # im = ax.imshow(
+        #     w,
+        #     cmap="RdBu_r",
+        #     origin="lower",
+        #     vmin=vmin,
+        #     vmax=vmax,
+        #     interpolation="bilinear",   # smoother than nearest
+        #     resample=True,
+        #     rasterized=True,
+        # )
+        im = ax.contourf(
+            w,
+            levels=100,
+            cmap="RdBu_r",
+            vmin=vmin,
+            vmax=vmax,
+        )
+        try:
+            for coll in im.collections:
+                coll.set_rasterized(True)
+        except AttributeError:
+            # 新版本 Matplotlib (>= 3.8)
+            im.set_rasterized(True)
+        # for coll in im.collections:
+        #     coll.set_rasterized(True)
+        # ax.set_rasterized(True)
+        ax.set_title(title, pad=4)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.set_aspect("equal")
+
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+
+        axes.append(ax)
+
+    cax = fig.add_subplot(gs[0, 4])
+    cb = fig.colorbar(im, cax=cax)
+    cb.set_label(r"$\omega$ value", labelpad=3)
+    cb.outline.set_linewidth(0.5)
+    cb.ax.tick_params(labelsize=6.5, width=0.6, length=2.5, pad=1)
+
+    add_panel_label(axes[0], "c", x=-0.18, y=1.10)
+
+
+# ============================================================
+# Main figure
+# ============================================================
+def main():
+    # --------------------------------------------------------
+    # Panel a inputs: files
+    # --------------------------------------------------------
+    file_ani2 = "2th/traj_error.txt"
+    file_ani4 = "4th/traj_error.txt"
+    file_les  = "2th/traj_error_les.txt"
+
+    # --------------------------------------------------------
+    # Panel b inputs: use your already-prepared arrays
+    # Example:
+    #   u_true_spec = u_true_t299
+    #   v_true_spec = v_true_t299
+    #   ...
+    # --------------------------------------------------------
+    u_true_spec = u_true_t299
+    v_true_spec = v_true_t299
+
+    u_les_spec = u_les_t299
+    v_les_spec = v_les_t299
+
+    u_ani2_spec = u_2th_t299
+    v_ani2_spec = v_2th_t299
+
+    u_ani4_spec = u_4th_t299
+    v_ani4_spec = v_4th_t299
+
+    # --------------------------------------------------------
+    # Panel c inputs: omega snapshots at 1.0 s
+    # Replace omega_step_1s with your own index.
+    # --------------------------------------------------------
+    omega_step_1s = 199  
+    omega_list = [
+        data["omega_true"][omega_step_1s],
+        data["omega_les"][omega_step_1s],
+        data["omega_2th"][omega_step_1s],
+        data["omega_4th"][omega_step_1s],
+    ]
+
+    omega_titles = [
+        r"True - $\omega$",
+        r"LES - $\omega$",
+        r"ANI-2 - $\omega$",
+        r"ANI-4 - $\omega$",
+    ]
+
+    # --------------------------------------------------------
+    # Build the figure
+    # --------------------------------------------------------
+    width_mm = 180
+    height_mm = 118
+
+    fig = plt.figure(figsize=(mm_to_inch(width_mm), mm_to_inch(height_mm)))
+
+    outer = gridspec.GridSpec(
+        2, 2,
+        figure=fig,
+        height_ratios=[1.0, 0.78],
+        width_ratios=[1.0, 1.0],
+        hspace=0.40,
+        wspace=0.35,
+    )
+
+    # Panel a
+    ax_a = fig.add_subplot(outer[0, 0])
+    plot_error_panel(
+        ax_a,
+        file_les=file_les,
+        file_ani2=file_ani2,
+        file_ani4=file_ani4,
+        n=400,
+    )
+
+    # Panel b
+    ax_b = fig.add_subplot(outer[0, 1])
+    plot_spectrum_panel(
+        ax_b,
+        [u_true_spec, u_les_spec, u_ani2_spec, u_ani4_spec],
+        [v_true_spec, v_les_spec, v_ani2_spec, v_ani4_spec],
+        ["True", "LES", "ANI-2", "ANI-4"],
+        L=1.0,
+    )
+
+    # Panel c
+    plot_omega_row(fig, outer[1, :], omega_list, omega_titles)
+
+    fig.subplots_adjust(
+        left=0.065,
+        right=0.955, 
+        bottom=0.075,
+        top=0.965,
+        wspace=0.34,
+        hspace=0.42,
+    )
+
+    fig.savefig("ns_main_figure_nature.pdf", format="pdf", dpi=600)
+    fig.savefig("ns_main_figure_nature.png", format="png", dpi=600)
+    plt.close(fig)
+
+    print("Saved: ns_main_figure_nature.pdf")
+    print("Saved: ns_main_figure_nature.png")
+
+
+if __name__ == "__main__":
+    main()
