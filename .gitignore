@@ -31,3 +31,5 @@ src/ANI.egg-info/*
 !Lorenz-stenflo/OSNET_Lorenz_stenflo_base_0.mat
 !Lorenz-stenflo/ANI_Lorenz_stenflo_true_0.mat
 !Lorenz-stenflo/dataset/**
+
+!requirements.txt

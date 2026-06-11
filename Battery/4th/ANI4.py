@@ -21,7 +21,7 @@ if torch.cuda.is_available():
 
 DATA_PATH = "../dataset/processed_battery_data_rollout.pt"
 BATCH_SIZE = 256
-EPOCHS = 1000
+EPOCHS = 400
 LR = 2e-3
 
 LAMBDA_SMOOTH = 0.1  
@@ -252,7 +252,7 @@ if __name__ == "__main__":
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=EPOCHS, eta_min=1e-6)
     
     best_val_loss = float('inf')
-    best_model_path = "best_ani4_model_1000.pth"
+    best_model_path = "best_ani4_model.pth"
     history = {'train_loss': [], 'val_loss': []}
     
     # 4. Training Loop
@@ -282,7 +282,7 @@ if __name__ == "__main__":
     model.load_state_dict(torch.load(best_model_path))
     test_loss = validate(model, val_loader, criterion, device)
     print(f"\nTraining Finished. Best Val Loss: {best_val_loss:.2e}")
-    print(f"Test Set MSE Loss: {test_loss:.2e}")
+    print(f"Val Set MSE Loss: {test_loss:.2e}")
     
     # 6. Visualization
     model.eval()

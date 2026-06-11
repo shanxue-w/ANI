@@ -9,7 +9,7 @@ from scipy.optimize import minimize
 # =====================
 # Config
 # =====================
-BASIN_ID = "01013500"
+BASIN_ID = "01031500"
 DATA_ROOT = "."
 OUTPUT_FILE = f"data_{BASIN_ID}.pt"
 

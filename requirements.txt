@@ -1,0 +1,16 @@
+einops==0.8.2
+fine==2.6.0
+givernylocal==3.5.2
+matplotlib==3.10.8
+mayavi==4.8.3
+numpy==2.4.4
+pandas==3.0.2
+pysindy==2.1.0
+scikit_learn==1.8.0
+scipy==1.17.1
+seaborn==0.13.2
+setuptools==82.0.0
+sympy==1.14.0
+torch==2.10.0
+torchdiffeq==0.2.5
+tqdm==4.67.3
