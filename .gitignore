@@ -71,3 +71,11 @@ src/ANI.egg-info/*
 !Kan/4th/*.npy
 !Kan/RK4/*.txt
 !Kan/RK4/*.npy
+
+!Euler/2th/*.txt
+!Euler/4th/*.txt
+!Euler/2th/*.npy
+!Euler/4th/*.npy
+!Euler/Exact/*.csv
+!Euler/Exact/*.c
+!Euler/Exact/*.h
