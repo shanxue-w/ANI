@@ -41,8 +41,8 @@ python -u plot_image.py
 cd ..
 
 cd KolmogorovFlow
-python -u plot_new.py
-python -u plot_image_new.py
+python -u plot.py
+python -u plot_image.py
 cd ..
 
 cd NS
