@@ -104,3 +104,9 @@ src/ANI.egg-info/*
 !Basin/4th/ANI4_Best_01031500.pth
 !Basin/baseline/Baseline_Best_01031500.pth
 !Basin/dataset/data_01031500.pt
+
+!Battery/2th/best_ani2_model.pth
+!Battery/4th/best_ani4_model.pth
+!Battery/baseline/best_baseline_model.pth
+!Battery/dataset/processed_battery_data_rollout.pt
+!Battery/*.csv

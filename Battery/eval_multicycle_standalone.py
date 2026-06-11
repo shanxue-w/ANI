@@ -327,14 +327,7 @@ def main() -> None:
             f"Evaluated cycles: {int(summ.get('n_cycles', 0))} "
             f"(grouped by X_test[:, {CYCLE_IDX}] Norm_Cycle)"
         )
-        if summ.get("n_cycles", 0) > 0:
-            print(
-                f"MSE  mean ± std: {summ['mse_mean']:.6e} ± {summ['mse_std']:.6e}\n"
-                f"MAE  mean ± std: {summ['mae_mean']:.6e} ± {summ['mae_std']:.6e}\n"
-                f"RMSE mean ± std: {summ['rmse_mean']:.6e} ± {summ['rmse_std']:.6e}"
-            )
-        if rows:
-            print_cycle_table(rows, max_rows=args.print_cycles)
+
 
         for r in rows:
             csv_cycle_rows.append(
@@ -368,15 +361,8 @@ def main() -> None:
                 }
             )
 
-    if len(per_cell_means) >= 2:
-        print(f"\n{'='*60}")
-        print("Across cells (mean ± std of each cell's **mean** metric; zero-shot style if one checkpoint):")
-        for name in ["mse_mean", "mae_mean", "rmse_mean"]:
-            vals = np.array([c[name] for c in per_cell_means], dtype=np.float64)
-            print(
-                f"  {name}: {float(np.mean(vals)):.6e} ± "
-                f"{float(np.std(vals, ddof=1)):.6e}  (n_cells={len(vals)})"
-            )
+
+
 
     if args.out_csv:
         keys_c = list(csv_cycle_rows[0].keys()) if csv_cycle_rows else []

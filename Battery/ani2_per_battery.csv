@@ -1,0 +1,2 @@
+battery_key,data_path,n_cycles_evaluated,mse_mean,mse_std,mae_mean,mae_std,rmse_mean,rmse_std
+B0005,./dataset/processed_battery_data_rollout.pt,18,0.0023766784582008,0.0011553747973448763,0.03313485364134081,0.008921830058338142,0.04776986365199332,0.010014502800127093
