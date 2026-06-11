@@ -1,0 +1,203 @@
+/home/hao.wang/miniconda3/envs/OSNET/lib/python3.11/site-packages/torch/cuda/__init__.py:829: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+
+Starting training...
+[train] Epoch 1/100 | Batch 1/5[train] Epoch 1/100 | Batch 2/5[train] Epoch 1/100 | Batch 3/5[train] Epoch 1/100 | Batch 4/5[train] Epoch 1/100 | Batch 5/5[val] Epoch 1/100 | Batch 1/2[val] Epoch 1/100 | Batch 2/2[Epoch 001] Train Loss: 2.83844e-06 | Val Loss: 5.10492e-06
+Saved best model!
+[train] Epoch 2/100 | Batch 1/5[train] Epoch 2/100 | Batch 2/5[train] Epoch 2/100 | Batch 3/5[train] Epoch 2/100 | Batch 4/5[train] Epoch 2/100 | Batch 5/5[val] Epoch 2/100 | Batch 1/2[val] Epoch 2/100 | Batch 2/2[Epoch 002] Train Loss: 2.22025e-06 | Val Loss: 4.84829e-06
+Saved best model!
+[train] Epoch 3/100 | Batch 1/5[train] Epoch 3/100 | Batch 2/5[train] Epoch 3/100 | Batch 3/5[train] Epoch 3/100 | Batch 4/5[train] Epoch 3/100 | Batch 5/5[val] Epoch 3/100 | Batch 1/2[val] Epoch 3/100 | Batch 2/2[Epoch 003] Train Loss: 2.03764e-06 | Val Loss: 4.77110e-06
+Saved best model!
+[train] Epoch 4/100 | Batch 1/5[train] Epoch 4/100 | Batch 2/5[train] Epoch 4/100 | Batch 3/5[train] Epoch 4/100 | Batch 4/5[train] Epoch 4/100 | Batch 5/5[val] Epoch 4/100 | Batch 1/2[val] Epoch 4/100 | Batch 2/2[Epoch 004] Train Loss: 1.95857e-06 | Val Loss: 4.72486e-06
+Saved best model!
+[train] Epoch 5/100 | Batch 1/5[train] Epoch 5/100 | Batch 2/5[train] Epoch 5/100 | Batch 3/5[train] Epoch 5/100 | Batch 4/5[train] Epoch 5/100 | Batch 5/5[val] Epoch 5/100 | Batch 1/2[val] Epoch 5/100 | Batch 2/2[Epoch 005] Train Loss: 1.90492e-06 | Val Loss: 4.69737e-06
+Saved best model!
+[train] Epoch 6/100 | Batch 1/5[train] Epoch 6/100 | Batch 2/5[train] Epoch 6/100 | Batch 3/5[train] Epoch 6/100 | Batch 4/5[train] Epoch 6/100 | Batch 5/5[val] Epoch 6/100 | Batch 1/2[val] Epoch 6/100 | Batch 2/2[Epoch 006] Train Loss: 1.86837e-06 | Val Loss: 4.67571e-06
+Saved best model!
+[train] Epoch 7/100 | Batch 1/5[train] Epoch 7/100 | Batch 2/5[train] Epoch 7/100 | Batch 3/5[train] Epoch 7/100 | Batch 4/5[train] Epoch 7/100 | Batch 5/5[val] Epoch 7/100 | Batch 1/2[val] Epoch 7/100 | Batch 2/2[Epoch 007] Train Loss: 1.83986e-06 | Val Loss: 4.65079e-06
+Saved best model!
+[train] Epoch 8/100 | Batch 1/5[train] Epoch 8/100 | Batch 2/5[train] Epoch 8/100 | Batch 3/5[train] Epoch 8/100 | Batch 4/5[train] Epoch 8/100 | Batch 5/5[val] Epoch 8/100 | Batch 1/2[val] Epoch 8/100 | Batch 2/2[Epoch 008] Train Loss: 1.81159e-06 | Val Loss: 4.62884e-06
+Saved best model!
+[train] Epoch 9/100 | Batch 1/5[train] Epoch 9/100 | Batch 2/5[train] Epoch 9/100 | Batch 3/5[train] Epoch 9/100 | Batch 4/5[train] Epoch 9/100 | Batch 5/5[val] Epoch 9/100 | Batch 1/2[val] Epoch 9/100 | Batch 2/2[Epoch 009] Train Loss: 1.78834e-06 | Val Loss: 4.60330e-06
+Saved best model!
+[train] Epoch 10/100 | Batch 1/5[train] Epoch 10/100 | Batch 2/5[train] Epoch 10/100 | Batch 3/5[train] Epoch 10/100 | Batch 4/5[train] Epoch 10/100 | Batch 5/5[val] Epoch 10/100 | Batch 1/2[val] Epoch 10/100 | Batch 2/2[Epoch 010] Train Loss: 1.76255e-06 | Val Loss: 4.57167e-06
+Saved best model!
+[train] Epoch 11/100 | Batch 1/5[train] Epoch 11/100 | Batch 2/5[train] Epoch 11/100 | Batch 3/5[train] Epoch 11/100 | Batch 4/5[train] Epoch 11/100 | Batch 5/5[val] Epoch 11/100 | Batch 1/2[val] Epoch 11/100 | Batch 2/2[Epoch 011] Train Loss: 1.74122e-06 | Val Loss: 4.54350e-06
+Saved best model!
+[train] Epoch 12/100 | Batch 1/5[train] Epoch 12/100 | Batch 2/5[train] Epoch 12/100 | Batch 3/5[train] Epoch 12/100 | Batch 4/5[train] Epoch 12/100 | Batch 5/5[val] Epoch 12/100 | Batch 1/2[val] Epoch 12/100 | Batch 2/2[Epoch 012] Train Loss: 1.71469e-06 | Val Loss: 4.51974e-06
+Saved best model!
+[train] Epoch 13/100 | Batch 1/5[train] Epoch 13/100 | Batch 2/5[train] Epoch 13/100 | Batch 3/5[train] Epoch 13/100 | Batch 4/5[train] Epoch 13/100 | Batch 5/5[val] Epoch 13/100 | Batch 1/2[val] Epoch 13/100 | Batch 2/2[Epoch 013] Train Loss: 1.69210e-06 | Val Loss: 4.49184e-06
+Saved best model!
+[train] Epoch 14/100 | Batch 1/5[train] Epoch 14/100 | Batch 2/5[train] Epoch 14/100 | Batch 3/5[train] Epoch 14/100 | Batch 4/5[train] Epoch 14/100 | Batch 5/5[val] Epoch 14/100 | Batch 1/2[val] Epoch 14/100 | Batch 2/2[Epoch 014] Train Loss: 1.66760e-06 | Val Loss: 4.45784e-06
+Saved best model!
+[train] Epoch 15/100 | Batch 1/5[train] Epoch 15/100 | Batch 2/5[train] Epoch 15/100 | Batch 3/5[train] Epoch 15/100 | Batch 4/5[train] Epoch 15/100 | Batch 5/5[val] Epoch 15/100 | Batch 1/2[val] Epoch 15/100 | Batch 2/2[Epoch 015] Train Loss: 1.64271e-06 | Val Loss: 4.43278e-06
+Saved best model!
+[train] Epoch 16/100 | Batch 1/5[train] Epoch 16/100 | Batch 2/5[train] Epoch 16/100 | Batch 3/5[train] Epoch 16/100 | Batch 4/5[train] Epoch 16/100 | Batch 5/5[val] Epoch 16/100 | Batch 1/2[val] Epoch 16/100 | Batch 2/2[Epoch 016] Train Loss: 1.61967e-06 | Val Loss: 4.40397e-06
+Saved best model!
+[train] Epoch 17/100 | Batch 1/5[train] Epoch 17/100 | Batch 2/5[train] Epoch 17/100 | Batch 3/5[train] Epoch 17/100 | Batch 4/5[train] Epoch 17/100 | Batch 5/5[val] Epoch 17/100 | Batch 1/2[val] Epoch 17/100 | Batch 2/2[Epoch 017] Train Loss: 1.59585e-06 | Val Loss: 4.38229e-06
+Saved best model!
+[train] Epoch 18/100 | Batch 1/5[train] Epoch 18/100 | Batch 2/5[train] Epoch 18/100 | Batch 3/5[train] Epoch 18/100 | Batch 4/5[train] Epoch 18/100 | Batch 5/5[val] Epoch 18/100 | Batch 1/2[val] Epoch 18/100 | Batch 2/2[Epoch 018] Train Loss: 1.57374e-06 | Val Loss: 4.36324e-06
+Saved best model!
+[train] Epoch 19/100 | Batch 1/5[train] Epoch 19/100 | Batch 2/5[train] Epoch 19/100 | Batch 3/5[train] Epoch 19/100 | Batch 4/5[train] Epoch 19/100 | Batch 5/5[val] Epoch 19/100 | Batch 1/2[val] Epoch 19/100 | Batch 2/2[Epoch 019] Train Loss: 1.55177e-06 | Val Loss: 4.34367e-06
+Saved best model!
+[train] Epoch 20/100 | Batch 1/5[train] Epoch 20/100 | Batch 2/5[train] Epoch 20/100 | Batch 3/5[train] Epoch 20/100 | Batch 4/5[train] Epoch 20/100 | Batch 5/5[val] Epoch 20/100 | Batch 1/2[val] Epoch 20/100 | Batch 2/2[Epoch 020] Train Loss: 1.53014e-06 | Val Loss: 4.32540e-06
+Saved best model!
+[train] Epoch 21/100 | Batch 1/5[train] Epoch 21/100 | Batch 2/5[train] Epoch 21/100 | Batch 3/5[train] Epoch 21/100 | Batch 4/5[train] Epoch 21/100 | Batch 5/5[val] Epoch 21/100 | Batch 1/2[val] Epoch 21/100 | Batch 2/2[Epoch 021] Train Loss: 1.50623e-06 | Val Loss: 4.31131e-06
+Saved best model!
+[train] Epoch 22/100 | Batch 1/5[train] Epoch 22/100 | Batch 2/5[train] Epoch 22/100 | Batch 3/5[train] Epoch 22/100 | Batch 4/5[train] Epoch 22/100 | Batch 5/5[val] Epoch 22/100 | Batch 1/2[val] Epoch 22/100 | Batch 2/2[Epoch 022] Train Loss: 1.48669e-06 | Val Loss: 4.29450e-06
+Saved best model!
+[train] Epoch 23/100 | Batch 1/5[train] Epoch 23/100 | Batch 2/5[train] Epoch 23/100 | Batch 3/5[train] Epoch 23/100 | Batch 4/5[train] Epoch 23/100 | Batch 5/5[val] Epoch 23/100 | Batch 1/2[val] Epoch 23/100 | Batch 2/2[Epoch 023] Train Loss: 1.46574e-06 | Val Loss: 4.28452e-06
+Saved best model!
+[train] Epoch 24/100 | Batch 1/5[train] Epoch 24/100 | Batch 2/5[train] Epoch 24/100 | Batch 3/5[train] Epoch 24/100 | Batch 4/5[train] Epoch 24/100 | Batch 5/5[val] Epoch 24/100 | Batch 1/2[val] Epoch 24/100 | Batch 2/2[Epoch 024] Train Loss: 1.44322e-06 | Val Loss: 4.27499e-06
+Saved best model!
+[train] Epoch 25/100 | Batch 1/5[train] Epoch 25/100 | Batch 2/5[train] Epoch 25/100 | Batch 3/5[train] Epoch 25/100 | Batch 4/5[train] Epoch 25/100 | Batch 5/5[val] Epoch 25/100 | Batch 1/2[val] Epoch 25/100 | Batch 2/2[Epoch 025] Train Loss: 1.42410e-06 | Val Loss: 4.26756e-06
+Saved best model!
+[train] Epoch 26/100 | Batch 1/5[train] Epoch 26/100 | Batch 2/5[train] Epoch 26/100 | Batch 3/5[train] Epoch 26/100 | Batch 4/5[train] Epoch 26/100 | Batch 5/5[val] Epoch 26/100 | Batch 1/2[val] Epoch 26/100 | Batch 2/2[Epoch 026] Train Loss: 1.40163e-06 | Val Loss: 4.25736e-06
+Saved best model!
+[train] Epoch 27/100 | Batch 1/5[train] Epoch 27/100 | Batch 2/5[train] Epoch 27/100 | Batch 3/5[train] Epoch 27/100 | Batch 4/5[train] Epoch 27/100 | Batch 5/5[val] Epoch 27/100 | Batch 1/2[val] Epoch 27/100 | Batch 2/2[Epoch 027] Train Loss: 1.38246e-06 | Val Loss: 4.24870e-06
+Saved best model!
+[train] Epoch 28/100 | Batch 1/5[train] Epoch 28/100 | Batch 2/5[train] Epoch 28/100 | Batch 3/5[train] Epoch 28/100 | Batch 4/5[train] Epoch 28/100 | Batch 5/5[val] Epoch 28/100 | Batch 1/2[val] Epoch 28/100 | Batch 2/2[Epoch 028] Train Loss: 1.36145e-06 | Val Loss: 4.24245e-06
+Saved best model!
+[train] Epoch 29/100 | Batch 1/5[train] Epoch 29/100 | Batch 2/5[train] Epoch 29/100 | Batch 3/5[train] Epoch 29/100 | Batch 4/5[train] Epoch 29/100 | Batch 5/5[val] Epoch 29/100 | Batch 1/2[val] Epoch 29/100 | Batch 2/2[Epoch 029] Train Loss: 1.34190e-06 | Val Loss: 4.24220e-06
+Saved best model!
+[train] Epoch 30/100 | Batch 1/5[train] Epoch 30/100 | Batch 2/5[train] Epoch 30/100 | Batch 3/5[train] Epoch 30/100 | Batch 4/5[train] Epoch 30/100 | Batch 5/5[val] Epoch 30/100 | Batch 1/2[val] Epoch 30/100 | Batch 2/2[Epoch 030] Train Loss: 1.32243e-06 | Val Loss: 4.23464e-06
+Saved best model!
+[train] Epoch 31/100 | Batch 1/5[train] Epoch 31/100 | Batch 2/5[train] Epoch 31/100 | Batch 3/5[train] Epoch 31/100 | Batch 4/5[train] Epoch 31/100 | Batch 5/5[val] Epoch 31/100 | Batch 1/2[val] Epoch 31/100 | Batch 2/2[Epoch 031] Train Loss: 1.30213e-06 | Val Loss: 4.23003e-06
+Saved best model!
+[train] Epoch 32/100 | Batch 1/5[train] Epoch 32/100 | Batch 2/5[train] Epoch 32/100 | Batch 3/5[train] Epoch 32/100 | Batch 4/5[train] Epoch 32/100 | Batch 5/5[val] Epoch 32/100 | Batch 1/2[val] Epoch 32/100 | Batch 2/2[Epoch 032] Train Loss: 1.28458e-06 | Val Loss: 4.22442e-06
+Saved best model!
+[train] Epoch 33/100 | Batch 1/5[train] Epoch 33/100 | Batch 2/5[train] Epoch 33/100 | Batch 3/5[train] Epoch 33/100 | Batch 4/5[train] Epoch 33/100 | Batch 5/5[val] Epoch 33/100 | Batch 1/2[val] Epoch 33/100 | Batch 2/2[Epoch 033] Train Loss: 1.26871e-06 | Val Loss: 4.22187e-06
+Saved best model!
+[train] Epoch 34/100 | Batch 1/5[train] Epoch 34/100 | Batch 2/5[train] Epoch 34/100 | Batch 3/5[train] Epoch 34/100 | Batch 4/5[train] Epoch 34/100 | Batch 5/5[val] Epoch 34/100 | Batch 1/2[val] Epoch 34/100 | Batch 2/2[Epoch 034] Train Loss: 1.24915e-06 | Val Loss: 4.22182e-06
+Saved best model!
+[train] Epoch 35/100 | Batch 1/5[train] Epoch 35/100 | Batch 2/5[train] Epoch 35/100 | Batch 3/5[train] Epoch 35/100 | Batch 4/5[train] Epoch 35/100 | Batch 5/5[val] Epoch 35/100 | Batch 1/2[val] Epoch 35/100 | Batch 2/2[Epoch 035] Train Loss: 1.23144e-06 | Val Loss: 4.21419e-06
+Saved best model!
+[train] Epoch 36/100 | Batch 1/5[train] Epoch 36/100 | Batch 2/5[train] Epoch 36/100 | Batch 3/5[train] Epoch 36/100 | Batch 4/5[train] Epoch 36/100 | Batch 5/5[val] Epoch 36/100 | Batch 1/2[val] Epoch 36/100 | Batch 2/2[Epoch 036] Train Loss: 1.21494e-06 | Val Loss: 4.21139e-06
+Saved best model!
+[train] Epoch 37/100 | Batch 1/5[train] Epoch 37/100 | Batch 2/5[train] Epoch 37/100 | Batch 3/5[train] Epoch 37/100 | Batch 4/5[train] Epoch 37/100 | Batch 5/5[val] Epoch 37/100 | Batch 1/2[val] Epoch 37/100 | Batch 2/2[Epoch 037] Train Loss: 1.19857e-06 | Val Loss: 4.21723e-06
+[train] Epoch 38/100 | Batch 1/5[train] Epoch 38/100 | Batch 2/5[train] Epoch 38/100 | Batch 3/5[train] Epoch 38/100 | Batch 4/5[train] Epoch 38/100 | Batch 5/5[val] Epoch 38/100 | Batch 1/2[val] Epoch 38/100 | Batch 2/2[Epoch 038] Train Loss: 1.18296e-06 | Val Loss: 4.20947e-06
+Saved best model!
+[train] Epoch 39/100 | Batch 1/5[train] Epoch 39/100 | Batch 2/5[train] Epoch 39/100 | Batch 3/5[train] Epoch 39/100 | Batch 4/5[train] Epoch 39/100 | Batch 5/5[val] Epoch 39/100 | Batch 1/2[val] Epoch 39/100 | Batch 2/2[Epoch 039] Train Loss: 1.16738e-06 | Val Loss: 4.20496e-06
+Saved best model!
+[train] Epoch 40/100 | Batch 1/5[train] Epoch 40/100 | Batch 2/5[train] Epoch 40/100 | Batch 3/5[train] Epoch 40/100 | Batch 4/5[train] Epoch 40/100 | Batch 5/5[val] Epoch 40/100 | Batch 1/2[val] Epoch 40/100 | Batch 2/2[Epoch 040] Train Loss: 1.15181e-06 | Val Loss: 4.20281e-06
+Saved best model!
+[train] Epoch 41/100 | Batch 1/5[train] Epoch 41/100 | Batch 2/5[train] Epoch 41/100 | Batch 3/5[train] Epoch 41/100 | Batch 4/5[train] Epoch 41/100 | Batch 5/5[val] Epoch 41/100 | Batch 1/2[val] Epoch 41/100 | Batch 2/2[Epoch 041] Train Loss: 1.13761e-06 | Val Loss: 4.19927e-06
+Saved best model!
+[train] Epoch 42/100 | Batch 1/5[train] Epoch 42/100 | Batch 2/5[train] Epoch 42/100 | Batch 3/5[train] Epoch 42/100 | Batch 4/5[train] Epoch 42/100 | Batch 5/5[val] Epoch 42/100 | Batch 1/2[val] Epoch 42/100 | Batch 2/2[Epoch 042] Train Loss: 1.12552e-06 | Val Loss: 4.19678e-06
+Saved best model!
+[train] Epoch 43/100 | Batch 1/5[train] Epoch 43/100 | Batch 2/5[train] Epoch 43/100 | Batch 3/5[train] Epoch 43/100 | Batch 4/5[train] Epoch 43/100 | Batch 5/5[val] Epoch 43/100 | Batch 1/2[val] Epoch 43/100 | Batch 2/2[Epoch 043] Train Loss: 1.11095e-06 | Val Loss: 4.18869e-06
+Saved best model!
+[train] Epoch 44/100 | Batch 1/5[train] Epoch 44/100 | Batch 2/5[train] Epoch 44/100 | Batch 3/5[train] Epoch 44/100 | Batch 4/5[train] Epoch 44/100 | Batch 5/5[val] Epoch 44/100 | Batch 1/2[val] Epoch 44/100 | Batch 2/2[Epoch 044] Train Loss: 1.09836e-06 | Val Loss: 4.18089e-06
+Saved best model!
+[train] Epoch 45/100 | Batch 1/5[train] Epoch 45/100 | Batch 2/5[train] Epoch 45/100 | Batch 3/5[train] Epoch 45/100 | Batch 4/5[train] Epoch 45/100 | Batch 5/5[val] Epoch 45/100 | Batch 1/2[val] Epoch 45/100 | Batch 2/2[Epoch 045] Train Loss: 1.08600e-06 | Val Loss: 4.17981e-06
+Saved best model!
+[train] Epoch 46/100 | Batch 1/5[train] Epoch 46/100 | Batch 2/5[train] Epoch 46/100 | Batch 3/5[train] Epoch 46/100 | Batch 4/5[train] Epoch 46/100 | Batch 5/5[val] Epoch 46/100 | Batch 1/2[val] Epoch 46/100 | Batch 2/2[Epoch 046] Train Loss: 1.07500e-06 | Val Loss: 4.17181e-06
+Saved best model!
+[train] Epoch 47/100 | Batch 1/5[train] Epoch 47/100 | Batch 2/5[train] Epoch 47/100 | Batch 3/5[train] Epoch 47/100 | Batch 4/5[train] Epoch 47/100 | Batch 5/5[val] Epoch 47/100 | Batch 1/2[val] Epoch 47/100 | Batch 2/2[Epoch 047] Train Loss: 1.06213e-06 | Val Loss: 4.17108e-06
+Saved best model!
+[train] Epoch 48/100 | Batch 1/5[train] Epoch 48/100 | Batch 2/5[train] Epoch 48/100 | Batch 3/5[train] Epoch 48/100 | Batch 4/5[train] Epoch 48/100 | Batch 5/5[val] Epoch 48/100 | Batch 1/2[val] Epoch 48/100 | Batch 2/2[Epoch 048] Train Loss: 1.05082e-06 | Val Loss: 4.16765e-06
+Saved best model!
+[train] Epoch 49/100 | Batch 1/5[train] Epoch 49/100 | Batch 2/5[train] Epoch 49/100 | Batch 3/5[train] Epoch 49/100 | Batch 4/5[train] Epoch 49/100 | Batch 5/5[val] Epoch 49/100 | Batch 1/2[val] Epoch 49/100 | Batch 2/2[Epoch 049] Train Loss: 1.04160e-06 | Val Loss: 4.16228e-06
+Saved best model!
+[train] Epoch 50/100 | Batch 1/5[train] Epoch 50/100 | Batch 2/5[train] Epoch 50/100 | Batch 3/5[train] Epoch 50/100 | Batch 4/5[train] Epoch 50/100 | Batch 5/5[val] Epoch 50/100 | Batch 1/2[val] Epoch 50/100 | Batch 2/2[Epoch 050] Train Loss: 1.03160e-06 | Val Loss: 4.15812e-06
+Saved best model!
+[train] Epoch 51/100 | Batch 1/5[train] Epoch 51/100 | Batch 2/5[train] Epoch 51/100 | Batch 3/5[train] Epoch 51/100 | Batch 4/5[train] Epoch 51/100 | Batch 5/5[val] Epoch 51/100 | Batch 1/2[val] Epoch 51/100 | Batch 2/2[Epoch 051] Train Loss: 1.02222e-06 | Val Loss: 4.15818e-06
+[train] Epoch 52/100 | Batch 1/5[train] Epoch 52/100 | Batch 2/5[train] Epoch 52/100 | Batch 3/5[train] Epoch 52/100 | Batch 4/5[train] Epoch 52/100 | Batch 5/5[val] Epoch 52/100 | Batch 1/2[val] Epoch 52/100 | Batch 2/2[Epoch 052] Train Loss: 1.01276e-06 | Val Loss: 4.14931e-06
+Saved best model!
+[train] Epoch 53/100 | Batch 1/5[train] Epoch 53/100 | Batch 2/5[train] Epoch 53/100 | Batch 3/5[train] Epoch 53/100 | Batch 4/5[train] Epoch 53/100 | Batch 5/5[val] Epoch 53/100 | Batch 1/2[val] Epoch 53/100 | Batch 2/2[Epoch 053] Train Loss: 1.00406e-06 | Val Loss: 4.14217e-06
+Saved best model!
+[train] Epoch 54/100 | Batch 1/5[train] Epoch 54/100 | Batch 2/5[train] Epoch 54/100 | Batch 3/5[train] Epoch 54/100 | Batch 4/5[train] Epoch 54/100 | Batch 5/5[val] Epoch 54/100 | Batch 1/2[val] Epoch 54/100 | Batch 2/2[Epoch 054] Train Loss: 9.96193e-07 | Val Loss: 4.14377e-06
+[train] Epoch 55/100 | Batch 1/5[train] Epoch 55/100 | Batch 2/5[train] Epoch 55/100 | Batch 3/5[train] Epoch 55/100 | Batch 4/5[train] Epoch 55/100 | Batch 5/5[val] Epoch 55/100 | Batch 1/2[val] Epoch 55/100 | Batch 2/2[Epoch 055] Train Loss: 9.86695e-07 | Val Loss: 4.13795e-06
+Saved best model!
+[train] Epoch 56/100 | Batch 1/5[train] Epoch 56/100 | Batch 2/5[train] Epoch 56/100 | Batch 3/5[train] Epoch 56/100 | Batch 4/5[train] Epoch 56/100 | Batch 5/5[val] Epoch 56/100 | Batch 1/2[val] Epoch 56/100 | Batch 2/2[Epoch 056] Train Loss: 9.79789e-07 | Val Loss: 4.13037e-06
+Saved best model!
+[train] Epoch 57/100 | Batch 1/5[train] Epoch 57/100 | Batch 2/5[train] Epoch 57/100 | Batch 3/5[train] Epoch 57/100 | Batch 4/5[train] Epoch 57/100 | Batch 5/5[val] Epoch 57/100 | Batch 1/2[val] Epoch 57/100 | Batch 2/2[Epoch 057] Train Loss: 9.72530e-07 | Val Loss: 4.12457e-06
+Saved best model!
+[train] Epoch 58/100 | Batch 1/5[train] Epoch 58/100 | Batch 2/5[train] Epoch 58/100 | Batch 3/5[train] Epoch 58/100 | Batch 4/5[train] Epoch 58/100 | Batch 5/5[val] Epoch 58/100 | Batch 1/2[val] Epoch 58/100 | Batch 2/2[Epoch 058] Train Loss: 9.64129e-07 | Val Loss: 4.12253e-06
+Saved best model!
+[train] Epoch 59/100 | Batch 1/5[train] Epoch 59/100 | Batch 2/5[train] Epoch 59/100 | Batch 3/5[train] Epoch 59/100 | Batch 4/5[train] Epoch 59/100 | Batch 5/5[val] Epoch 59/100 | Batch 1/2[val] Epoch 59/100 | Batch 2/2[Epoch 059] Train Loss: 9.57835e-07 | Val Loss: 4.11942e-06
+Saved best model!
+[train] Epoch 60/100 | Batch 1/5[train] Epoch 60/100 | Batch 2/5[train] Epoch 60/100 | Batch 3/5[train] Epoch 60/100 | Batch 4/5[train] Epoch 60/100 | Batch 5/5[val] Epoch 60/100 | Batch 1/2[val] Epoch 60/100 | Batch 2/2[Epoch 060] Train Loss: 9.52014e-07 | Val Loss: 4.11812e-06
+Saved best model!
+[train] Epoch 61/100 | Batch 1/5[train] Epoch 61/100 | Batch 2/5[train] Epoch 61/100 | Batch 3/5[train] Epoch 61/100 | Batch 4/5[train] Epoch 61/100 | Batch 5/5[val] Epoch 61/100 | Batch 1/2[val] Epoch 61/100 | Batch 2/2[Epoch 061] Train Loss: 9.45575e-07 | Val Loss: 4.11724e-06
+Saved best model!
+[train] Epoch 62/100 | Batch 1/5[train] Epoch 62/100 | Batch 2/5[train] Epoch 62/100 | Batch 3/5[train] Epoch 62/100 | Batch 4/5[train] Epoch 62/100 | Batch 5/5[val] Epoch 62/100 | Batch 1/2[val] Epoch 62/100 | Batch 2/2[Epoch 062] Train Loss: 9.40169e-07 | Val Loss: 4.11288e-06
+Saved best model!
+[train] Epoch 63/100 | Batch 1/5[train] Epoch 63/100 | Batch 2/5[train] Epoch 63/100 | Batch 3/5[train] Epoch 63/100 | Batch 4/5[train] Epoch 63/100 | Batch 5/5[val] Epoch 63/100 | Batch 1/2[val] Epoch 63/100 | Batch 2/2[Epoch 063] Train Loss: 9.34511e-07 | Val Loss: 4.10904e-06
+Saved best model!
+[train] Epoch 64/100 | Batch 1/5[train] Epoch 64/100 | Batch 2/5[train] Epoch 64/100 | Batch 3/5[train] Epoch 64/100 | Batch 4/5[train] Epoch 64/100 | Batch 5/5[val] Epoch 64/100 | Batch 1/2[val] Epoch 64/100 | Batch 2/2[Epoch 064] Train Loss: 9.29155e-07 | Val Loss: 4.10452e-06
+Saved best model!
+[train] Epoch 65/100 | Batch 1/5[train] Epoch 65/100 | Batch 2/5[train] Epoch 65/100 | Batch 3/5[train] Epoch 65/100 | Batch 4/5[train] Epoch 65/100 | Batch 5/5[val] Epoch 65/100 | Batch 1/2[val] Epoch 65/100 | Batch 2/2[Epoch 065] Train Loss: 9.24503e-07 | Val Loss: 4.09930e-06
+Saved best model!
+[train] Epoch 66/100 | Batch 1/5[train] Epoch 66/100 | Batch 2/5[train] Epoch 66/100 | Batch 3/5[train] Epoch 66/100 | Batch 4/5[train] Epoch 66/100 | Batch 5/5[val] Epoch 66/100 | Batch 1/2[val] Epoch 66/100 | Batch 2/2[Epoch 066] Train Loss: 9.19565e-07 | Val Loss: 4.09761e-06
+Saved best model!
+[train] Epoch 67/100 | Batch 1/5[train] Epoch 67/100 | Batch 2/5[train] Epoch 67/100 | Batch 3/5[train] Epoch 67/100 | Batch 4/5[train] Epoch 67/100 | Batch 5/5[val] Epoch 67/100 | Batch 1/2[val] Epoch 67/100 | Batch 2/2[Epoch 067] Train Loss: 9.14807e-07 | Val Loss: 4.09340e-06
+Saved best model!
+[train] Epoch 68/100 | Batch 1/5[train] Epoch 68/100 | Batch 2/5[train] Epoch 68/100 | Batch 3/5[train] Epoch 68/100 | Batch 4/5[train] Epoch 68/100 | Batch 5/5[val] Epoch 68/100 | Batch 1/2[val] Epoch 68/100 | Batch 2/2[Epoch 068] Train Loss: 9.10867e-07 | Val Loss: 4.09285e-06
+Saved best model!
+[train] Epoch 69/100 | Batch 1/5[train] Epoch 69/100 | Batch 2/5[train] Epoch 69/100 | Batch 3/5[train] Epoch 69/100 | Batch 4/5[train] Epoch 69/100 | Batch 5/5[val] Epoch 69/100 | Batch 1/2[val] Epoch 69/100 | Batch 2/2[Epoch 069] Train Loss: 9.06959e-07 | Val Loss: 4.08999e-06
+Saved best model!
+[train] Epoch 70/100 | Batch 1/5[train] Epoch 70/100 | Batch 2/5[train] Epoch 70/100 | Batch 3/5[train] Epoch 70/100 | Batch 4/5[train] Epoch 70/100 | Batch 5/5[val] Epoch 70/100 | Batch 1/2[val] Epoch 70/100 | Batch 2/2[Epoch 070] Train Loss: 9.02837e-07 | Val Loss: 4.08975e-06
+Saved best model!
+[train] Epoch 71/100 | Batch 1/5[train] Epoch 71/100 | Batch 2/5[train] Epoch 71/100 | Batch 3/5[train] Epoch 71/100 | Batch 4/5[train] Epoch 71/100 | Batch 5/5[val] Epoch 71/100 | Batch 1/2[val] Epoch 71/100 | Batch 2/2[Epoch 071] Train Loss: 8.99791e-07 | Val Loss: 4.08691e-06
+Saved best model!
+[train] Epoch 72/100 | Batch 1/5[train] Epoch 72/100 | Batch 2/5[train] Epoch 72/100 | Batch 3/5[train] Epoch 72/100 | Batch 4/5[train] Epoch 72/100 | Batch 5/5[val] Epoch 72/100 | Batch 1/2[val] Epoch 72/100 | Batch 2/2[Epoch 072] Train Loss: 8.96544e-07 | Val Loss: 4.08654e-06
+Saved best model!
+[train] Epoch 73/100 | Batch 1/5[train] Epoch 73/100 | Batch 2/5[train] Epoch 73/100 | Batch 3/5[train] Epoch 73/100 | Batch 4/5[train] Epoch 73/100 | Batch 5/5[val] Epoch 73/100 | Batch 1/2[val] Epoch 73/100 | Batch 2/2[Epoch 073] Train Loss: 8.93705e-07 | Val Loss: 4.08562e-06
+Saved best model!
+[train] Epoch 74/100 | Batch 1/5[train] Epoch 74/100 | Batch 2/5[train] Epoch 74/100 | Batch 3/5[train] Epoch 74/100 | Batch 4/5[train] Epoch 74/100 | Batch 5/5[val] Epoch 74/100 | Batch 1/2[val] Epoch 74/100 | Batch 2/2[Epoch 074] Train Loss: 8.90693e-07 | Val Loss: 4.08280e-06
+Saved best model!
+[train] Epoch 75/100 | Batch 1/5[train] Epoch 75/100 | Batch 2/5[train] Epoch 75/100 | Batch 3/5[train] Epoch 75/100 | Batch 4/5[train] Epoch 75/100 | Batch 5/5[val] Epoch 75/100 | Batch 1/2[val] Epoch 75/100 | Batch 2/2[Epoch 075] Train Loss: 8.87890e-07 | Val Loss: 4.08061e-06
+Saved best model!
+[train] Epoch 76/100 | Batch 1/5[train] Epoch 76/100 | Batch 2/5[train] Epoch 76/100 | Batch 3/5[train] Epoch 76/100 | Batch 4/5[train] Epoch 76/100 | Batch 5/5[val] Epoch 76/100 | Batch 1/2[val] Epoch 76/100 | Batch 2/2[Epoch 076] Train Loss: 8.85349e-07 | Val Loss: 4.07847e-06
+Saved best model!
+[train] Epoch 77/100 | Batch 1/5[train] Epoch 77/100 | Batch 2/5[train] Epoch 77/100 | Batch 3/5[train] Epoch 77/100 | Batch 4/5[train] Epoch 77/100 | Batch 5/5[val] Epoch 77/100 | Batch 1/2[val] Epoch 77/100 | Batch 2/2[Epoch 077] Train Loss: 8.83276e-07 | Val Loss: 4.07717e-06
+Saved best model!
+[train] Epoch 78/100 | Batch 1/5[train] Epoch 78/100 | Batch 2/5[train] Epoch 78/100 | Batch 3/5[train] Epoch 78/100 | Batch 4/5[train] Epoch 78/100 | Batch 5/5[val] Epoch 78/100 | Batch 1/2[val] Epoch 78/100 | Batch 2/2[Epoch 078] Train Loss: 8.81227e-07 | Val Loss: 4.07642e-06
+Saved best model!
+[train] Epoch 79/100 | Batch 1/5[train] Epoch 79/100 | Batch 2/5[train] Epoch 79/100 | Batch 3/5[train] Epoch 79/100 | Batch 4/5[train] Epoch 79/100 | Batch 5/5[val] Epoch 79/100 | Batch 1/2[val] Epoch 79/100 | Batch 2/2[Epoch 079] Train Loss: 8.79142e-07 | Val Loss: 4.07618e-06
+Saved best model!
+[train] Epoch 80/100 | Batch 1/5[train] Epoch 80/100 | Batch 2/5[train] Epoch 80/100 | Batch 3/5[train] Epoch 80/100 | Batch 4/5[train] Epoch 80/100 | Batch 5/5[val] Epoch 80/100 | Batch 1/2[val] Epoch 80/100 | Batch 2/2[Epoch 080] Train Loss: 8.77328e-07 | Val Loss: 4.07539e-06
+Saved best model!
+[train] Epoch 81/100 | Batch 1/5[train] Epoch 81/100 | Batch 2/5[train] Epoch 81/100 | Batch 3/5[train] Epoch 81/100 | Batch 4/5[train] Epoch 81/100 | Batch 5/5[val] Epoch 81/100 | Batch 1/2[val] Epoch 81/100 | Batch 2/2[Epoch 081] Train Loss: 8.75800e-07 | Val Loss: 4.07282e-06
+Saved best model!
+[train] Epoch 82/100 | Batch 1/5[train] Epoch 82/100 | Batch 2/5[train] Epoch 82/100 | Batch 3/5[train] Epoch 82/100 | Batch 4/5[train] Epoch 82/100 | Batch 5/5[val] Epoch 82/100 | Batch 1/2[val] Epoch 82/100 | Batch 2/2[Epoch 082] Train Loss: 8.74278e-07 | Val Loss: 4.07124e-06
+Saved best model!
+[train] Epoch 83/100 | Batch 1/5[train] Epoch 83/100 | Batch 2/5[train] Epoch 83/100 | Batch 3/5[train] Epoch 83/100 | Batch 4/5[train] Epoch 83/100 | Batch 5/5[val] Epoch 83/100 | Batch 1/2[val] Epoch 83/100 | Batch 2/2[Epoch 083] Train Loss: 8.72976e-07 | Val Loss: 4.07107e-06
+Saved best model!
+[train] Epoch 84/100 | Batch 1/5[train] Epoch 84/100 | Batch 2/5[train] Epoch 84/100 | Batch 3/5[train] Epoch 84/100 | Batch 4/5[train] Epoch 84/100 | Batch 5/5[val] Epoch 84/100 | Batch 1/2[val] Epoch 84/100 | Batch 2/2[Epoch 084] Train Loss: 8.71781e-07 | Val Loss: 4.07126e-06
+[train] Epoch 85/100 | Batch 1/5[train] Epoch 85/100 | Batch 2/5[train] Epoch 85/100 | Batch 3/5[train] Epoch 85/100 | Batch 4/5[train] Epoch 85/100 | Batch 5/5[val] Epoch 85/100 | Batch 1/2[val] Epoch 85/100 | Batch 2/2[Epoch 085] Train Loss: 8.70773e-07 | Val Loss: 4.07136e-06
+[train] Epoch 86/100 | Batch 1/5[train] Epoch 86/100 | Batch 2/5[train] Epoch 86/100 | Batch 3/5[train] Epoch 86/100 | Batch 4/5[train] Epoch 86/100 | Batch 5/5[val] Epoch 86/100 | Batch 1/2[val] Epoch 86/100 | Batch 2/2[Epoch 086] Train Loss: 8.69866e-07 | Val Loss: 4.07033e-06
+Saved best model!
+[train] Epoch 87/100 | Batch 1/5[train] Epoch 87/100 | Batch 2/5[train] Epoch 87/100 | Batch 3/5[train] Epoch 87/100 | Batch 4/5[train] Epoch 87/100 | Batch 5/5[val] Epoch 87/100 | Batch 1/2[val] Epoch 87/100 | Batch 2/2[Epoch 087] Train Loss: 8.68999e-07 | Val Loss: 4.06949e-06
+Saved best model!
+[train] Epoch 88/100 | Batch 1/5[train] Epoch 88/100 | Batch 2/5[train] Epoch 88/100 | Batch 3/5[train] Epoch 88/100 | Batch 4/5[train] Epoch 88/100 | Batch 5/5[val] Epoch 88/100 | Batch 1/2[val] Epoch 88/100 | Batch 2/2[Epoch 088] Train Loss: 8.68194e-07 | Val Loss: 4.06917e-06
+Saved best model!
+[train] Epoch 89/100 | Batch 1/5[train] Epoch 89/100 | Batch 2/5[train] Epoch 89/100 | Batch 3/5[train] Epoch 89/100 | Batch 4/5[train] Epoch 89/100 | Batch 5/5[val] Epoch 89/100 | Batch 1/2[val] Epoch 89/100 | Batch 2/2[Epoch 089] Train Loss: 8.67677e-07 | Val Loss: 4.06912e-06
+Saved best model!
+[train] Epoch 90/100 | Batch 1/5[train] Epoch 90/100 | Batch 2/5[train] Epoch 90/100 | Batch 3/5[train] Epoch 90/100 | Batch 4/5[train] Epoch 90/100 | Batch 5/5[val] Epoch 90/100 | Batch 1/2[val] Epoch 90/100 | Batch 2/2[Epoch 090] Train Loss: 8.67092e-07 | Val Loss: 4.06835e-06
+Saved best model!
+[train] Epoch 91/100 | Batch 1/5[train] Epoch 91/100 | Batch 2/5[train] Epoch 91/100 | Batch 3/5[train] Epoch 91/100 | Batch 4/5[train] Epoch 91/100 | Batch 5/5[val] Epoch 91/100 | Batch 1/2[val] Epoch 91/100 | Batch 2/2[Epoch 091] Train Loss: 8.66605e-07 | Val Loss: 4.06823e-06
+Saved best model!
+[train] Epoch 92/100 | Batch 1/5[train] Epoch 92/100 | Batch 2/5[train] Epoch 92/100 | Batch 3/5[train] Epoch 92/100 | Batch 4/5[train] Epoch 92/100 | Batch 5/5[val] Epoch 92/100 | Batch 1/2[val] Epoch 92/100 | Batch 2/2[Epoch 092] Train Loss: 8.66283e-07 | Val Loss: 4.06811e-06
+Saved best model!
+[train] Epoch 93/100 | Batch 1/5[train] Epoch 93/100 | Batch 2/5[train] Epoch 93/100 | Batch 3/5[train] Epoch 93/100 | Batch 4/5[train] Epoch 93/100 | Batch 5/5[val] Epoch 93/100 | Batch 1/2[val] Epoch 93/100 | Batch 2/2[Epoch 093] Train Loss: 8.65970e-07 | Val Loss: 4.06792e-06
+Saved best model!
+[train] Epoch 94/100 | Batch 1/5[train] Epoch 94/100 | Batch 2/5[train] Epoch 94/100 | Batch 3/5[train] Epoch 94/100 | Batch 4/5[train] Epoch 94/100 | Batch 5/5[val] Epoch 94/100 | Batch 1/2[val] Epoch 94/100 | Batch 2/2[Epoch 094] Train Loss: 8.65722e-07 | Val Loss: 4.06785e-06
+Saved best model!
+[train] Epoch 95/100 | Batch 1/5[train] Epoch 95/100 | Batch 2/5[train] Epoch 95/100 | Batch 3/5[train] Epoch 95/100 | Batch 4/5[train] Epoch 95/100 | Batch 5/5[val] Epoch 95/100 | Batch 1/2[val] Epoch 95/100 | Batch 2/2[Epoch 095] Train Loss: 8.65552e-07 | Val Loss: 4.06795e-06
+[train] Epoch 96/100 | Batch 1/5[train] Epoch 96/100 | Batch 2/5[train] Epoch 96/100 | Batch 3/5[train] Epoch 96/100 | Batch 4/5[train] Epoch 96/100 | Batch 5/5[val] Epoch 96/100 | Batch 1/2[val] Epoch 96/100 | Batch 2/2[Epoch 096] Train Loss: 8.65402e-07 | Val Loss: 4.06791e-06
+[train] Epoch 97/100 | Batch 1/5[train] Epoch 97/100 | Batch 2/5[train] Epoch 97/100 | Batch 3/5[train] Epoch 97/100 | Batch 4/5[train] Epoch 97/100 | Batch 5/5[val] Epoch 97/100 | Batch 1/2[val] Epoch 97/100 | Batch 2/2[Epoch 097] Train Loss: 8.65300e-07 | Val Loss: 4.06785e-06
+Saved best model!
+[train] Epoch 98/100 | Batch 1/5[train] Epoch 98/100 | Batch 2/5[train] Epoch 98/100 | Batch 3/5[train] Epoch 98/100 | Batch 4/5[train] Epoch 98/100 | Batch 5/5[val] Epoch 98/100 | Batch 1/2[val] Epoch 98/100 | Batch 2/2[Epoch 098] Train Loss: 8.65234e-07 | Val Loss: 4.06782e-06
+Saved best model!
+[train] Epoch 99/100 | Batch 1/5[train] Epoch 99/100 | Batch 2/5[train] Epoch 99/100 | Batch 3/5[train] Epoch 99/100 | Batch 4/5[train] Epoch 99/100 | Batch 5/5[val] Epoch 99/100 | Batch 1/2[val] Epoch 99/100 | Batch 2/2[Epoch 099] Train Loss: 8.65187e-07 | Val Loss: 4.06781e-06
+Saved best model!
+[train] Epoch 100/100 | Batch 1/5[train] Epoch 100/100 | Batch 2/5[train] Epoch 100/100 | Batch 3/5[train] Epoch 100/100 | Batch 4/5[train] Epoch 100/100 | Batch 5/5[val] Epoch 100/100 | Batch 1/2[val] Epoch 100/100 | Batch 2/2[Epoch 100] Train Loss: 8.65160e-07 | Val Loss: 4.06779e-06
+Saved best model!
+
+Training complete!
+
+real	2m37.291s
+user	1m36.195s
+sys	0m56.939s

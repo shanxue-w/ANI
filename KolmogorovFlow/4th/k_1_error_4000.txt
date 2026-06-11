@@ -1,0 +1,2 @@
+Rollout_Steps_K	Avg_MSE	Avg_Relative_L2
+1	8.402426e-09	3.824919e-04

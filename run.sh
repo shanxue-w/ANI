@@ -41,6 +41,9 @@ cd ..
 cd KolmogorovFlow
 python -u plot.py
 python -u plot_image.py
+python -u plot_fno.py
+python -u tradeoff.py
+python -u tradeoffnew.py
 cd ..
 
 cd NS
