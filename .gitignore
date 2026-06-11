@@ -79,3 +79,7 @@ src/ANI.egg-info/*
 !Euler/Exact/*.csv
 !Euler/Exact/*.c
 !Euler/Exact/*.h
+
+!Fitzhugh-Nagumo/2th_new/*.txt
+!Fitzhugh-Nagumo/4th_new/*.txt
+!Fitzhugh-Nagumo/NEW_baseline/*.txt

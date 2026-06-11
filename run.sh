@@ -34,10 +34,8 @@ python -u plot_2.py
 cd ..
 
 cd Fitzhugh-Nagumo
-python -u plot_ab.py
-python -u plot.py
-python -u plot_eps.py
-python -u plot_image.py
+python -u plot_submit1.py
+python -u plot_submit2.py
 cd ..
 
 cd KolmogorovFlow
