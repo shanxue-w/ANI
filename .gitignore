@@ -64,3 +64,10 @@ src/ANI.egg-info/*
 !CompoundPendulum/4th/*.npy
 !CompoundPendulum/baseline/*.txt
 !CompoundPendulum/baseline/*.npy
+
+!Kan/2th/*.txt
+!Kan/4th/*.txt
+!Kan/2th/*.npy
+!Kan/4th/*.npy
+!Kan/RK4/*.txt
+!Kan/RK4/*.npy
