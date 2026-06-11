@@ -99,3 +99,8 @@ src/ANI.egg-info/*
 !NS/FNO_pretrain/*.sh
 !NS/FNO_tradeoff_pretrain/*.sh
 !NS/FNO_tradeoff_pretrain/*.txt
+
+!Basin/2th/ANI2_Best_01031500.pth
+!Basin/4th/ANI4_Best_01031500.pth
+!Basin/baseline/Baseline_Best_01031500.pth
+!Basin/dataset/data_01031500.pt

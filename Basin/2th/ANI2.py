@@ -129,6 +129,25 @@ class ANI_2th_Hydro(nn.Module):
         
         return F.softplus(q_next), drift
 
+    def _strang_step_prior(self, q, x_raw_t, x_norm_t, history_norm, dt):
+        P_raw, T_raw = x_raw_t[:, 0:1], x_raw_t[:, 1:2]
+
+        # prior half-step
+        q_half = self.A(q, P_raw, T_raw, dt/2)
+
+        # NN correction (NN 能看到 forcing)
+        q_half_norm = (q_half - self.y_mean) / (self.y_std + 1e-12)
+        drift = self.NN(history_norm, q_half_norm, x_norm_t)  # [B,1]
+
+        # corrected
+        q_corr = q_half + drift * dt * self.y_std
+
+        # # prior half-step
+        # q_next = self.A(q_corr, P_raw, T_raw, dt/2)
+        q_next = self.A(q_half, P_raw, T_raw, dt/2)
+        
+        return F.softplus(q_next), drift
+
     def forward(self, history_norm, x_future_raw, x_future_norm, q_start, pred_steps, dt=1.0):
         preds, drifts = [], []
         curr_q = q_start
@@ -142,6 +161,27 @@ class ANI_2th_Hydro(nn.Module):
             x_norm_t = x_future_norm[:, t+1]
 
             curr_q, d = self._strang_step(curr_q, x_raw_t, x_norm_t, curr_history, dt)
+            preds.append(curr_q)
+            drifts.append(d)
+
+            # 更新 history（把当前 forcing 加进去）
+            curr_history = torch.cat([curr_history[:, 1:], x_norm_t.unsqueeze(1)], dim=1)
+
+        return torch.stack(preds, dim=1), torch.stack(drifts, dim=1)
+
+    def forward_prior(self, history_norm, x_future_raw, x_future_norm, q_start, pred_steps, dt=1.0):
+        preds, drifts = [], []
+        curr_q = q_start
+        if curr_q.dim() == 1:
+            curr_q = curr_q.unsqueeze(-1)
+
+        curr_history = history_norm.clone()
+
+        for t in range(pred_steps):
+            x_raw_t = x_future_raw[:, t+1]
+            x_norm_t = x_future_norm[:, t+1]
+
+            curr_q, d = self._strang_step_prior(curr_q, x_raw_t, x_norm_t, curr_history, dt)
             preds.append(curr_q)
             drifts.append(d)
 
