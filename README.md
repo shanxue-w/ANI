@@ -151,6 +151,8 @@ Because different experiments use different state variables and preprocessing pi
 
 After installation, experiments can typically be run from within the corresponding folder using the provided Python or shell scripts.
 
+To reproduce all figures in the paper, run the top-level `run.sh` script from the repository root.
+
 For the **Lorenz--Stenflo** demo, the recommended entry point is:
 
 ```bash
