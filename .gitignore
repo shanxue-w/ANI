@@ -33,3 +33,12 @@ src/ANI.egg-info/*
 !Lorenz-stenflo/dataset/**
 
 !requirements.txt
+
+!Pendulum/2th_test/*.txt
+!Pendulum/4th_test/*.txt
+!Pendulum/6th_test/*.txt
+!Pendulum/neural_RK4/*.txt
+!Pendulum/2th_test/*.npy
+!Pendulum/4th_test/*.npy
+!Pendulum/6th_test/*.npy
+!Pendulum/neural_RK4/*.npy
