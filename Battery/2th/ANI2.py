@@ -114,6 +114,21 @@ class ANI2(nn.Module):
         V_next = self.prior(x_next)
         return V_next
 
+    def forward_prior(self, x):
+        dt = x[:, 4:5]
+        dt_half = dt * 0.5
+
+        x_half = x.clone()
+        x_half[:, 4:5] = dt_half
+        V_half_prior = self.prior(x_half)
+
+        x_next = x.clone()
+        x_next[:, 0:1] = V_half_prior
+        x_next[:, 4:5] = dt_half
+
+        V_next = self.prior(x_next)
+        return V_next
+
 # ================= 3. Training Utils =================
 def load_data(path):
     if not os.path.exists(path):
