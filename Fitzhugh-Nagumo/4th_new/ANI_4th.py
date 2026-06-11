@@ -668,8 +668,8 @@ class AllenCahn(nn.Module):
         v = self.N0_SCHEME.single_step(v, dts=self.dt_tensor/2)
         v = self.fno(v, eps, dt=1e-2/2)
         k2 = self.N0_SCHEME.single_step(v, dts=self.dt_tensor/2)
-        # return -1.0/3.0 * k1 + 4.0/3.0 * k2
-        return x, save_1, save_2, save_3, save_4, save_5, save_6, -1.0/3.0*k1+4.0/3.0*k2
+        return -1.0/3.0 * k1 + 4.0/3.0 * k2
+        # return x, save_1, save_2, save_3, save_4, save_5, save_6, -1.0/3.0*k1+4.0/3.0*k2
     
     def predict(self, x, eps):
         u = self.N0_SCHEME.single_step(x, dts=self.dt_tensor)

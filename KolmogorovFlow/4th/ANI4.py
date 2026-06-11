@@ -15,7 +15,8 @@ import math
 from einops import rearrange
 from torch.utils.checkpoint import checkpoint
 
-device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
+# device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
 
 torch.set_default_dtype(torch.float64)
 torch.manual_seed(123)
@@ -1123,7 +1124,7 @@ if __name__ == "__main__":
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             # Create directory for saving models if it doesn't exist
-            os.makedirs('.', exist_ok=True)
+            os.makedirs("models", exist_ok=True) 
             torch.save(model.state_dict(), os.path.join('models', "best_model_fno_32.pth"))
             print("Saved best model!")
     
