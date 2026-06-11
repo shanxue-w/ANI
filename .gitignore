@@ -42,3 +42,10 @@ src/ANI.egg-info/*
 !Pendulum/4th_test/*.npy
 !Pendulum/6th_test/*.npy
 !Pendulum/neural_RK4/*.npy
+
+!Glycolytic/2th/*.txt
+!Glycolytic/4th/*.txt
+!Glycolytic/2th/*.npy
+!Glycolytic/4th/*.npy
+!Glycolytic/NeuralRK4/*.txt
+!Glycolytic/NeuralRK4/*.npy
