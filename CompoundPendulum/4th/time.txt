@@ -1,1 +1,0 @@
-Total inference time: 10.279180 s
