@@ -19,7 +19,7 @@ torch.cuda.manual_seed_all(SEED)
 
 BASIN_ID = "01031500"
 DATA_FILE = f"../dataset/data_{BASIN_ID}.pt"
-MODEL_FILE = f"ANI2_Best_{BASIN_ID}.pth"
+MODEL_FILE = f"ANI4_Best_{BASIN_ID}.pth"
 
 SEQ_LEN = 60
 PRED_STEPS = 30

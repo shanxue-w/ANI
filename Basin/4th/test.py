@@ -14,7 +14,7 @@ plt.rcParams.update({
 })
 
 # 模型权重文件
-MODEL_PATH = f"ANI2_Best_{BASIN_ID}.pth"
+MODEL_PATH = f"ANI4_Best_{BASIN_ID}.pth"
 
 def calculate_metrics(obs, sim):
     obs = obs.flatten()

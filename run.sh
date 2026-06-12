@@ -58,9 +58,10 @@ cd ..
 
 cd Battery
 python -u plot.py
+python -u eval_cross_battery.py --model ani2 --checkpoint 2th/best_ani2_model.pth --data ./dataset/processed_battery_data_rollout.pt --predict_mode prior --use_meta_q0
+python -u eval_cross_battery.py --model baseline --checkpoint baseline/best_baseline_model.pth --data ./dataset/processed_battery_data_rollout.pt --use_meta_q0
 python -u eval_cross_battery.py --model ani2 --checkpoint 2th/best_ani2_model.pth --data ./dataset/processed_battery_data_rollout.pt --use_meta_q0
 python -u eval_cross_battery.py --model ani4 --checkpoint 4th/best_ani4_model.pth --data ./dataset/processed_battery_data_rollout.pt --use_meta_q0
-python -u eval_cross_battery.py --model baseline --checkpoint baseline/best_baseline_model.pth --data ./dataset/processed_battery_data_rollout.pt --use_meta_q0
 python -u eval_multicycle_standalone.py --model ani2 --checkpoint 2th/best_ani2_model.pth --data ./dataset/processed_battery_data_rollout.pt --out_csv ani2 --use_meta_q0
 python -u eval_multicycle_standalone.py --model ani4 --checkpoint 4th/best_ani4_model.pth --data ./dataset/processed_battery_data_rollout.pt --out_csv ani4 --use_meta_q0
 python -u eval_multicycle_standalone.py --model baseline --checkpoint baseline/best_baseline_model.pth --data ./dataset/processed_battery_data_rollout.pt --out_csv "baseline" --use_meta_q0
