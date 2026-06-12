@@ -137,7 +137,7 @@ def create_standard_plot(data_key, title, ylabel, filename):
     plt.tight_layout()
     plt.savefig(f'{filename}.pdf', bbox_inches='tight')
     plt.savefig(f'{filename}.png', dpi=300, bbox_inches='tight')
-    plt.show()
+    # plt.show()
 
 # 分别调用生成
 create_standard_plot('times', 'Training Cost Analysis', 'Training Time (Seconds)', 'scaling_time_pretrain')
