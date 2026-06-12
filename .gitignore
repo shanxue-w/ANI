@@ -31,6 +31,9 @@ src/ANI.egg-info/*
 !Lorenz-stenflo/OSNET_Lorenz_stenflo_base_0.mat
 !Lorenz-stenflo/ANI_Lorenz_stenflo_true_0.mat
 !Lorenz-stenflo/dataset/**
+!Lorenz-stenflo/2th_h32/*.txt
+!Lorenz-stenflo/4th_h32/*.txt
+!Lorenz-stenflo/NeuralRK4_h32/*.txt
 
 !requirements.txt
 
