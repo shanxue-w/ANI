@@ -24,6 +24,7 @@ The repository requires:
 
 Install the Python environment with:
 ```bash
+conda install mayavi numpy scipy pandas matplotlib seaborn sympy scikit-learn -y
 pip install -r requirements.txt
 pip install -e .
 ```
