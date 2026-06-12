@@ -117,3 +117,5 @@ src/ANI.egg-info/*
 !Battery/baseline/best_baseline_model.pth
 !Battery/dataset/processed_battery_data_rollout.pt
 !Battery/*.csv
+
+src/osnet.egg-info/
