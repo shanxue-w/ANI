@@ -605,6 +605,12 @@ def plot_uv_grid(u_list, v_list, t_label, methods):
 #     "1.75s",
 #     methods
 # )
+
+time_map = {
+    99:  "0.5s",
+    199: "1.0s",
+    299: "1.5s",
+}
 for t, time_label in time_map.items():
     u_list = [
         data['u_true'][t],
