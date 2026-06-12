@@ -74,6 +74,7 @@ src/ANI.egg-info/*
 !Kan/4th/*.npy
 !Kan/RK4/*.txt
 !Kan/RK4/*.npy
+!Kan/dataset/kan_test_trajectories_1.mat
 
 !Euler/2th/*.txt
 !Euler/4th/*.txt
