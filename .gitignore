@@ -95,6 +95,7 @@ src/ANI.egg-info/*
 !KolmogorovFlow/FNO_baseline/*.txt
 !KolmogorovFlow/FNO_tradeoff_pretrain/*.txt
 !KolmogorovFlow/FNO_tradeoff_pretrain/*.sh
+!KolmogorovFlow/baseline/*.txt
 
 !NS/2th/*.txt
 !NS/4th/*.txt
@@ -103,6 +104,8 @@ src/ANI.egg-info/*
 !NS/FNO_pretrain/*.sh
 !NS/FNO_tradeoff_pretrain/*.sh
 !NS/FNO_tradeoff_pretrain/*.txt
+!NS/baseline/*.txt
+!NS/baseline/*.npy
 
 !Basin/2th/ANI2_Best_01031500.pth
 !Basin/4th/ANI4_Best_01031500.pth
