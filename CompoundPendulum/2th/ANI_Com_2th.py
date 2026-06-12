@@ -42,7 +42,7 @@ class A(N0):
             sin_theta * x4**2 +
             20.0 * sin_x1 -
             10.0 * sin_x3 * cos_theta) / common
-        dx3 = x3
+        dx3 = x4
         dx4 = (-sin_theta * cos_theta * x4**2 -
             2.0 * sin_theta * x2**2 -
             20.0 * sin_x1 * cos_theta +
@@ -205,7 +205,7 @@ if __name__ == "__main__":
     test_trajectories = np.load("../dataset/test_trajectories.npy")
 
     # # 初始化模型
-    model = CompoundPendulum(N0_SCHEME=A(mu, sigma), input_dim=5, output_dim=4, hidden_layers=4, hidden_dim=20).to(device)
+    model = CompoundPendulum(N0_SCHEME=A(mu, sigma), input_dim=5, output_dim=4, hidden_layers=4, hidden_dim=64).to(device)
     model.get_mu_and_sigma(mu, sigma)
     model = torch.compile(model, mode="max-autotune")
 
