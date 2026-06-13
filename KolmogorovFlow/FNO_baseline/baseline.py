@@ -254,7 +254,7 @@ if __name__ == "__main__":
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             # Create directory for saving models if it doesn't exist
-            os.makedirs('.', exist_ok=True)
+            os.makedirs('models', exist_ok=True)
             torch.save(model.state_dict(), os.path.join('models', "best_model_cnextunet.pth"))
             print("Saved best model!")
     
