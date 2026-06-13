@@ -119,3 +119,8 @@ src/ANI.egg-info/*
 !Battery/*.csv
 
 src/osnet.egg-info/
+
+*.ts
+*.bin
+HPC/combined
+HPC/prior_oscillator_eigen
