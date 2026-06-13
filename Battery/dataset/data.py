@@ -397,6 +397,8 @@ def create_rollout_sequences(X, Y, rollout_len=5):
         X_seq: (N - L + 1, L, Features)
         Y_seq: (N - L + 1, L, 1)
     Note: This assumes X and Y are continuous time series. 
+    If they contain disjoint cycles, this naive sliding window will 
+    create invalid transitions at cycle boundaries.
     
     Since we don't want to modify the upstream function, we will use this
     but be aware of the minor boundary artifacts (which are usually negligible 
