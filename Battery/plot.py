@@ -314,7 +314,6 @@ def main():
     pack = load_all()
 
     q0_ah = pack["q0_ah"]
-    print(f"Using Q0_Ah={q0_ah:.6g}")
 
     cid, cycle_x_ani, cycle_y_ani = select_cycle(
         pack["test_x_ani"],
