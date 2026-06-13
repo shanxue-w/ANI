@@ -30,9 +30,6 @@ def _float_col(rows: List[Dict[str, Any]], key: str) -> np.ndarray:
 
 def main() -> None:
     root = Path(__file__).resolve().parent
-    # p2 = root / "ani2_per_cycle.csv"
-    # p4 = root / "ani4_per_cycle.csv"
-    # pb = root / "baseline_per_cycle.csv"
     p2 = root / "ani2_per_cycle.csv"
     p4 = root / "ani4_per_cycle.csv"
     pb = root / "baseline_per_cycle.csv"
@@ -63,7 +60,6 @@ def main() -> None:
     ax.plot(cb, mseb, marker="^", ms=4, lw=1.5, label="Baseline")
     ax.set_xlabel("Normalized cycle")
     ax.set_ylabel("MSE")
-    # ax.set_title("Per-cycle rollout MSE")
     ax.legend(frameon=True)
     ax.grid(True, alpha=0.35)
 

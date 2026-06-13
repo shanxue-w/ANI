@@ -114,7 +114,6 @@ if __name__ == "__main__":
     print(f"Best Cycle MSE: {np.min(mse_list):.2e}")
 
     num_plots = 1
-    # indices_to_plot = np.linspace(0, len(results)-1, num_plots, dtype=int)
     for j in range(len(results)):
         indices_to_plot = np.array([j], dtype=int)
         
@@ -126,15 +125,12 @@ if __name__ == "__main__":
             
             plt.plot(res['true'], 'k-', label='Ground Truth', linewidth=2)
             plt.plot(res['pred'], 'r--', label=f'ANI-2 Pred (MSE={res["mse"]:.1e})', linewidth=1.5)
-            
-            # plt.title(f"Cycle ID (norm): {res['cycle_id']:.4f}")
+
             plt.ylabel("Voltage (V)")
             plt.legend()
             plt.grid(True, alpha=0.3)
-            
+
         plt.xlabel("Time Step (within cycle)")
         plt.tight_layout()
-        # plt.savefig("multicycle_test_result.png")
-        # print("Result saved to multicycle_test_result.png")
         plt.savefig(f"battery_ANI2_{j}.pdf", bbox_inches='tight', format='pdf')
         plt.close()

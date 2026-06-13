@@ -7,7 +7,7 @@ import numpy as np
 from torch.utils.data import DataLoader, TensorDataset
 import matplotlib.pyplot as plt
 import os
-import random # Added for scheduled sampling
+import random
 
 # ================= 1. Config =================
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -174,8 +174,6 @@ def train_epoch(model, loader, optimizer, criterion, device='cuda', teacher_forc
             
         
         mse_loss = torch.mean((preds - y) ** 2)
-        # change to L1 loss
-        # mse_loss = torch.mean(torch.abs(preds - y))
         
         diff = preds[:, 1:] - preds[:, :-1]
         smooth_loss = torch.mean(diff ** 2)

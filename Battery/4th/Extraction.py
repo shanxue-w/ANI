@@ -183,10 +183,6 @@ if __name__ == "__main__":
     X_train = np.concatenate(X_list, axis=0) 
     Y_train = np.concatenate(Y_list, axis=0) 
 
-    # mask = (X_train[:, SOC_IDX] > 0.1) & (X_train[:, SOC_IDX] < 0.9)
-    # X_train = X_train[mask]
-    # Y_train = Y_train[mask]
-
     print(f"SINDy Training Data: X={X_train.shape}, Y={Y_train.shape}")
     
     print("Fitting SINDy model...")

@@ -69,7 +69,7 @@ def process_and_split_dynamic(
         raise FileNotFoundError(f"Cannot find {mat_file}")
 
     # SciPy recommended options for MATLAB structs
-    mat = scipy.io.loadmat(mat_file, squeeze_me=True, struct_as_record=False)  # :contentReference[oaicite:3]{index=3}
+    mat = scipy.io.loadmat(mat_file, squeeze_me=True, struct_as_record=False)
     key = _get_mat_battery_key(mat, preferred=battery_key)
     batt = mat[key]
 
@@ -99,9 +99,7 @@ def process_and_split_dynamic(
         # Remove NaN/Inf
         m = np.isfinite(V) & np.isfinite(I) & np.isfinite(t)
         V, I, t = V[m], I[m], t[m]
-        # t /= 10
-        # t /= 60
-        
+
         if np.nanmedian(I) < 0:
             I_load = -I
         else:
@@ -109,21 +107,8 @@ def process_and_split_dynamic(
 
         I_load = np.maximum(I_load, 0.0)
 
-        # is_discharging = I_load > 1e-2
-        # V = V[is_discharging]
-        # I_load = I_load[is_discharging]
-        # t = t[is_discharging]
-
         if len(V) < min_points:
             continue
-
-        # Ensure time is non-decreasing; drop non-increasing steps later
-        # Decide current sign convention: make discharge current positive (I_load)
-        # If median is negative, assume discharge current is negative -> flip
-
-          # keep discharge as positive, clip any sign noise
-
-        # I_load = I
 
         # Coulomb counting SoC using correct dt (first dt = 0)
         dt_full = np.diff(t, prepend=t[0])
@@ -163,7 +148,7 @@ def process_and_split_dynamic(
             Q0 = item["cap"]
             break
     if Q0 is None:
-        Q0 = 2.0  # dataset docs commonly treat B0005 ~2Ah initial  :contentReference[oaicite:4]{index=4}
+        Q0 = 2.0  # dataset docs commonly treat B0005 as about 2Ah initially
 
     # Split by cycle index (contiguous)
     n_train = max(1, int(discharge_count * train_ratio))
@@ -278,7 +263,7 @@ def fit_physical_parameters_linear(X_train, Y_train, dt_min=1e-3,
         R_est, C_est, [w0, w1], tau_est
     """
     V = X_train[:, 0].astype(np.float64)
-    I = X_train[:, 1].astype(np.float64)  # assume I_load (discharge positive)
+    I = X_train[:, 1].astype(np.float64)  # feature convention: discharge-positive I_load
     S = X_train[:, 2].astype(np.float64)
     dt = X_train[:, 4].astype(np.float64)
     V_next = Y_train.astype(np.float64)
@@ -354,7 +339,7 @@ def fit_physical_parameters_linear(X_train, Y_train, dt_min=1e-3,
 
 
 # ==========================================
-# 3. Frozen prior model (for checking)
+# 3. Frozen prior model
 # ==========================================
 class TheveninPriorFixed(nn.Module):
     def __init__(self, R_val, C_val, w_vals, dtype=torch.float64):
@@ -384,10 +369,7 @@ class TheveninPriorFixed(nn.Module):
         return V_next.unsqueeze(1)
 
 # ==========================================
-# 4. Run & save
-# ==========================================
-# ==========================================
-# Helper: Create Sliding Window Sequences
+# 4. Helper: Create Sliding Window Sequences
 # ==========================================
 def create_rollout_sequences(X, Y, rollout_len=5):
     """
@@ -396,11 +378,6 @@ def create_rollout_sequences(X, Y, rollout_len=5):
     Returns:
         X_seq: (N - L + 1, L, Features)
         Y_seq: (N - L + 1, L, 1)
-    Note: This assumes X and Y are continuous time series. 
-    
-    Since we don't want to modify the upstream function, we will use this
-    but be aware of the minor boundary artifacts (which are usually negligible 
-    if N >> number of cycles).
     """
     num_samples = X.shape[0]
     num_features = X.shape[1]
@@ -412,12 +389,9 @@ def create_rollout_sequences(X, Y, rollout_len=5):
             Y.reshape(1, num_samples, 1)
         )
 
-    # Efficient stride tricks could be used, but loop is clear and safe
     X_seq_list = []
     Y_seq_list = []
     
-    # Simple sliding window
-    # We want input [t, t+1, ..., t+L-1]
     for i in range(num_samples - rollout_len + 1):
         X_seq_list.append(X[i : i + rollout_len])
         Y_seq_list.append(Y[i : i + rollout_len])

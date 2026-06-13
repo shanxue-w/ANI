@@ -7,7 +7,7 @@ import numpy as np
 from torch.utils.data import DataLoader, TensorDataset
 import matplotlib.pyplot as plt
 import os
-import random # Added for scheduled sampling
+import random
 
 # ================= 1. Config =================
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -57,7 +57,6 @@ class A(nn.Module):
 class Baseline(nn.Module):
     def __init__(self, hidden_dim=64, hidden_layers=4):
         super().__init__()
-        # self.prior = A(R_val, C_val, w_vals)
 
         layers = []
         layers.append(nn.Linear(5, hidden_dim))

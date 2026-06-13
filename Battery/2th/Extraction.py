@@ -99,7 +99,7 @@ THRESHOLD = 1e-3
 RIDGE_ALPHA = 1e-6
 
 # Model checkpoint
-MODEL_CKPT_PATH = "best_ani2_model.pth"   # <-- 改成你的权重文件
+MODEL_CKPT_PATH = "best_ani2_model.pth"
 USE_MODEL_ATTR_NN = True                # True: use model.nn(x), False: use model(x)
 
 # -------------------------

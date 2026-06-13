@@ -7,7 +7,7 @@ import numpy as np
 from torch.utils.data import DataLoader, TensorDataset
 import matplotlib.pyplot as plt
 import os
-import random # Added for scheduled sampling
+import random
 
 # ================= 1. Config =================
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -69,28 +69,6 @@ class ANI2(nn.Module):
         layers.append(nn.Linear(hidden_dim, 1))
         
         self.nn = nn.Sequential(*layers)
-
-    # def forward(self, x):
-    #     dt = x[:, 4:5]
-    #     dt_half = dt * 0.5
-
-    #     x_half = x.clone()
-    #     x_half[:, 4:5] = dt_half
-    #     V_half_prior = self.prior(x_half)
-
-    #     x_nn = x.clone()
-    #     x_nn[:, 0:1] = V_half_prior
-        
-    #     delta = self.nn(x_nn)
-        
-    #     V_mid = V_half_prior + delta
-
-    #     x_next = x.clone()
-    #     x_next[:, 0:1] = V_mid
-    #     x_next[:, 4:5] = dt_half
-
-    #     V_next = self.prior(x_next)
-    #     return V_next
 
     def forward(self, x):
         dt = x[:, 4:5]
@@ -194,8 +172,6 @@ def train_epoch(model, loader, optimizer, criterion, device='cuda', teacher_forc
         
         
         mse_loss = torch.mean((preds - y) ** 2)
-        # change to L1 loss
-        # mse_loss = torch.mean(torch.abs(preds - y))
         
         diff = preds[:, 1:] - preds[:, :-1]
         smooth_loss = torch.mean(diff ** 2)
@@ -262,8 +238,7 @@ if __name__ == "__main__":
     # 2. Initialize Model
     R_val, C_val, w_vals = prior_params
     model = ANI2(R_val, C_val, w_vals).to(device)
-    # model = torch.compile(model, mode='max-autotune')
-    
+
     print(f"Model initialized on {device}")
     
     # 3. Setup Training
