@@ -154,6 +154,20 @@ After installation, experiments can typically be run from within the correspondi
 
 To reproduce all figures in the paper, run the top-level `run.sh` script from the repository root.
 
+If the required datasets and saved intermediate results are already available in the expected experiment folders, the figures can be reproduced directly with:
+
+```bash
+bash run.sh
+```
+
+If those data or result files are not available in the current checkout, clone the latest prepared repository from [shanxue-w/ANI](https://github.com/shanxue-w/ANI) and run the same top-level script there:
+
+```bash
+git clone https://github.com/shanxue-w/ANI
+cd ANI
+bash run.sh
+```
+
 For the **Lorenz--Stenflo** demo, the recommended entry point is:
 
 ```bash
