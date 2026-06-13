@@ -81,8 +81,8 @@ def generate_datasets():
     train_x, train_y = shuffle_pairs(train_x, train_y)
 
     print(f"Saving Training Pairs: Input {train_x.shape}, Output {train_y.shape}")
-    torch.save(train_x, os.path.join(DATA_DIR, "train_input_new_1e-2.pt"))
-    torch.save(train_y, os.path.join(DATA_DIR, "train_output_new_1e-2.pt"))
+    torch.save(train_x, os.path.join(DATA_DIR, "train_input_new.pt"))
+    torch.save(train_y, os.path.join(DATA_DIR, "train_output_new.pt"))
 
     # ==========================================
     # 2. Val & Test Set (Last 1000 time steps)
@@ -108,7 +108,7 @@ def generate_datasets():
     # --- Process Validation (Trajectory) ---
     val_tensor = process_trajectory_tensor(val_raw)
     print(f"Saving Validation Trajectories: {val_tensor.shape}") # [37, 1000, 1, 128, 128]
-    torch.save(val_tensor, os.path.join(DATA_DIR, "val_trajectory_1e-2.pt"))
+    torch.save(val_tensor, os.path.join(DATA_DIR, "val_trajectory.pt"))
 
     # --- Process Test (Pairs & Shuffle) ---
     print(f"Processing Test Data into Pairs...")
@@ -116,8 +116,8 @@ def generate_datasets():
     test_x, test_y = shuffle_pairs(test_x, test_y)
 
     print(f"Saving Test Pairs: Input {test_x.shape}, Output {test_y.shape}")
-    torch.save(test_x, os.path.join(DATA_DIR, "test_input_new_1e-2.pt"))
-    torch.save(test_y, os.path.join(DATA_DIR, "test_output_new_1e-2.pt"))
+    torch.save(test_x, os.path.join(DATA_DIR, "test_input_new.pt"))
+    torch.save(test_y, os.path.join(DATA_DIR, "test_output_new.pt"))
 
     print("\nAll files saved successfully.")
 
@@ -150,20 +150,20 @@ if __name__ == "__main__":
     generate_datasets()
 
     # Check output existence and shapes
-    if os.path.exists(os.path.join(DATA_DIR, "train_input_new_1e-2.pt")):
+    if os.path.exists(os.path.join(DATA_DIR, "train_input_new.pt")):
         print("\n--- Verification ---")
         # Check Train
         ds_train = ODEPairDataset(
-            os.path.join(DATA_DIR, "train_input_new_1e-2.pt"),
-            os.path.join(DATA_DIR, "train_output_new_1e-2.pt"),
+            os.path.join(DATA_DIR, "train_input_new.pt"),
+            os.path.join(DATA_DIR, "train_output_new.pt"),
             limit=10
         )
         print(f"Train Sample: {ds_train[0][0].shape}")
 
         # Check Test (Should be pairs now)
         ds_test = ODEPairDataset(
-            os.path.join(DATA_DIR, "test_input_new_1e-2.pt"),
-            os.path.join(DATA_DIR, "test_output_new_1e-2.pt"),
+            os.path.join(DATA_DIR, "test_input_new.pt"),
+            os.path.join(DATA_DIR, "test_output_new.pt"),
             limit=10
         )
         print(f"Test Sample:  {ds_test[0][0].shape}")
