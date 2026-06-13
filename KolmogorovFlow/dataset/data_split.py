@@ -156,7 +156,7 @@ if __name__ == "__main__":
         ds_train = ODEPairDataset(
             os.path.join(DATA_DIR, "train_input_new.pt"),
             os.path.join(DATA_DIR, "train_output_new.pt"),
-            limit=10
+            limit=8000
         )
         print(f"Train Sample: {ds_train[0][0].shape}")
 
@@ -164,7 +164,7 @@ if __name__ == "__main__":
         ds_test = ODEPairDataset(
             os.path.join(DATA_DIR, "test_input_new.pt"),
             os.path.join(DATA_DIR, "test_output_new.pt"),
-            limit=10
+            limit=2000
         )
         print(f"Test Sample:  {ds_test[0][0].shape}")
 

@@ -199,7 +199,7 @@ if __name__ == "__main__":
     model.load_state_dict(torch.load("models/best_model_cnextunet_32.pth", map_location=device))
 
     # 加载 trajectory 数据
-    traj_data = torch.load("../dataset/test_omega_traj_4x800x128x128.pt").to(device).to(torch.float64).unsqueeze(2)   # [N, T, 128, 128]
+    traj_data = torch.load("../dataset/test_trajectory_new.pt").to(device).to(torch.float64).unsqueeze(2)   # [N, T, 128, 128]
 
     # init_states = traj_data[:, 0].clone().permute(0, 3, 1, 2)     # [4, 128, 128]
     # true_trajs  = traj_data[:].clone().permute(0, 1, 4, 2, 3)       # [4, T, 128, 128]
@@ -290,4 +290,3 @@ if __name__ == "__main__":
 
     # # # 如果想保存图片，可以取消下面这行的注释
     # # fig.savefig("true_streamlines.png")
-

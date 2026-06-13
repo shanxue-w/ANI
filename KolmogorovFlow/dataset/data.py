@@ -723,7 +723,7 @@ def generate_and_save_omega_trajectories(
         print(f"\n[{split_name}] wrote {take} trajectories -> filled {filled}/{N_target}")
 
     if split_name == "test":
-        pt_path = os.path.splitext(out_path)[0] + ".pt"
+        pt_path = os.path.join(save_dir, "test_trajectory_new.pt")
         traj_mm.flush()
         torch.save(torch.from_numpy(traj_mm), pt_path)
         print(f"[{split_name}] ✅ saved PyTorch trajectory to: {pt_path}")
