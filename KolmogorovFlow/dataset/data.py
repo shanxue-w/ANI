@@ -13,8 +13,8 @@ from numpy.lib.format import open_memmap
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 torch.set_default_dtype(torch.float64)
-torch.manual_seed(23989)
-np.random.seed(23989)
+torch.manual_seed(123)
+np.random.seed(123)
 
 class A():
     def __init__(self, Nx=1024, Ny=1024, Lx=1.0, Ly=1.0, Re=1e4, dt_step=5e-4, device='cuda', factor=1):
@@ -669,7 +669,7 @@ def generate_and_save_omega_trajectories(
     print(f"[{split_name}] N={N_target}, T={T}, dt={dt}, burn_in={burn_in_seconds}s -> {burn_steps} steps")
 
     out_path = os.path.join(save_dir, f"{split_name}_omega_traj_{N_target}x{T}x128x128.npy")
-    traj_mm = open_memmap(out_path, mode="w+", dtype=dtype, shape=(N_target, T+1, 128, 128))
+    traj_mm = open_memmap(out_path, mode="w+", dtype=dtype, shape=(N_target, T, 128, 128))
 
     filled = 0
     batch_idx = 0
@@ -696,7 +696,7 @@ def generate_and_save_omega_trajectories(
         #     continue
 
         omega_batch_frames = []
-        for t in range(T+1):
+        for t in range(T):
             if (t + 1) % 50 == 0 or t == 0:
                 print(f"  Save step {t+1}/{T}", end="\r")
 
@@ -728,12 +728,8 @@ def generate_and_save_omega_trajectories(
 if __name__ == '__main__':
     model = A(Nx=1024, Ny=1024, Lx=1.0, Ly=1.0, Re=1e4, device=device)
     dt = 1e-2
-    # seed = 123
-    # generate_and_save_omega_trajectories(model=model, batch_size=1, batch=40, dt=1e-2, device=device, save_dir='./', split_name='train_new', T=400)
-    
-    # seed = 23989
-    generate_and_save_omega_trajectories(model=model, batch_size=1, batch=4, dt=1e-2, burn_in_seconds=0.5, device=device, save_dir='./', split_name='test_new', T=400)
-
+    generate_and_save_omega_trajectories(model=model, batch_size=1, batch=40, dt=5e-3, device=device, save_dir='./', split_name='train', T=800)
+    # generate_and_save_omega_trajectories(model=model, batch_size=1, batch=4, dt=5e-3, device=device, save_dir='./', split_name='test', T=800)
     # generate_and_save_dataset(model, batch_size=1, batch=32, steps=1000, dt=dt, device=device, save_dir='./', split_name='train')
 
     # # # 验证集 10个样本，500步
