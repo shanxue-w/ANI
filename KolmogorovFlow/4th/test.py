@@ -63,12 +63,12 @@ def evaluate_on_trajectory(model, init_states, true_trajs, dt=5e-3):
     pred_trajs = torch.stack(pred_trajs, dim=1)  # [4, T, 128, 128]
     # print(pred_trajs.shape)
 
-    # rng = np.random.default_rng(seed=123)
-    # n = rng.integers(0, 20)
+    rng = np.random.default_rng(seed=123)
+    n = rng.integers(0, 20)
 
-    n = 1
-    time_steps = [99, 149, 199, 249, 299, 349, 399, 449, 499, 549, 599, 649, 699, 749]
-    file_suffixes = [99, 149, 199, 249, 299, 349, 399, 449, 499, 549, 599, 649, 699, 749]
+    # n = 2
+    time_steps = [99, 149, 199, 249, 299, 349]
+    file_suffixes = [99, 149, 199, 249, 299, 349]
     for t, suffix in zip(time_steps, file_suffixes):
         u_pred, v_pred = A1._vorticity_to_velocity_spectral(
             pred_trajs[n, t], A1.Kx_fine, A1.Ky_fine, A1.denom_safe_fine
@@ -78,8 +78,8 @@ def evaluate_on_trajectory(model, init_states, true_trajs, dt=5e-3):
         np.save(f'v_{suffix}_4th.npy', v_pred.cpu().numpy())
 
 
-    time_steps = [100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750]
-    file_suffixes = [99, 149, 199, 249, 299, 349, 399, 449, 499, 549, 599, 649, 699, 749]
+    time_steps = [100, 150, 200, 250, 300, 350]
+    file_suffixes = [99, 149, 199, 249, 299, 349]
     for t, suffix in zip(time_steps, file_suffixes):
         u_true, v_true = A1._vorticity_to_velocity_spectral(
             true_trajs[n, t], A1.Kx_fine, A1.Ky_fine, A1.denom_safe_fine
@@ -144,23 +144,23 @@ def evaluate_on_trajectory(model, init_states, true_trajs, dt=5e-3):
     # # np.save('v99_true.npy', true_trajs[1,200,1,:,:].cpu().numpy())
 
 
-    # avg_l2_per_t = []
-    # avg_rel_per_t = []
+    avg_l2_per_t = []
+    avg_rel_per_t = []
 
-    # for t in range(T-1):
-    #     l2s = []
-    #     rels = []
-    #     for i in range(batch_size):
-    #         omega_pred = pred_trajs[i, t]
-    #         omega_true = true_trajs[i, t+1]
-    #         l2 = mse_loss(omega_pred, omega_true)
-    #         rel = relative_l2_error(omega_pred, omega_true)
-    # #         # l2 = mse_loss(pred_trajs[i, t], true_trajs[i, t+1])
-    # #         # rel = relative_l2_error(pred_trajs[i, t], true_trajs[i, t+1])
-    #         l2s.append(l2.item())
-    #         rels.append(rel.item())
-    #     avg_l2_per_t.append(sum(l2s) / batch_size)
-    #     avg_rel_per_t.append(sum(rels) / batch_size)
+    for t in range(T-1):
+        l2s = []
+        rels = []
+        for i in range(batch_size):
+            omega_pred = pred_trajs[i, t]
+            omega_true = true_trajs[i, t+1]
+            l2 = mse_loss(omega_pred, omega_true)
+            rel = relative_l2_error(omega_pred, omega_true)
+    #         # l2 = mse_loss(pred_trajs[i, t], true_trajs[i, t+1])
+    #         # rel = relative_l2_error(pred_trajs[i, t], true_trajs[i, t+1])
+            l2s.append(l2.item())
+            rels.append(rel.item())
+        avg_l2_per_t.append(sum(l2s) / batch_size)
+        avg_rel_per_t.append(sum(rels) / batch_size)
     
     # # plot error [B,2,128,512], so plot u, v
     # print(error.norm())
@@ -186,7 +186,7 @@ def evaluate_on_trajectory(model, init_states, true_trajs, dt=5e-3):
     # plt.savefig("error.png")
     # plt.close()
 
-    # return avg_l2_per_t, avg_rel_per_t, pred_trajs
+    return avg_l2_per_t, avg_rel_per_t, pred_trajs
 
 if __name__ == "__main__":
     # 加载模型
@@ -203,16 +203,16 @@ if __name__ == "__main__":
 
     print(init_states.shape, true_trajs.shape)
 
-    evaluate_on_trajectory(model, init_states, true_trajs)
-    # avg_l2_per_t, avg_rel_per_t, pred_trajs = evaluate_on_trajectory(model, init_states, true_trajs)
+    # evaluate_on_trajectory(model, init_states, true_trajs)
+    avg_l2_per_t, avg_rel_per_t, pred_trajs = evaluate_on_trajectory(model, init_states, true_trajs)
 
-    # # 写入文件，每行写一个时间点的误差
-    # with open("traj_error.txt", "w") as f:
-    #     f.write("t_index\tavg_L2_error\tavg_relative_error\n")
-    #     for t, (l2, rel) in enumerate(zip(avg_l2_per_t, avg_rel_per_t)):
-    #         f.write(f"{t}\t{l2:.6e}\t{rel:.6e}\n")
+    # 写入文件，每行写一个时间点的误差
+    with open("traj_error.txt", "w") as f:
+        f.write("t_index\tavg_L2_error\tavg_relative_error\n")
+        for t, (l2, rel) in enumerate(zip(avg_l2_per_t, avg_rel_per_t)):
+            f.write(f"{t}\t{l2:.6e}\t{rel:.6e}\n")
 
-    # print("✅ Trajectory error evaluation done.")
+    print("✅ Trajectory error evaluation done.")
 
     # B, T, _, H, W = true_trajs.shape
 
@@ -284,3 +284,5 @@ if __name__ == "__main__":
 
     # # # 如果想保存图片，可以取消下面这行的注释
     # # fig.savefig("true_streamlines.png")
+
+

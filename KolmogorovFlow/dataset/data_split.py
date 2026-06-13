@@ -167,5 +167,5 @@ if __name__ == "__main__":
         print(f"Test Sample:  {ds_test[0][0].shape}")
 
         # Check Val (Should be trajectory)
-        val_data = torch.load(os.path.join(DATA_DIR, "val_trajectory.pt"))
-        print(f"Val Data:     {val_data.shape}")
+        # val_data = torch.load(os.path.join(DATA_DIR, "val_trajectory.pt"))
+        # print(f"Val Data:     {val_data.shape}")
