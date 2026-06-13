@@ -126,3 +126,5 @@ HPC/combined
 HPC/prior_oscillator_eigen
 !HPC/CMakeLists.txt
 CompoundPendulum/*.ipynb
+
+.vscode
