@@ -152,15 +152,15 @@ Because different experiments use different state variables and preprocessing pi
 
 After installation, experiments can typically be run from within the corresponding folder using the provided Python or shell scripts.
 
-To reproduce all figures in the paper, run the top-level `run.sh` script from the repository root.
+To reproduce all figures in the paper, use the top-level `run.sh` script from the repository root.
 
-If the required datasets and saved intermediate results are already available in the expected experiment folders, the figures can be reproduced directly with:
+If the required datasets, checkpoints, and saved intermediate results are already present in the expected experiment folders of this checkout, run:
 
 ```bash
 bash run.sh
 ```
 
-If those data or result files are not available in the current checkout, clone the latest prepared repository from [shanxue-w/ANI](https://github.com/shanxue-w/ANI) and run the same top-level script there:
+If this command reports missing data, checkpoints, or result files, the current checkout does not contain the prepared experiment artifacts. In that case, clone the latest prepared repository from [shanxue-w/ANI](https://github.com/shanxue-w/ANI), enter the cloned repository, and run the same top-level script there:
 
 ```bash
 git clone https://github.com/shanxue-w/ANI
