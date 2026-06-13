@@ -735,7 +735,7 @@ if __name__ == '__main__':
     model = A(Nx=1024, Ny=1024, Lx=1.0, Ly=1.0, Re=1e4, device=device)
     dt = 1e-2
     generate_and_save_omega_trajectories(model=model, batch_size=1, batch=40, dt=5e-3, device=device, save_dir='./', split_name='train', T=800)
-    generate_and_save_omega_trajectories(model=model, batch_size=1, batch=4, dt=5e-3, device=device, save_dir='./', split_name='test', T=800)
+    # generate_and_save_omega_trajectories(model=model, batch_size=1, batch=4, dt=5e-3, device=device, save_dir='./', split_name='test', T=800)
     # generate_and_save_dataset(model, batch_size=1, batch=32, steps=1000, dt=dt, device=device, save_dir='./', split_name='train')
 
     # # # 验证集 10个样本，500步

@@ -74,7 +74,7 @@ def generate_datasets():
     # 1. Train Set (First 1000 time steps)
     #    Strategy: Flatten into pairs (u^n, u^n+1), Shuffle
     # ==========================================
-    train_raw = full_data[:, :200, :, :]
+    train_raw = full_data[:, :400, :, :]
     print(f"\nProcessing Train Data (Time 0-1000, Shape: {train_raw.shape})...")
 
     train_x, train_y = create_input_output_pairs(train_raw)
@@ -90,7 +90,7 @@ def generate_datasets():
     #              Val -> Keep Trajectory structure
     #              Test -> Convert to Pairs & Shuffle
     # ==========================================
-    test_val_raw = full_data[:, -200:, :, :] # (74, 1000, 128, 128)
+    test_val_raw = full_data[:, -400:, :, :] # (74, 1000, 128, 128)
     print(f"\nProcessing Val/Test Data (Time 1001-2000, Shape: {test_val_raw.shape})...")
 
     num_traj = test_val_raw.shape[0] # 74
@@ -108,7 +108,7 @@ def generate_datasets():
     # --- Process Validation (Trajectory) ---
     val_tensor = process_trajectory_tensor(val_raw)
     print(f"Saving Validation Trajectories: {val_tensor.shape}") # [37, 1000, 1, 128, 128]
-    torch.save(val_tensor, os.path.join(DATA_DIR, "val_trajectory.pt"))
+    torch.save(val_tensor, os.path.join(DATA_DIR, "test_trajectory_new.pt"))
 
     # --- Process Test (Pairs & Shuffle) ---
     print(f"Processing Test Data into Pairs...")
@@ -144,8 +144,6 @@ class ODEPairDataset(Dataset):
     def __getitem__(self, idx):
         return self.input[idx], self.output[idx]
 
-
-
 if __name__ == "__main__":
     generate_datasets()
 
@@ -168,6 +166,6 @@ if __name__ == "__main__":
         )
         print(f"Test Sample:  {ds_test[0][0].shape}")
 
-        # # Check Val (Should be trajectory)
-        # val_data = torch.load(os.path.join(DATA_DIR, "val_trajectory.pt"))
-        # print(f"Val Data:     {val_data.shape}")
+        # Check Val (Should be trajectory)
+        val_data = torch.load(os.path.join(DATA_DIR, "val_trajectory.pt"))
+        print(f"Val Data:     {val_data.shape}")
