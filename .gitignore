@@ -124,3 +124,4 @@ src/osnet.egg-info/
 *.bin
 HPC/combined
 HPC/prior_oscillator_eigen
+CompoundPendulum/*.ipynb
