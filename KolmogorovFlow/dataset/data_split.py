@@ -5,7 +5,7 @@ from torch.utils.data import Dataset
 
 # Configuration paths
 DATA_DIR = "./"  # Directory to store data
-FILE_NAME = "train_omega_traj_40x400x128x128.npy"
+FILE_NAME = "train_omega_traj_40x800x128x128.npy"
 os.makedirs(DATA_DIR, exist_ok=True)
 
 def create_input_output_pairs(data_chunk):
