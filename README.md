@@ -132,7 +132,9 @@ The repository currently includes the following experiments:
 
 ## Data Access
 
-This GitHub repository contains the source code only. The datasets used in this work are hosted separately.
+For convenience, the files required to support the top-level `run.sh` workflow have been uploaded to this GitHub repository ([https://github.com/shanxue-w/ANI](https://github.com/shanxue-w/ANI)), so users do not need to download them separately from Zenodo before running the script.
+
+The datasets used in this work are also archived on Zenodo:
 
 - [Zenodo Link 1](https://doi.org/10.5281/zenodo.17412715)
 - [Zenodo Link 2](https://doi.org/10.5281/zenodo.17412698)
@@ -152,23 +154,13 @@ Because different experiments use different state variables and preprocessing pi
 
 After installation, experiments can typically be run from within the corresponding folder using the provided Python or shell scripts.
 
-To reproduce all figures in the paper, use the top-level `run.sh` script from the repository root.
-
-If the required datasets, checkpoints, and saved intermediate results are already present in the expected experiment folders of this checkout, run:
+To reproduce all figures in the paper, use the top-level `run.sh` script from the repository root. The support files required by this workflow are included in the prepared GitHub repository for convenience, so no separate Zenodo download is needed for running this script.
 
 ```bash
 bash run.sh
 ```
 
-If this command reports missing data, checkpoints, or result files, the current checkout does not contain the prepared experiment artifacts. In that case, clone the latest prepared repository from [shanxue-w/ANI](https://github.com/shanxue-w/ANI), enter the cloned repository, and run the same top-level script there:
-
-```bash
-git clone https://github.com/shanxue-w/ANI
-cd ANI
-bash run.sh
-```
-
-For the **Lorenz--Stenflo** demo, the recommended entry point is:
+For the **Lorenz--Stenflo** demo, the recommended entry point inside the `Lorenz-stenflo` folder is:
 
 ```bash
 bash run.sh
