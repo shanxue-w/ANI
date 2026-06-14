@@ -2,6 +2,7 @@ function generate_compound_dataset()
 
     delta_t = 0.05;
     total_samples = 7000;
+    reported_samples = 1000;
 
     % ==== 构建监督学习数据 ====
     inputs = zeros(total_samples, 5);   % [u1...u7, dt]
@@ -17,11 +18,15 @@ function generate_compound_dataset()
     end
 
     % 分割训练集 / 验证集
-    train_inputs = inputs(1:5000, :);
-    train_outputs = outputs(1:5000, :);
+    % Save the SI-reported split: 1,000 one-step training pairs and
+    % 1,000 one-step validation pairs.
+    train_inputs = inputs(1:reported_samples, :);
+    train_outputs = outputs(1:reported_samples, :);
 
-    val_inputs = inputs(5001:7000, :);
-    val_outputs = outputs(5001:7000, :);
+    val_start = 5001;
+    val_end = val_start + reported_samples - 1;
+    val_inputs = inputs(val_start:val_end, :);
+    val_outputs = outputs(val_start:val_end, :);
 
     % ==== 生成测试轨迹 ====
     num_trajectories = 3;
@@ -38,7 +43,7 @@ function generate_compound_dataset()
     end
 
     % ==== 保存数据 ====
-    %save('compound_train_data.mat', 'train_inputs', 'train_outputs');
-    %save('compound_val_data.mat', 'val_inputs', 'val_outputs');
+    save('compound_train_data.mat', 'train_inputs', 'train_outputs');
+    save('compound_val_data.mat', 'val_inputs', 'val_outputs');
     save('compound_test_trajectories1.mat', 'test_trajectories');
 end
