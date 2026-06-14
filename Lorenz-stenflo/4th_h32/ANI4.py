@@ -178,8 +178,8 @@ def plot_trajectories(NN_traj, true_traj, title="Trajectories Comparison", i = 0
     # plt.close()
 
     # save them as .mat file
-    sio.savemat(f"ANI_Lorenz_stenflo_4th_{i}.mat", {"NN_traj": NN_traj})
-    sio.savemat(f"ANI_Lorenz_stenflo_true_{i}.mat", {"true_traj": true_traj})
+    sio.savemat(f"ANI_Lorenz_stenflo_4th_{i}_h32.mat", {"NN_traj": NN_traj})
+    sio.savemat(f"ANI_Lorenz_stenflo_true_{i}_h32.mat", {"true_traj": true_traj})
 
 
 if __name__ == "__main__":

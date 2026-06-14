@@ -32,6 +32,7 @@ class RK4Baseline(nn.Module):
         return x[:, 0:4], x[:, 4:5]
     
     def f(self, x):
+        x = self.modify_output(x)
         f1 = x[:, 1] - x[:, 0]
         f2 = x[:, 0] * (26-x[:,2]) - x[:,1]
         f3 = x[:,0]*x[:,1] - 0.7*x[:,2]
@@ -135,8 +136,8 @@ def plot_trajectories(NN_traj, true_traj, title="Trajectories Comparison", i = 0
     # plt.close()
 
     # save them as .mat file
-    sio.savemat(f"ANI_Lorenz_stenflo_base_{i}.mat", {"NN_traj": NN_traj})
-    sio.savemat(f"ANI_Lorenz_stenflo_true_{i}.mat", {"true_traj": true_traj})
+    sio.savemat(f"ANI_Lorenz_stenflo_base_{i}_h20.mat", {"NN_traj": NN_traj})
+    sio.savemat(f"ANI_Lorenz_stenflo_true_{i}_h20.mat", {"true_traj": true_traj})
 
 
 if __name__ == "__main__":
