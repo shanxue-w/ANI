@@ -74,7 +74,6 @@ for i, metric in enumerate(metrics):
 plt.tight_layout()
 plt.savefig("chaos_metrics_comparison.png", dpi=300, bbox_inches="tight")
 plt.savefig("chaos_metrics_comparison.pdf", bbox_inches="tight")
-plt.show()
 
 wide = agg.pivot(index=["Metric", "K"], columns="Method", values="Value").reset_index()
 
@@ -130,4 +129,3 @@ for i, metric in enumerate(metrics):
 plt.tight_layout()
 plt.savefig("chaos_metrics_diff_comparison.png", dpi=300, bbox_inches="tight")
 plt.savefig("chaos_metrics_diff_comparison.pdf", bbox_inches="tight")
-plt.show()
