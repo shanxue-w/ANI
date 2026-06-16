@@ -474,7 +474,7 @@ v_4th_t349 = np.load('4th/v_349_4th.npy').squeeze(0)
 u_les_t349 = np.load('2th/u_349_les.npy').squeeze(0)
 v_les_t349 = np.load('2th/v_349_les.npy').squeeze(0)
 
-time_steps = [99, 149, 199, 249, 299, 349, 399, 449, 499, 549, 599, 649, 699, 749]
+time_steps = [99, 149, 199, 249, 299]
 data = {
     'u_true': {}, 'v_true': {},
     'u_2th': {}, 'v_2th': {},
@@ -499,15 +499,6 @@ time_map = {
     199: "1.0s",
     249: "1.25s",
     299: "1.5s",
-    349: "1.75s",
-    399: "2.0s",
-    449: "2.25s",
-    499: "2.5s",
-    549: "2.75s",
-    599: "3.0s",
-    649: "3.25s",
-    699: "3.5s",
-    749: "3.75s"
 }
 
 x = np.linspace(0, 1, 128)
@@ -605,12 +596,6 @@ def plot_uv_grid(u_list, v_list, t_label, methods):
 #     "1.75s",
 #     methods
 # )
-
-time_map = {
-    99:  "0.5s",
-    199: "1.0s",
-    299: "1.5s",
-}
 for t, time_label in time_map.items():
     u_list = [
         data['u_true'][t],
@@ -625,7 +610,6 @@ for t, time_label in time_map.items():
         data['v_2th'][t],
         data['v_4th'][t]
     ]
-    print(f"Plotting for t = {t} ({time_label})...")
     plot_uv_grid(u_list, v_list, time_label, methods)
 
 
@@ -649,10 +633,6 @@ def plot_error_grid(u_true, v_true, u_methods, v_methods, t_label,
         err_v = [np.abs(m - v_true) for m in v_methods]
         cmap = cmap_abs
 
-    for i in err_u:
-        print(np.linalg.norm(i))
-    for i in err_v:
-        print(np.linalg.norm(i))
 
     fig, axes = plt.subplots(2, len(methods), figsize=(4*len(methods), 8))
     for col, method in enumerate(methods):
@@ -738,7 +718,6 @@ for t, time_label in time_map.items():
     v_preds = [data['v_les'][t], data['v_2th'][t], data['v_4th'][t]]
     
     if u_true is not None:
-        print(f"Generating Error Grid for {time_label}...")
         plot_error_grid(
             u_true, v_true,
             u_preds, v_preds,
@@ -833,7 +812,7 @@ model = A(Nx=128, Ny=128, Lx=1.0, Ly=1.0, device=device)
 # omega_les_t349 = model._velocity_to_vorticity_spectral(u_les_t349, v_les_t349, model.Kx_fine, model.Ky_fine).squeeze(0).cpu().numpy()
 
 methods = ["true", "2th", "4th", "les"]
-steps = [99, 149, 199, 249, 299, 349, 399, 449, 499, 549, 599, 649, 699, 749]
+steps = [99, 149, 199, 249, 299]
 for t in steps:
     for m in methods:
         u_key = f'u_{m}'
@@ -858,7 +837,6 @@ for t in steps:
             # 如果你后续训练还需要 Tensor，也可以选择把 Tensor 存下来：
             # data[f'{u_key}_tensor'][t] = u_tensor 
             
-    print(f"Time step {t}: Velocity converted, Omega calculated and stored in data dictionary.")
 
 # fig, ax = plt.subplots(figsize=(4, 4))
 # ax.contourf(X, Y, omega_true_t249, levels=100, cmap='RdBu_r', origin='lower')
@@ -947,7 +925,6 @@ for t, time_label in time_map.items():
             data['omega_4th'][t]
         ]
         
-        print(f"Plotting Omega Grid for {time_label} (Step {t})...")
         plot_omega_grid(
             omega_list,
             time_label,
@@ -966,8 +943,7 @@ def plot_omega_error_grid(omega_true, omega_methods, t_label, methods,
         err = [np.abs(m - omega_true) for m in omega_methods]
         cmap = cmap_abs
 
-    for i, method in zip(err, methods):
-        print(f"{method} error norm:", np.linalg.norm(i))
+
 
     fig, axes = plt.subplots(1, len(methods), figsize=(4*len(methods), 4))
     if len(methods) == 1:
@@ -1543,6 +1519,12 @@ def plot_spectrum_panel(ax, u_list, v_list, methods, L=1.0):
 # ============================================================
 # Panel c: omega snapshots
 # ============================================================
+OMEGA_CMAP = "seismic"
+OMEGA_BOX_XY = (0.25, 0.07)
+OMEGA_BOX_WIDTH = 0.18
+OMEGA_BOX_HEIGHT = 0.18
+
+
 def plot_omega_row(fig, outer_spec, omega_list, method_titles):
     omega_np = [to_numpy(w) for w in omega_list]
     omega_np = [w[0] if w.ndim == 3 else w for w in omega_np]
@@ -1565,7 +1547,7 @@ def plot_omega_row(fig, outer_spec, omega_list, method_titles):
 
         # im = ax.imshow(
         #     w,
-        #     cmap="RdBu_r",
+        #     cmap=OMEGA_CMAP,
         #     origin="lower",
         #     vmin=vmin,
         #     vmax=vmax,
@@ -1576,7 +1558,7 @@ def plot_omega_row(fig, outer_spec, omega_list, method_titles):
         im = ax.contourf(
             w,
             levels=100,
-            cmap="RdBu_r",
+            cmap=OMEGA_CMAP,
             vmin=vmin,
             vmax=vmax,
         )
@@ -1596,6 +1578,19 @@ def plot_omega_row(fig, outer_spec, omega_list, method_titles):
 
         for spine in ax.spines.values():
             spine.set_visible(False)
+
+        # Axes-fraction coordinates: adjust these constants above to move the box.
+        box = plt.Rectangle(
+            OMEGA_BOX_XY,
+            OMEGA_BOX_WIDTH,
+            OMEGA_BOX_HEIGHT,
+            transform=ax.transAxes,
+            fill=False,
+            edgecolor="black",
+            linewidth=1.0,
+            zorder=10,
+        )
+        ax.add_patch(box)
 
         axes.append(ax)
 
