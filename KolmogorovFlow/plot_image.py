@@ -1520,7 +1520,7 @@ def plot_spectrum_panel(ax, u_list, v_list, methods, L=1.0):
 # Panel c: omega snapshots
 # ============================================================
 OMEGA_CMAP = "seismic"
-OMEGA_BOX_XY = (0.25, 0.07)
+OMEGA_BOX_XY = (0.07, 0.25)
 OMEGA_BOX_WIDTH = 0.18
 OMEGA_BOX_HEIGHT = 0.18
 
@@ -1556,6 +1556,8 @@ def plot_omega_row(fig, outer_spec, omega_list, method_titles):
         #     rasterized=True,
         # )
         im = ax.contourf(
+            X,
+            Y,
             w,
             levels=100,
             cmap=OMEGA_CMAP,
