@@ -708,21 +708,21 @@ def plot_error_grid(u_true, v_true, u_methods, v_methods, t_label,
 #         return globals().get(name_with_t, locals().get(name_with_t))
 #     return globals().get(name_without_t, locals().get(name_without_t))
 
-for t, time_label in time_map.items():
-    u_true = data['u_true'][t]
-    v_true = data['v_true'][t]
+# for t, time_label in time_map.items():
+#     u_true = data['u_true'][t]
+#     v_true = data['v_true'][t]
     
-    # u_preds = [get_var("u_les", t), get_var("u_2th", t), get_var("u_4th", t)]
-    # v_preds = [get_var("v_les", t), get_var("v_2th", t), get_var("v_4th", t)]
-    u_preds = [data['u_les'][t], data['u_2th'][t], data['u_4th'][t]]
-    v_preds = [data['v_les'][t], data['v_2th'][t], data['v_4th'][t]]
+#     # u_preds = [get_var("u_les", t), get_var("u_2th", t), get_var("u_4th", t)]
+#     # v_preds = [get_var("v_les", t), get_var("v_2th", t), get_var("v_4th", t)]
+#     u_preds = [data['u_les'][t], data['u_2th'][t], data['u_4th'][t]]
+#     v_preds = [data['v_les'][t], data['v_2th'][t], data['v_4th'][t]]
     
-    if u_true is not None:
-        plot_error_grid(
-            u_true, v_true,
-            u_preds, v_preds,
-            time_label
-        )
+#     if u_true is not None:
+#         plot_error_grid(
+#             u_true, v_true,
+#             u_preds, v_preds,
+#             time_label
+#         )
 
 model = A(Nx=128, Ny=128, Lx=1.0, Ly=1.0, device=device)
 # convert u_true_t99 -> tensor
@@ -1028,28 +1028,28 @@ plot_config = {
     'cmap_signed': 'RdBu_r'
 }
 
-for t, time_label in time_map.items():
+# for t, time_label in time_map.items():
     
-    try:
-        o_true = data['omega_true'][t]
-        o_preds = [
-            data['omega_les'][t],
-            data['omega_2th'][t],
-            data['omega_4th'][t]
-        ]
+#     try:
+#         o_true = data['omega_true'][t]
+#         o_preds = [
+#             data['omega_les'][t],
+#             data['omega_2th'][t],
+#             data['omega_4th'][t]
+#         ]
         
-        print(f"Generating Omega Error Grid for {time_label} (Step {t})...")
-        plot_omega_error_grid(
-            o_true,
-            o_preds,
-            time_label,
-            methods_label,
-            **plot_config  
-        )
+#         print(f"Generating Omega Error Grid for {time_label} (Step {t})...")
+#         plot_omega_error_grid(
+#             o_true,
+#             o_preds,
+#             time_label,
+#             methods_label,
+#             **plot_config  
+#         )
         
-    except KeyError:
-        if t > 349:
-            print(f"Notice: Data for Step {t} ({time_label}) not found in 'data' dictionary. Skipping.")
+#     except KeyError:
+#         if t > 349:
+#             print(f"Notice: Data for Step {t} ({time_label}) not found in 'data' dictionary. Skipping.")
 
 def compute_kinetic_energy(u, v, L=1.0):
     # u [1, 128, 128]
