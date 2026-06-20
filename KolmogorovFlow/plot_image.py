@@ -507,24 +507,190 @@ X, Y = np.meshgrid(x, y, indexing='ij')
 
 methods = ["True", "LES", "ANI-2", "ANI-4"]
 
-def plot_uv_grid(u_list, v_list, t_label, methods):
+OMEGA_BOX_XY = (0.07, 0.25)
+OMEGA_BOX_WIDTH = 0.18
+OMEGA_BOX_HEIGHT = 0.18
+OMEGA_BOX_EDGE_COLOR = "black"
+OMEGA_BOX_LINEWIDTH = 1.0
+UV_U_BOXES = [
+    # {"xy": OMEGA_BOX_XY, "width": OMEGA_BOX_WIDTH, "height": OMEGA_BOX_HEIGHT},
+    # {"xy": (0.40, 0.40), "width": 0.18, "height": 0.18},
+]
+UV_U_BOXES_BY_TIME = {
+    "0.5s": [
+        {"xy": (0.95, 0.3), "width": 0.05, "height": 0.10},
+    ],
+    "1.0s": [
+        {"xy": (0.54, 0.35), "width": 0.12, "height": 0.12},
+    ]
+}
+UV_V_BOXES = [
+    # {"xy": OMEGA_BOX_XY, "width": OMEGA_BOX_WIDTH, "height": OMEGA_BOX_HEIGHT},
+    # {"xy": (0.40, 0.40), "width": 0.18, "height": 0.18},
+]
+UV_V_BOXES_BY_TIME = {
+    "0.5s": [
+        {"xy": (0.84, 0.54), "width": 0.08, "height": 0.08},
+    ],
+    "1.0s": [
+        {"xy": (0.7, 0.85), "width": 0.12, "height": 0.12},
+        {"xy": (0.4, 0.5), "width": 0.18, "height": 0.18},
+    ]
+}
+OMEGA_GRID_BOXES = [
+    # {"xy": OMEGA_BOX_XY, "width": OMEGA_BOX_WIDTH, "height": OMEGA_BOX_HEIGHT},
+    # {"xy": (0.40, 0.40), "width": 0.18, "height": 0.18},
+]
+OMEGA_GRID_BOXES_BY_TIME = {
+    "0.5s": [
+        {"xy": (0.14, 0.6), "width": 0.10, "height": 0.10},
+    ],
+    "1.0s": [
+        {"xy": (0.07, 0.25), "width": 0.18, "height": 0.18},
+    ]
+}
+MAIN_OMEGA_BOXES = [
+    {"xy": OMEGA_BOX_XY, "width": OMEGA_BOX_WIDTH, "height": OMEGA_BOX_HEIGHT},
+    # {"xy": (0.40, 0.40), "width": 0.18, "height": 0.18},
+]
+
+
+def get_boxes_for_time(default_boxes, boxes_by_time, t_label):
+    return boxes_by_time.get(t_label, default_boxes)
+
+
+def iter_box_specs(
+    boxes=None,
+    box_xy=None,
+    box_width=None,
+    box_height=None,
+    box_edgecolor=None,
+    box_linewidth=None,
+):
+    edgecolor_default = OMEGA_BOX_EDGE_COLOR if box_edgecolor is None else box_edgecolor
+    linewidth_default = OMEGA_BOX_LINEWIDTH if box_linewidth is None else box_linewidth
+
+    if boxes is None:
+        if any(v is not None for v in (box_xy, box_width, box_height)):
+            boxes = [{"xy": box_xy, "width": box_width, "height": box_height}]
+        else:
+            boxes = MAIN_OMEGA_BOXES
+
+    for box_spec in boxes:
+        if isinstance(box_spec, dict):
+            xy = box_spec.get("xy")
+            width = box_spec.get("width")
+            height = box_spec.get("height")
+            edgecolor = box_spec.get("edgecolor")
+            linewidth = box_spec.get("linewidth")
+
+            yield {
+                "xy": OMEGA_BOX_XY if xy is None else xy,
+                "width": OMEGA_BOX_WIDTH if width is None else width,
+                "height": OMEGA_BOX_HEIGHT if height is None else height,
+                "edgecolor": edgecolor_default if edgecolor is None else edgecolor,
+                "linewidth": linewidth_default if linewidth is None else linewidth,
+            }
+        else:
+            xy, width, height = box_spec[:3]
+            yield {
+                "xy": xy,
+                "width": width,
+                "height": height,
+                "edgecolor": edgecolor_default,
+                "linewidth": linewidth_default,
+            }
+
+
+def add_axes_box(
+    ax,
+    box=True,
+    boxes=None,
+    box_xy=None,
+    box_width=None,
+    box_height=None,
+    box_edgecolor=None,
+    box_linewidth=None,
+):
+    if not box:
+        return
+
+    for box_spec in iter_box_specs(
+        boxes=boxes,
+        box_xy=box_xy,
+        box_width=box_width,
+        box_height=box_height,
+        box_edgecolor=box_edgecolor,
+        box_linewidth=box_linewidth,
+    ):
+        rect = plt.Rectangle(
+            box_spec["xy"],
+            box_spec["width"],
+            box_spec["height"],
+            transform=ax.transAxes,
+            fill=False,
+            edgecolor=box_spec["edgecolor"],
+            linewidth=box_spec["linewidth"],
+            zorder=10,
+        )
+        ax.add_patch(rect)
+
+
+def plot_uv_grid(
+    u_list,
+    v_list,
+    t_label,
+    methods,
+    box=True,
+    boxes=None,
+    u_boxes=None,
+    v_boxes=None,
+    box_xy=None,
+    box_width=None,
+    box_height=None,
+    box_edgecolor=None,
+    box_linewidth=None,
+):
     fig = plt.figure(figsize=(4.5*len(methods), 8))
     gs = fig.add_gridspec(2, len(methods)+1, width_ratios=[1]*len(methods)+[0.05])
 
     # 统一颜色范围
-    umin, umax = np.min(u_list), np.max(u_list)
-    vmin, vmax = np.min(v_list), np.max(v_list)
+    # umin, umax = np.min(u_list), np.max(u_list)
+    # vmin, vmax = np.min(v_list), np.max(v_list)
+    
+    absmaxu = max(np.nanmax(np.abs(u)) for u in u_list)
+    umin, umax = -absmaxu, absmaxu
+
+    absmaxv = max(np.nanmax(np.abs(v)) for v in v_list)
+    vmin, vmax = -absmaxv, absmaxv
+    uses_legacy_box_args = any(v is not None for v in (box_xy, box_width, box_height))
+    u_box_specs = u_boxes if u_boxes is not None else boxes
+    v_box_specs = v_boxes if v_boxes is not None else boxes
+    if u_box_specs is None and not uses_legacy_box_args:
+        u_box_specs = get_boxes_for_time(UV_U_BOXES, UV_U_BOXES_BY_TIME, t_label)
+    if v_box_specs is None and not uses_legacy_box_args:
+        v_box_specs = get_boxes_for_time(UV_V_BOXES, UV_V_BOXES_BY_TIME, t_label)
 
     # 第一行：u
     axes_u = []
     for col, method in enumerate(methods):
         ax = fig.add_subplot(gs[0, col])
-        im_u = ax.contourf(X, Y, u_list[col], cmap='RdBu_r', origin='lower',
-                           levels=100, vmin=umin, vmax=umax)
+        im_u = ax.contourf(X, Y, u_list[col], cmap='seismic', origin='lower',
+                           levels=10, vmin=umin, vmax=umax)
         ax.set_rasterized(True)
         ax.set_title(f"{method} - u")
         ax.axis('off')
         ax.set_aspect('equal', adjustable='box')
+        add_axes_box(
+            ax,
+            box=box,
+            boxes=u_box_specs,
+            box_xy=box_xy,
+            box_width=box_width,
+            box_height=box_height,
+            box_edgecolor=box_edgecolor,
+            box_linewidth=box_linewidth,
+        )
         axes_u.append(ax)
     cax_u = fig.add_subplot(gs[0, -1])
     norm  = mcolors.Normalize(vmin=umin, vmax=umax)
@@ -537,12 +703,22 @@ def plot_uv_grid(u_list, v_list, t_label, methods):
     axes_v = []
     for col, method in enumerate(methods):
         ax = fig.add_subplot(gs[1, col])
-        im_v = ax.contourf(X, Y, v_list[col], cmap='RdBu_r', origin='lower',
-                           levels=100, vmin=vmin, vmax=vmax)
+        im_v = ax.contourf(X, Y, v_list[col], cmap='seismic', origin='lower',
+                           levels=10, vmin=vmin, vmax=vmax)
         ax.set_rasterized(True)
         ax.set_title(f"{method} - v")
         ax.axis('off')
         ax.set_aspect('equal', adjustable='box')
+        add_axes_box(
+            ax,
+            box=box,
+            boxes=v_box_specs,
+            box_xy=box_xy,
+            box_width=box_width,
+            box_height=box_height,
+            box_edgecolor=box_edgecolor,
+            box_linewidth=box_linewidth,
+        )
         axes_v.append(ax)
     cax_v = fig.add_subplot(gs[1, -1])
     norm  = mcolors.Normalize(vmin=vmin, vmax=vmax)
@@ -847,24 +1023,52 @@ for t in steps:
 # plt.savefig("omega_grid.pdf", format='pdf', bbox_inches='tight', dpi=300, transparent=True)
 # plt.close()
 
-def plot_omega_grid(omega_list, t_label, methods):
+def plot_omega_grid(
+    omega_list,
+    t_label,
+    methods,
+    box=True,
+    boxes=None,
+    box_xy=None,
+    box_width=None,
+    box_height=None,
+    box_edgecolor=None,
+    box_linewidth=None,
+):
 
     fig = plt.figure(figsize=(4*len(methods), 3.5))
     gs = fig.add_gridspec(1, len(methods)+1, width_ratios=[1]*len(methods)+[0.05])
 
     # 统一颜色范围
-    umin, umax = np.min(omega_list), np.max(omega_list)
+    # umin, umax = np.min(omega_list), np.max(omega_list)
 
+    absmax = max(np.nanmax(np.abs(w)) for w in omega_list)
+    umin, umax = -absmax, absmax
+    uses_legacy_box_args = any(v is not None for v in (box_xy, box_width, box_height))
+    box_specs = boxes
+    if box_specs is None and not uses_legacy_box_args:
+        box_specs = get_boxes_for_time(OMEGA_GRID_BOXES, OMEGA_GRID_BOXES_BY_TIME, t_label)
+    
     # 第一行：u
     axes_u = []
     for col, method in enumerate(methods):
         ax = fig.add_subplot(gs[0, col])
-        im_u = ax.contourf(X, Y, omega_list[col], cmap='RdBu_r', origin='lower',
-                           levels=100, vmin=umin, vmax=umax)
+        im_u = ax.contourf(X, Y, omega_list[col], cmap='seismic', origin='lower',
+                           levels=10, vmin=umin, vmax=umax)
         ax.set_rasterized(True)
         ax.set_title(fr"{method} - $\omega$")
         ax.axis('off')
         ax.set_aspect('equal', adjustable='box')
+        add_axes_box(
+            ax,
+            box=box,
+            boxes=box_specs,
+            box_xy=box_xy,
+            box_width=box_width,
+            box_height=box_height,
+            box_edgecolor=box_edgecolor,
+            box_linewidth=box_linewidth,
+        )
         axes_u.append(ax)
     cax_u = fig.add_subplot(gs[0, -1])
     norm  = mcolors.Normalize(vmin=umin, vmax=umax)
@@ -885,11 +1089,11 @@ methods_legend = ["True", "LES", "ANI-2", "ANI-4"]
 #     methods
 # )
 
-# plot_omega_grid(
-#     [omega_true_149, omega_les_149, omega_2th_149, omega_4th_149],
-#     "0.75s",
-#     methods
-# )
+# # plot_omega_grid(
+# #     [omega_true_149, omega_les_149, omega_2th_149, omega_4th_149],
+# #     "0.75s",
+# #     methods
+# # )
 
 # plot_omega_grid(
 #     [omega_true_t199, omega_les_t199, omega_2th_t199, omega_4th_t199],
@@ -1520,12 +1724,9 @@ def plot_spectrum_panel(ax, u_list, v_list, methods, L=1.0):
 # Panel c: omega snapshots
 # ============================================================
 OMEGA_CMAP = "seismic"
-OMEGA_BOX_XY = (0.07, 0.25)
-OMEGA_BOX_WIDTH = 0.18
-OMEGA_BOX_HEIGHT = 0.18
 
 
-def plot_omega_row(fig, outer_spec, omega_list, method_titles):
+def plot_omega_row(fig, outer_spec, omega_list, method_titles, boxes=None):
     omega_np = [to_numpy(w) for w in omega_list]
     omega_np = [w[0] if w.ndim == 3 else w for w in omega_np]
 
@@ -1541,6 +1742,7 @@ def plot_omega_row(fig, outer_spec, omega_list, method_titles):
 
     axes = []
     im = None
+    box_specs = MAIN_OMEGA_BOXES if boxes is None else boxes
 
     for i, (w, title) in enumerate(zip(omega_np, method_titles)):
         ax = fig.add_subplot(gs[0, i])
@@ -1581,18 +1783,7 @@ def plot_omega_row(fig, outer_spec, omega_list, method_titles):
         for spine in ax.spines.values():
             spine.set_visible(False)
 
-        # Axes-fraction coordinates: adjust these constants above to move the box.
-        box = plt.Rectangle(
-            OMEGA_BOX_XY,
-            OMEGA_BOX_WIDTH,
-            OMEGA_BOX_HEIGHT,
-            transform=ax.transAxes,
-            fill=False,
-            edgecolor="black",
-            linewidth=1.0,
-            zorder=10,
-        )
-        ax.add_patch(box)
+        add_axes_box(ax, boxes=box_specs)
 
         axes.append(ax)
 
