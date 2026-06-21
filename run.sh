@@ -40,6 +40,10 @@ cd Fitzhugh-Nagumo
 python -u plot_submit1.py
 python -u plot_submit2.py
 python -u plot_image.py
+python -u plot.py
+python -u plot_newbase.py
+python -u plot_abnew.py
+python -u plot_epsnew.py
 cd ..
 
 cd KolmogorovFlow
