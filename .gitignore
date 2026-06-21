@@ -118,6 +118,11 @@ src/ANI.egg-info/*
 !Battery/dataset/processed_battery_data_rollout.pt
 !Battery/*.csv
 
+!HPC/*.csv
+
+!Fitzhugh-Nagumo/2th_new/*.npy
+!Fitzhugh-Nagumo/4th_new/*.npy
+
 src/osnet.egg-info/
 
 *.ts

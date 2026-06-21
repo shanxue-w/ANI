@@ -36,6 +36,7 @@ cd ..
 cd Fitzhugh-Nagumo
 python -u plot_submit1.py
 python -u plot_submit2.py
+python -u plot_image.py
 cd ..
 
 cd KolmogorovFlow
@@ -66,4 +67,9 @@ python -u eval_multicycle_standalone.py --model ani2 --checkpoint 2th/best_ani2_
 python -u eval_multicycle_standalone.py --model ani4 --checkpoint 4th/best_ani4_model.pth --data ./dataset/processed_battery_data_rollout.pt --out_csv ani4 --use_meta_q0
 python -u eval_multicycle_standalone.py --model baseline --checkpoint baseline/best_baseline_model.pth --data ./dataset/processed_battery_data_rollout.pt --out_csv "baseline" --use_meta_q0
 python -u plot_per_cycle_mse_compare.py
+cd ..
+
+cd HPC
+python plot.py --csv loss_ani.csv --out ref_ani2.pdf --model "ANI-2"
+python plot.py --csv loss_lie.csv --out ref_lie.pdf --model Lie 
 cd ..
