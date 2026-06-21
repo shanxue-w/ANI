@@ -122,6 +122,7 @@ src/ANI.egg-info/*
 
 !Fitzhugh-Nagumo/2th_new/*.npy
 !Fitzhugh-Nagumo/4th_new/*.npy
+!Fitzhugh-Nagumo/FNO_baseline/*.txt
 
 src/osnet.egg-info/
 
