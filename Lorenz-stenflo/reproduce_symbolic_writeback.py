@@ -461,12 +461,12 @@ def main() -> None:
     truth_long = rollout_single(long_ic, args.long_steps, args.long_dt, args.long_truth_h_micro, f_lorenz_stenflo_full)
     add_long = rollout_single(long_ic, args.long_steps, args.long_dt, args.long_h_micro, rhs_additive)
     ani_long = rollout_ani4_split_single(long_ic, args.long_steps, args.long_dt, args.long_h_micro, args.n_sub_strang)
-    plot_attractor_triptych(
-        truth=truth_long,
-        add=add_long,
-        ani=ani_long,
-        out_path=args.out_dir / "lorenz_symbolic_attractor.pdf",
-    )
+    # plot_attractor_triptych(
+    #     truth=truth_long,
+    #     add=add_long,
+    #     ani=ani_long,
+    #     out_path=args.out_dir / "lorenz_symbolic_attractor.pdf",
+    # )
 
     np.savez(
         args.out_dir / "symbolic_writeback_rollouts.npz",
