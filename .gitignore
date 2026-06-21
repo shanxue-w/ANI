@@ -34,6 +34,7 @@ src/ANI.egg-info/*
 !Lorenz-stenflo/2th_h32/*.txt
 !Lorenz-stenflo/4th_h32/*.txt
 !Lorenz-stenflo/NeuralRK4_h32/*.txt
+!Lorenz-stenflo/chaos_metrics_data.csv
 
 !requirements.txt
 

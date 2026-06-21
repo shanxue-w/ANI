@@ -9,6 +9,7 @@ cd ..
 
 cd Lorenz-stenflo
 python -u plot.py
+python -u plot_time.py
 python -u symbolic_refinement_rollout.py
 python -u reproduce_symbolic_writeback.py
 cd ..
