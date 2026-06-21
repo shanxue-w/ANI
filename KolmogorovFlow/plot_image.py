@@ -521,7 +521,7 @@ UV_U_BOXES_BY_TIME = {
         {"xy": (0.95, 0.3), "width": 0.05, "height": 0.10},
     ],
     "1.0s": [
-        {"xy": (0.54, 0.35), "width": 0.12, "height": 0.12},
+        {"xy": (0.50, 0.30), "width": 0.12, "height": 0.12},
     ]
 }
 UV_V_BOXES = [
@@ -530,7 +530,7 @@ UV_V_BOXES = [
 ]
 UV_V_BOXES_BY_TIME = {
     "0.5s": [
-        {"xy": (0.84, 0.54), "width": 0.08, "height": 0.08},
+        {"xy": (0.84, 0.54), "width": 0.12, "height": 0.12},
     ],
     "1.0s": [
         {"xy": (0.7, 0.85), "width": 0.12, "height": 0.12},
